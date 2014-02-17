@@ -1,16 +1,17 @@
 package com.slothproductions.riskybusiness.model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class Hexagon {
-	final public List<Edge> edges;
-	final public List<Vertex> vertices;
-	final public List<Hexagon> adjacent_hexagons;
+	final protected List<Edge> edges;
+	final protected List<Vertex> vertices;
+	final protected List<Hexagon> adjacent_hexagons;
 
 	public Hexagon(Edge[] e, Vertex[] v, Hexagon[] a) {
-		edges = Collections.unmodifiableList(e.asList());
-		vertices = Collections.unmodifiableList(v.asList());
-		adjacent_hexagons = Collections.unmodifiableList(a.asList());
+		edges = Collections.unmodifiableList(Arrays.asList(e));
+		vertices = Collections.unmodifiableList(Arrays.asList(v));
+		adjacent_hexagons = Collections.unmodifiableList(Arrays.asList(a));
 	}
 }
