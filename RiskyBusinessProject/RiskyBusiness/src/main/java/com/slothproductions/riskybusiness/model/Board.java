@@ -1,4 +1,4 @@
-package com.Model;
+package com.slothproductions.riskybusiness.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;

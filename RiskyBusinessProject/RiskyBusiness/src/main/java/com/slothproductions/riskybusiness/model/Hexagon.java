@@ -1,4 +1,4 @@
-package com.Model;
+package com.slothproductions.riskybusiness.model;
 
 import java.util.Collections;
 import java.util.List;

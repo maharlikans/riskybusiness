@@ -1,6 +1,5 @@
-package com.Model;
+package com.slothproductions.riskybusiness.model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,8 +15,9 @@ public class Vertex {
 	protected SettlementPair settlement;
 	
 
-	public Edge(Hexagon h1, Hexagon h2, Hexagon h3, Edge e1, Edge e2, Edge e3) {
-		hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
+	public Edge(Hexagon h1, Hexagon h2, Hexagon h3, Edge e1, Edge e2, Edge e3, List<Edge> edge) {
+        this.edge = edge;
+        hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
 		vertices = Collections.unmodifiableList(Arrays.asList(v1, v2));
 		settlement = null;
 	}
