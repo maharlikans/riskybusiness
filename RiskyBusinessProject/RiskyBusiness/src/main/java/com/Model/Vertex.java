@@ -1,7 +1,11 @@
 package com.Model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class Vertex {
-	/*final public List<Hexagon> hexagons;
+	final public List<Hexagon> hexagons;
 	final public List<Edge> edge;
 	
 	class SettlementPair {
@@ -16,5 +20,5 @@ public class Vertex {
 		hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
 		vertices = Collections.unmodifiableList(Arrays.asList(v1, v2));
 		settlement = null;
-	}*/
+	}
 }
