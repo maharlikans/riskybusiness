@@ -4,14 +4,29 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 public class SplashScreen extends Activity {
+
+    private FrameLayout mSplash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        mSplash = (FrameLayout)findViewById(R.id.container);
+
+        mSplash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Should proceed to main menu activity
+                Toast.makeText(SplashScreen.this, "Proceeding to Main Menu", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
