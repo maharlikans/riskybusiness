@@ -1,4 +1,4 @@
-package com.View;
+package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import com.View.R;
 
 
 public class SplashScreen extends Activity {
