@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.NoTitleBar.Fullscreen">
-        <!-- Customize your theme here. -->
+    <style name="BoardTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+    </style>
+
+    <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
