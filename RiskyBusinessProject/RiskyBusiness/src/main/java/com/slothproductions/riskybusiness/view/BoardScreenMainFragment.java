@@ -31,8 +31,28 @@ public class BoardScreenMainFragment extends Fragment {
         RelativeLayout mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
 
         //loop through indices, check which resource in board, color appropriately using code similar to below
-        ImageView iv = (ImageView)mHexParent.getChildAt(0);
-        iv.setColorFilter(Color.BLUE);
+        for (int i = 0; i < mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            switch(mBoardData.hexes.get(i).type) {
+                case LUMBER:
+                    iv.setColorFilter(Color.GREEN);
+                    break;
+                case BRICK:
+                    iv.setColorFilter(Color.RED);
+                    break;
+                case WOOL:
+                    iv.setColorFilter(Color.LTGRAY);
+                    break;
+                case GRAIN:
+                    iv.setColorFilter(Color.GRAY);
+                    break;
+                case ORE:
+                    iv.setColorFilter(Color.DKGRAY);
+                    break;
+                case DESERT:
+                    iv.setColorFilter(Color.YELLOW);
+            }
+        }
 
         return v;
     }
