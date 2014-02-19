@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.View.R;
+
 
 
 public class SplashScreen extends Activity {
@@ -20,13 +22,15 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        mSplash = (FrameLayout)findViewById(R.id.container);
+        mSplash = (FrameLayout)findViewById(R.id.splashContainer);
 
         mSplash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to main menu activity
                 Toast.makeText(SplashScreen.this, "Proceeding to Main Menu", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(SplashScreen.this, BoardScreen.class);
+                startActivity(i);
             }
         });
 
