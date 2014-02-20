@@ -1,14 +1,20 @@
 package com.slothproductions.riskybusiness.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.slothproductions.riskybusiness.view.BoardScreenMainFragment;
 
 import com.View.R;
@@ -16,18 +22,21 @@ import com.View.R;
 
 public class BoardScreen extends FragmentActivity {
 
+    private Fragment mBoardScreenFragment;
+    private BoardScreenMainFragment mFragmentClass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_screen);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.BoardContainer);
+        mBoardScreenFragment = fm.findFragmentById(R.id.BoardContainer);
 
-        if (fragment == null) {
-            fragment = new BoardScreenMainFragment();
+        if (mBoardScreenFragment == null) {
+            mBoardScreenFragment = new BoardScreenMainFragment();
             fm.beginTransaction()
-                    .add(R.id.BoardContainer, fragment)
+                    .add(R.id.BoardContainer, mBoardScreenFragment)
                     .commit();
         }
     }
@@ -51,6 +60,47 @@ public class BoardScreen extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d("KEYPRESSED", "back button was pressed");
+            showExitDialog();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void showExitDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("Save Game?");
+        alertDialog.setMessage("Do you want to save this game?");
+
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Save the game state here
+                Toast.makeText(getApplicationContext(), "Saving Game",
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Game was not saved", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        alertDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //return to screen
+            }
+        });
+
+        alertDialog.show();
     }
 
 }
