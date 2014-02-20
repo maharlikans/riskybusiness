@@ -25,6 +25,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.slothproductions.riskybusiness.view.MainMenuScreen"
+            android:label="MainMenuScreen"
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
             android:name="com.slothproductions.riskybusiness.view.BoardScreen"
             android:label="@string/title_activity_board_screen"
             android:theme="@style/BoardTheme"
