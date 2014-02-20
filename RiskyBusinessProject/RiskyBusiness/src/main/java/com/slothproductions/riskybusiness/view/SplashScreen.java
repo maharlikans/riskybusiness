@@ -1,26 +1,58 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.View.R;
 
+import android.os.Handler;
 
 
 public class SplashScreen extends Activity {
 
     private FrameLayout mSplash;
+    private ProgressBar mProgressBar;
+    private ProgressDialog mProgressDialog;
+    private int mProgressStatus;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
+        mProgressStatus = 1;
+        handler = new Handler();
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (mProgressStatus < 100) {
+                    mProgressStatus += 1;
+                    // Update the progress bar and display the
+                    //current value in the text view
+                    handler.post(new Runnable() {
+                        public void run() {
+                            mProgressBar.setProgress(mProgressStatus);
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        //Just to display the progress slowly
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
         mSplash = (FrameLayout)findViewById(R.id.splashContainer);
 
@@ -34,7 +66,6 @@ public class SplashScreen extends Activity {
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

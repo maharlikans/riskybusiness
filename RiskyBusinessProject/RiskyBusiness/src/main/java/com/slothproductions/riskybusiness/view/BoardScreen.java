@@ -81,7 +81,7 @@ public class BoardScreen extends FragmentActivity {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Save the game state here
-                Toast.makeText(getApplicationContext(), "Saving Game",
+                Toast.makeText(getApplicationContext(), "Game Saved",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
