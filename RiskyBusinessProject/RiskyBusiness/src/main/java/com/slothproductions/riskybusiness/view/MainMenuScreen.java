@@ -28,6 +28,8 @@ public class MainMenuScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
 
+
+        //Deals with the Start Button
         mStartNew = (ImageView)findViewById(R.id.start_new);
         mStartNew.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +40,20 @@ public class MainMenuScreen extends Activity {
             }
         });
 
+        //Deals with the Options Button
+       /* mOptions = (ImageView)findViewById(R.id.options);
+        mStartNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Should proceed to Options Activity
+                Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
+                startActivity(i);
+            }
+        });*/
+
+
+
+        //Deals with the exit button.
         mExit = (ImageView)findViewById(R.id.exit);
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
