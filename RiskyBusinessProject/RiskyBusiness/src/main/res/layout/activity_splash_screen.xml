@@ -32,7 +32,7 @@
             android:id="@+id/tap_to_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap To Start"
+            android:text=""
             android:textSize="24dp"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"/>

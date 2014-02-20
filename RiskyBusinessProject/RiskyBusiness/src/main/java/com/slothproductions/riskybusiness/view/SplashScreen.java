@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.View.R;
@@ -23,6 +24,7 @@ public class SplashScreen extends Activity {
     private ProgressDialog mProgressDialog;
     private int mProgressStatus;
     private Handler handler;
+    private TextView mTapToStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class SplashScreen extends Activity {
         mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
         mProgressStatus = 1;
         handler = new Handler();
+        mTapToStart = (TextView)findViewById(R.id.tap_to_start);
+        mSplash = (FrameLayout)findViewById(R.id.splashContainer);
 
         new Thread(new Runnable() {
             public void run() {
@@ -41,30 +45,39 @@ public class SplashScreen extends Activity {
                     handler.post(new Runnable() {
                         public void run() {
                             mProgressBar.setProgress(mProgressStatus);
+                            if (mProgressStatus < 40) {
+                                mTapToStart.setText("Loading Assets...");
+                            }
+                            else if (mProgressStatus < 65) {
+                                mTapToStart.setText("Rendering Textures...");
+                            }
+                            else if (mProgressStatus < 99) {
+                                mTapToStart.setText("Generating Board Layout...");
+                            }
+                            else {
+                                mTapToStart.setText("Tap to Start");
+                                mSplash.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //Should proceed to main menu activity
+                                        Intent i = new Intent(SplashScreen.this, MainMenuScreen.class);
+                                        startActivity(i);
+                                    }
+                                });
+                                mProgressBar.setVisibility(View.INVISIBLE);
+                            }
                         }
                     });
                     try {
                         // Sleep for 200 milliseconds.
                         //Just to display the progress slowly
-                        Thread.sleep(50);
+                        Thread.sleep(30);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
-
-        mSplash = (FrameLayout)findViewById(R.id.splashContainer);
-
-        mSplash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Should proceed to main menu activity
-                Intent i = new Intent(SplashScreen.this, MainMenuScreen.class);
-                startActivity(i);
-            }
-        });
-
     }
 
     @Override
