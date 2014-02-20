@@ -2,9 +2,14 @@
 <resources>
 
     <style name="BoardTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@color/blue_background</item>
+        <item name="android:colorBackground">@color/blue_background</item>
     </style>
 
     <style name="SplashTheme" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:background">@color/blue_background</item>
+        <item name="android:windowBackground">@color/blue_background</item>
+        <item name="android:colorBackground">@color/blue_background</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
