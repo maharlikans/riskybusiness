@@ -28,8 +28,7 @@ public class SplashScreen extends Activity {
             @Override
             public void onClick(View v) {
                 //Should proceed to main menu activity
-                Toast.makeText(SplashScreen.this, "Proceeding to Main Menu", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(SplashScreen.this, BoardScreen.class);
+                Intent i = new Intent(SplashScreen.this, MainMenuScreen.class);
                 startActivity(i);
             }
         });
