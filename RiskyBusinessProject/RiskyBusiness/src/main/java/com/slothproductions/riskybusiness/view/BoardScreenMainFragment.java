@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +36,8 @@ public class BoardScreenMainFragment extends Fragment {
         mBoardScreen = new BoardScreen();
         mBoardData = new Board(4);
 
+        Log.d("ONCREATE", "OnCreate was called");
+
     }
 
     @Override
@@ -41,37 +45,42 @@ public class BoardScreenMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
-        mHexParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int l = mBoardData.hexes.size();
-                for (int i = 1; i < l; i++) {
-                    ImageView iv = (ImageView)mHexParent.getChildAt(i);
-                    TextView tv = new TextView(getActivity());
-                    tv.setId((int)System.currentTimeMillis());
-                    LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-                    if (mBoardData.hexes.get(i).roll < 0 || mBoardData.hexes.get(i).roll > 9) {
-                        lp.leftMargin = iv.getLeft()-35;
-                        lp.rightMargin = iv.getRight()+35;
-                        lp.topMargin = iv.getTop()+35;
-                        lp.bottomMargin = iv.getBottom()-35;
-                    }
-                    else {
-                        lp.leftMargin = iv.getLeft()-15;
-                        lp.rightMargin = iv.getRight()+15;
-                        lp.topMargin = iv.getTop()+35;
-                        lp.bottomMargin = iv.getBottom()-35;
-                    }
-                    tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
-                    tv.setTextSize(30);
-                    tv.setTypeface(null, Typeface.BOLD);
-                    tv.setTextColor(getResources().getColor(R.color.blue_background));
-                    mHexParent.addView(tv, lp);
-                }
-            }
-        });
 
-        //loop through indices, check which resource in board, color appropriately using code similar to below
+        addColorsToBoard();
+
+        Log.d("VIEWCALLED", "View was called");
+        return v;
+    }
+
+    void addNumbersToBoard() {
+        int l = mBoardData.hexes.size();
+        for (int i = 1; i < l; i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            TextView tv = new TextView(getActivity());
+            tv.setId((int)System.currentTimeMillis());
+            LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            if (mBoardData.hexes.get(i).roll < 0 || mBoardData.hexes.get(i).roll > 9) {
+                lp.leftMargin = iv.getLeft()-35;
+                lp.rightMargin = iv.getRight()+35;
+                lp.topMargin = iv.getTop()+35;
+                lp.bottomMargin = iv.getBottom()-35;
+            }
+            else {
+                lp.leftMargin = iv.getLeft()-15;
+                lp.rightMargin = iv.getRight()+15;
+                lp.topMargin = iv.getTop()+35;
+                lp.bottomMargin = iv.getBottom()-35;
+            }
+            tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
+            tv.setTextSize(30);
+            tv.setTypeface(null, Typeface.BOLD);
+            tv.setTextColor(getResources().getColor(R.color.blue_background));
+            mHexParent.addView(tv, lp);
+        }
+    }
+
+    //loop through indices, check which resource in board, color appropriately using code similar to below
+    void addColorsToBoard() {
         for (int i = 0; i < mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             switch(mBoardData.hexes.get(i).type) {
@@ -94,7 +103,19 @@ public class BoardScreenMainFragment extends Fragment {
                     iv.setColorFilter(Color.YELLOW);
             }
         }
-        return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("ONSTART", "OnStart called");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                addNumbersToBoard();
+            }
+        }, 50);
     }
 
 }
+
