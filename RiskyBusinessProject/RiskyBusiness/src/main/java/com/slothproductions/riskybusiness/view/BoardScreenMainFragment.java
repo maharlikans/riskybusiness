@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.view;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -23,12 +24,14 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.DiceRoll;
 
 public class BoardScreenMainFragment extends Fragment {
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
     private RelativeLayout mHexParent;
+    private DiceRoll droll;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

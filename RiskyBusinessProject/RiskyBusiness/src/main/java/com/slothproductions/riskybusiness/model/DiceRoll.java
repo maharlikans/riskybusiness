@@ -5,6 +5,9 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 public class DiceRoll {
+
+    public DiceRoll(){};
+
     private static Random rng = new SecureRandom();
 
     public static class RollTriplet {
