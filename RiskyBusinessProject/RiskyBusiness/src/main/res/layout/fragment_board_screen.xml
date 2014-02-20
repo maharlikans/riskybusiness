@@ -181,6 +181,37 @@
         android:layout_toLeftOf="@+id/imageView5"
         android:layout_marginRight="64dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause Game"
+        android:id="@+id/pauseButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Build"
+        android:id="@+id/buildButton"
+        android:layout_above="@+id/imageView10"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/pauseButton"
+        android:layout_alignStart="@+id/pauseButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trade"
+        android:id="@+id/tradeButton"
+        android:layout_above="@+id/imageView17"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/buildButton"
+        android:layout_alignStart="@+id/buildButton" />
+
 </RelativeLayout>
 
 
