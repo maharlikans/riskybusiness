@@ -24,16 +24,8 @@ public class Board {
 				0, 8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
 		};
 
-		// TODO: Generate a generalized version of this list.
-		Resource[] resources = {
-				Resource.DESERT, Resource.BRICK, Resource.GRAIN,
-				Resource.GRAIN, Resource.LUMBER, Resource.WOOL,
-				Resource.WOOL, Resource.ORE, Resource.ORE,
-				Resource.WOOL, Resource.LUMBER, Resource.WOOL,
-				Resource.LUMBER, Resource.GRAIN, Resource.BRICK,
-				Resource.ORE, Resource.BRICK, Resource.LUMBER,
-				Resource.GRAIN
-		};
+
+		Resource[] resources = generateResources();
 
 		// Initializing values for the innermost ring with a single hex. This
 		// is done manually as there is no pattern for this one.
@@ -67,4 +59,37 @@ public class Board {
 			}
 		}
 	}
+
+    /**
+     * Generates a random list of resources, and returns it. The first resource is always desert.
+     * @return Resource[] a list of type Resource
+     */
+    Resource[] generateResources() {
+        Resource[] resources = new Resource[19];
+        resources[0] = Resource.DESERT;
+        Random rand = new Random();
+        int r = 0;
+        for (int i =1; i < resources.length; i ++) {
+            r = rand.nextInt(5);
+            switch(r) {
+                case 0:
+                    resources[i] = Resource.LUMBER;
+                    break;
+                case 1:
+                    resources[i] = Resource.BRICK;
+                    break;
+                case 2:
+                    resources[i] = Resource.WOOL;
+                    break;
+                case 3:
+                    resources[i] = Resource.GRAIN;
+                    break;
+                case 4:
+                    resources[i] = Resource.ORE;
+                    break;
+            }
+        }
+
+        return resources;
+    }
 }
