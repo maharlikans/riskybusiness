@@ -28,13 +28,20 @@ public class MainMenuScreen extends Activity {
         setContentView(R.layout.activity_main_menu_screen);
 
         mStartNew = (ImageView)findViewById(R.id.start_new);
-
         mStartNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to main menu activity
                 Intent i = new Intent(MainMenuScreen.this, BoardScreen.class);
                 startActivity(i);
+            }
+        });
+
+        mExit = (ImageView)findViewById(R.id.exit);
+        mExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

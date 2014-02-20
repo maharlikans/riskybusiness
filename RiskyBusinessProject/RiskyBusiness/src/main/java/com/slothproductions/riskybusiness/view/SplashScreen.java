@@ -49,4 +49,13 @@ public class SplashScreen extends Activity {
         return super.onOptionsItemSelected(menu);
     }
 
+    /**
+     * finish activity once splash screen displayed, so the app will not return to it.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        finish();
+    }
+
 }
