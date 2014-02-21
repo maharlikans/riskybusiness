@@ -34,7 +34,8 @@ public class BoardScreenMainFragment extends Fragment {
     private RelativeLayout mHexParent;
     private Button mBtnPause;
     private Button mBtnEndTurn;
-
+    private Button mBtnBuild;
+    private Button mBtnTrade;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,24 @@ public class BoardScreenMainFragment extends Fragment {
             @Override
         public void onClick(View v){
                 showEndTurnDialog();
+            }
+        });
+
+        //Adds functionality to the Build Button
+        mBtnBuild = (Button)v.findViewById(R.id.buildButton);
+        mBtnBuild.setOnClickListener(new View.OnClickListener(){
+            @Override
+        public void onClick(View v){
+                showBuildDialog();
+            }
+        });
+
+        //Adds functionality to the Trade Button
+        mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
+        mBtnTrade.setOnClickListener(new View.OnClickListener(){
+            @Override
+        public void onClick(View v){
+                showTradeDialog();
             }
         });
 
@@ -157,6 +176,50 @@ public class BoardScreenMainFragment extends Fragment {
         });
 
         alertpauseDialog.show();
+    }
+
+    public void showBuildDialog(){
+        AlertDialog.Builder alertBuildDialog = new AlertDialog.Builder(getActivity());
+
+        alertBuildDialog.setTitle("Build");
+        alertBuildDialog.setMessage("Build stuff");
+
+        alertBuildDialog.setPositiveButton("Build", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Build all the stuffs",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertBuildDialog.setNegativeButton("Cancel" , new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertBuildDialog.show();
+    }
+
+    public void showTradeDialog(){
+        AlertDialog.Builder alertTradeDialog = new AlertDialog.Builder(getActivity());
+
+        alertTradeDialog.setTitle("Trade");
+        alertTradeDialog.setMessage("Trade resources with other players?");
+
+        alertTradeDialog.setPositiveButton("Trade", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Trade all the resources!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertTradeDialog.setNegativeButton("Cancel",  new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Trade Canceled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertTradeDialog.show();
     }
 
     public void showEndTurnDialog() {
