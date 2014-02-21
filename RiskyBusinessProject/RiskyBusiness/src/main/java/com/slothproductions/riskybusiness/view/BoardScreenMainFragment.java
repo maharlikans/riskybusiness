@@ -231,7 +231,7 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "You rolled a: " + dRoll.roll().toString(),
+                Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
                         Toast.LENGTH_SHORT).show();
 
             }

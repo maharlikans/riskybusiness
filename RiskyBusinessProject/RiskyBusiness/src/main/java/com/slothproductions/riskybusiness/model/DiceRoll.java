@@ -24,12 +24,16 @@ public class DiceRoll {
                 throw new InvalidParameterException();
             }
         }
+        public String toString(){
+            return Integer.toString(result);
+        }
     }
 
     public static RollTriplet roll() {
         int r = rng.nextInt(35);
         return new RollTriplet(r/6 + 1, r%6 + 1);
     }
+
 
 
 }
