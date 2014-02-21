@@ -51,7 +51,9 @@ public class BoardScreenMainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        Log.d("VIEWCALLED", "View was called");
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
+        Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
 
@@ -92,7 +94,6 @@ public class BoardScreenMainFragment extends Fragment {
 
         addColorsToBoard();
 
-        Log.d("VIEWCALLED", "View was called");
         return v;
     }
 
@@ -154,14 +155,15 @@ public class BoardScreenMainFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Log.d("ONSTART", "Fragment Called Start");
         super.onStart();
-        Log.d("ONSTART", "OnStart called");
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 addNumbersToBoard();
             }
         }, 50);
+        Log.d("ONSTART", "Fragment Finished Start");
     }
 
     public void showPauseDialog() {
@@ -274,14 +276,6 @@ public class BoardScreenMainFragment extends Fragment {
         });
 
         alertDialog.show();
-    }
-
-    @Override
-    public void onPause() {
-        if (mLastToast!= null) {
-            mLastToast.cancel();
-        }
-        super.onPause();
     }
 
 }

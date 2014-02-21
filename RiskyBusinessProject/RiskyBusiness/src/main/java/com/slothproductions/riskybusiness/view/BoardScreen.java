@@ -100,4 +100,11 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.show();
     }
+
+    @Override
+    protected void onStart() {
+        Log.d("ONSTART", "On Start Called");
+        super.onStart();
+        Log.d("ONSTART", "On Start Finished");
+    }
 }
