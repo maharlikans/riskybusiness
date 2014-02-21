@@ -30,4 +30,6 @@ public class DiceRoll {
         int r = rng.nextInt(35);
         return new RollTriplet(r/6 + 1, r%6 + 1);
     }
+
+
 }

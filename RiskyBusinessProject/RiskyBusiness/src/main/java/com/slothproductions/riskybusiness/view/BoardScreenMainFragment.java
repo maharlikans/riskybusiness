@@ -33,7 +33,8 @@ public class BoardScreenMainFragment extends Fragment {
     private Board mBoardData;
     private RelativeLayout mHexParent;
     private Button mBtnPause;
-    private DiceRoll droll;
+    private Button mBtnEndTurn;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,15 @@ public class BoardScreenMainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showPauseDialog();
+            }
+        });
+
+        //Adds functionality to the End Turn Button
+        mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
+        mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
+            @Override
+        public void onClick(View v){
+                showEndTurnDialog();
             }
         });
 
@@ -147,6 +157,30 @@ public class BoardScreenMainFragment extends Fragment {
         });
 
         alertpauseDialog.show();
+    }
+
+    public void showEndTurnDialog() {
+        final DiceRoll dRoll = new DiceRoll();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+
+        alertDialog.setTitle("End Turn?");
+        alertDialog.setMessage("Do you want to end your turn?");
+
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "You rolled a: " + dRoll.roll().toString(),
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which){
+                Toast.makeText(getActivity(), "Turn not ended", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        alertDialog.show();
     }
 
 }

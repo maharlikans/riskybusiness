@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.view.View.OnClickListener;
 
 import com.View.R;
+import com.slothproductions.riskybusiness.model.DiceRoll;
 
 
 public class BoardScreen extends FragmentActivity {
@@ -99,5 +100,6 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.show();
     }
+
 
 }
