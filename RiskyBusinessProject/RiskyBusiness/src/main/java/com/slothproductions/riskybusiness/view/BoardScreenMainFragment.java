@@ -57,12 +57,15 @@ public class BoardScreenMainFragment extends Fragment {
 
     void addNumbersToBoard() {
         int l = mBoardData.hexes.size();
-        for (int i = 1; i < l; i++) {
+        for (int i = 0; i < l; i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             TextView tv = new TextView(getActivity());
             tv.setId((int)System.currentTimeMillis());
             LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-            if (mBoardData.hexes.get(i).roll < 0 || mBoardData.hexes.get(i).roll > 9) {
+            if (mBoardData.hexes.get(i).roll < 0) {
+                continue;
+            }
+            else if (mBoardData.hexes.get(i).roll > 9) {
                 lp.leftMargin = iv.getLeft()-35;
                 lp.rightMargin = iv.getRight()+35;
                 lp.topMargin = iv.getTop()+35;

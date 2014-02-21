@@ -25,11 +25,11 @@ public class Board {
 		};
 
 
-		Resource[] resources = generateResources();
+		ArrayList<Resource> resources = generateResources();
 
 		// Initializing values for the innermost ring with a single hex. This
 		// is done manually as there is no pattern for this one.
-		Hex center = new Hex(0, Resource.DESERT, -1);
+		Hex center = new Hex(0, resources.get(0), rolls[0]);
 		hexes.add(center);
 		int index = 1;
 
@@ -38,7 +38,7 @@ public class Board {
 			int minIndex = index;
 			int maxIndex = counter * (counter + 1) * 3;
 			for (; index <= maxIndex; index++) {
-				Hex current = new Hex(index, resources[index], rolls[index]);
+				Hex current = new Hex(index, resources.get(index), rolls[index]);
 				if ((index - minIndex) % counter == 0) { // On a corner of the ring
 					current.adjacent.add(hexes.get(innerIndex));
 					hexes.get(innerIndex).adjacent.add(current);
@@ -64,31 +64,22 @@ public class Board {
      * Generates a random list of resources, and returns it. The first resource is always desert.
      * @return Resource[] a list of type Resource
      */
-    Resource[] generateResources() {
-        Resource[] resources = new Resource[19];
-        resources[0] = Resource.DESERT;
-        Random rand = new Random();
-        int r = 0;
-        for (int i =1; i < resources.length; i ++) {
-            r = rand.nextInt(5);
-            switch(r) {
-                case 0:
-                    resources[i] = Resource.LUMBER;
-                    break;
-                case 1:
-                    resources[i] = Resource.BRICK;
-                    break;
-                case 2:
-                    resources[i] = Resource.WOOL;
-                    break;
-                case 3:
-                    resources[i] = Resource.GRAIN;
-                    break;
-                case 4:
-                    resources[i] = Resource.ORE;
-                    break;
-            }
+    ArrayList<Resource> generateResources() {
+        ArrayList<Resource> resources = new ArrayList(19);
+
+        resources.add(Resource.DESERT);
+
+        for (int i = 0; i < 3; i++) {
+            resources.add(Resource.BRICK);
+            resources.add(Resource.ORE);
         }
+        for (int i = 0; i < 4; i ++) {
+            resources.add(Resource.GRAIN);
+            resources.add(Resource.LUMBER);
+            resources.add(Resource.WOOL);
+        }
+
+        Collections.shuffle(resources);
 
         return resources;
     }
