@@ -99,10 +99,14 @@ public class Board {
         for (int i : rollsArray)
             rolls.add(i);
         Collections.shuffle(rolls);
+        rolls.add(0, -1);
 
-        for (int i = 0; i <18; i ++) {
+        for (int i = 0; i <19; i ++) {
             if (hexes.get(i).type == Resource.DESERT){
-                rolls.add(i, -1);
+                int temp = rolls.get(i);
+                rolls.set(0, temp);
+                rolls.set(i, -1);
+                Log.d(TAG, "Desert Roll Value Added");
             }
         }
 
@@ -116,7 +120,6 @@ public class Board {
                 ret[counter] = -1;
             } else {
                 //Error is somewhere in Here
-
                 while (true) {
                     int current = rolls.remove(0);
                     boolean adjacent = false;
