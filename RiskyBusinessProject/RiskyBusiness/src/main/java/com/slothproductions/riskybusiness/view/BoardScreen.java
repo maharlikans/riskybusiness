@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+import android.widget.Button;
+import android.view.View.OnClickListener;
 
 import com.View.R;
 
@@ -33,6 +36,14 @@ public class BoardScreen extends FragmentActivity {
                     .add(R.id.BoardContainer, mBoardScreenFragment)
                     .commit();
         }
+
+        btnPause = (Button) findViewById(R.id.pauseButton);
+        OnClickListener oclPause = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    showPauseDialog();
+            }
+        };
     }
 
 
@@ -54,6 +65,23 @@ public class BoardScreen extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showPauseDialog() {
+        AlertDialog.Builder alertpauseDialog = new AlertDialog.Builder(this);
+
+        alertpauseDialog.setTitle("Pause Screen");
+        alertpauseDialog.setMessage("Game Paused.");
+
+        alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Returning to game...",
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+
+        alertpauseDialog.show();
     }
 
     @Override
