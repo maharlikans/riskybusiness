@@ -37,6 +37,8 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+    private Toast mLastToast;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,8 +172,12 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Returning to game...",
-                        Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Returning to game...",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
             }
         });
 
@@ -186,14 +192,22 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertBuildDialog.setPositiveButton("Build", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Build all the stuffs",
-                        Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Build all the stuffs",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
             }
         });
 
         alertBuildDialog.setNegativeButton("Cancel" , new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT);
+                mLastToast.show();
             }
         });
 
@@ -208,14 +222,22 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertTradeDialog.setPositiveButton("Trade", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Trade all the resources!",
-                        Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Trade all the resources!",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
             }
         });
 
         alertTradeDialog.setNegativeButton("Cancel",  new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Trade Canceled", Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Trade Canceled", Toast.LENGTH_SHORT);
+                mLastToast.show();
             }
         });
 
@@ -231,19 +253,35 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
-                        Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
 
             }
         });
         alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
-                Toast.makeText(getActivity(), "Turn not ended", Toast.LENGTH_SHORT).show();
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Turn not ended", Toast.LENGTH_SHORT);
+                mLastToast.show();
 
             }
         });
 
         alertDialog.show();
+    }
+
+    @Override
+    public void onPause() {
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+        }
+        super.onPause();
     }
 
 }

@@ -79,7 +79,7 @@ public class BoardScreen extends FragmentActivity {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Save the game state here
-                Toast.makeText(getApplicationContext(), "Game Saved",
+                Toast.makeText(BoardScreen.this, "Game Saved",
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -87,7 +87,7 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), "Game was not saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BoardScreen.this, "Game was not saved", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -100,6 +100,4 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.show();
     }
-
-
 }
