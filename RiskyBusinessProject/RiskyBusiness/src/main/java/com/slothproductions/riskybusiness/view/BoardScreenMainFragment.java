@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ public class BoardScreenMainFragment extends Fragment {
     private BoardScreen mBoardScreen;
     private Board mBoardData;
     private RelativeLayout mHexParent;
+    private Button mBtnPause;
     private DiceRoll droll;
 
     @Override
@@ -48,6 +50,14 @@ public class BoardScreenMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
+
+        mBtnPause = (Button)v.findViewById(R.id.pauseButton);
+        mBtnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPauseDialog();
+            }
+        });
 
         addColorsToBoard();
 
@@ -121,6 +131,22 @@ public class BoardScreenMainFragment extends Fragment {
                 addNumbersToBoard();
             }
         }, 50);
+    }
+
+    public void showPauseDialog() {
+        AlertDialog.Builder alertpauseDialog = new AlertDialog.Builder(getActivity());
+
+        alertpauseDialog.setTitle("Pause Screen");
+        alertpauseDialog.setMessage("Game Paused.");
+
+        alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Returning to game...",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alertpauseDialog.show();
     }
 
 }

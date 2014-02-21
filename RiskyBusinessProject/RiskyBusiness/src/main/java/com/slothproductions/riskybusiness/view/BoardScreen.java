@@ -36,15 +36,6 @@ public class BoardScreen extends FragmentActivity {
                     .add(R.id.BoardContainer, mBoardScreenFragment)
                     .commit();
         }
-
-        Button btnPause = (Button) findViewById(R.id.pauseButton);
-        OnClickListener oclPause = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    showPauseDialog();
-            }
-        };
-        btnPause.setOnClickListener(this); 
     }
 
 
@@ -66,23 +57,6 @@ public class BoardScreen extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void showPauseDialog() {
-        AlertDialog.Builder alertpauseDialog = new AlertDialog.Builder(this);
-
-        alertpauseDialog.setTitle("Pause Screen");
-        alertpauseDialog.setMessage("Game Paused.");
-
-        alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(), "Returning to game...",
-                        Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        alertpauseDialog.show();
     }
 
     @Override
