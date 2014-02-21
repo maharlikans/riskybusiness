@@ -1,8 +1,12 @@
 package com.slothproductions.riskybusiness.model;
 
+import android.util.Log;
+
 import java.util.*;
 
 public class Board {
+
+    private final String TAG = "BOARDDATA";
 
     public static enum Resource {
         LUMBER, BRICK, WOOL, GRAIN, ORE, DESERT
@@ -18,10 +22,6 @@ public class Board {
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
         int radius = 3;
-
-        // TODO: Add a fair generation of dice rolls that avoids adjacent 6 & 8.
-
-
 
         ArrayList<Resource> resources = generateResources();
 
@@ -59,9 +59,11 @@ public class Board {
             }
         }
 
-        int[] rolls = generateRolls();
+        Log.d(TAG, "Generating Rolls");
+        ArrayList<Integer> rolls = generateRolls();
+        Log.d(TAG, "Finished Generating Rolls");
         for (int counter = 0; counter <= 18; counter++)
-            hexes.get(counter).roll = rolls[counter];
+            hexes.get(counter).roll = rolls.get(counter);
     }
 
     /**
@@ -88,7 +90,7 @@ public class Board {
         return resources;
     }
 
-    int[] generateRolls() {
+    ArrayList<Integer> generateRolls() {
         int[] rollsArray = {
                 8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
         };
@@ -98,12 +100,23 @@ public class Board {
             rolls.add(i);
         Collections.shuffle(rolls);
 
+        for (int i = 0; i <18; i ++) {
+            if (hexes.get(i).type == Resource.DESERT){
+                rolls.add(i, -1);
+            }
+        }
+
+        return rolls;
+        /*
         int[] ret = new int[19];
 
+        Log.d(TAG, "For Loop Entered");
         for (int counter = 0; counter <= 18; counter++) {
             if (hexes.get(counter).type == Resource.DESERT) {
                 ret[counter] = -1;
             } else {
+                //Error is somewhere in Here
+
                 while (true) {
                     int current = rolls.remove(0);
                     boolean adjacent = false;
@@ -119,10 +132,14 @@ public class Board {
                     } else {
                         rolls.add(current);
                     }
+                    Log.d(TAG, "While Loop Continuing");
                 }
                 Collections.shuffle(rolls);
+
             }
         }
+        Log.d(TAG, "For Loop Finished");
         return ret;
+        */
     }
 }

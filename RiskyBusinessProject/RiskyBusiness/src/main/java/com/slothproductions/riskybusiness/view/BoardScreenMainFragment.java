@@ -41,12 +41,13 @@ public class BoardScreenMainFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("ONCREATE", "OnCreate was called");
         super.onCreate(savedInstanceState);
         mBoardScreen = new BoardScreen();
+
+        Log.d("BOARDDATA", "Board Data Start");
         mBoardData = new Board(4);
-
-        Log.d("ONCREATE", "OnCreate was called");
-
+        Log.d("BOARDDATA", "Board Data Finished");
     }
 
     @Override
