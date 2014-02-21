@@ -37,13 +37,14 @@ public class BoardScreen extends FragmentActivity {
                     .commit();
         }
 
-        btnPause = (Button) findViewById(R.id.pauseButton);
+        Button btnPause = (Button) findViewById(R.id.pauseButton);
         OnClickListener oclPause = new OnClickListener() {
             @Override
             public void onClick(View v) {
                     showPauseDialog();
             }
         };
+        btnPause.setOnClickListener(this); 
     }
 
 
