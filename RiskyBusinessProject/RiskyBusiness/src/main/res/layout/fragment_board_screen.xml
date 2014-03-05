@@ -2,14 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/hexParent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:id="@+id/mainBoardFragment"
     tools:context="com.slothproductions.riskybusiness.view.BoardScreenMainFragment">
 
-    <ImageView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/hexParent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:rotation="30">
+
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView7"
@@ -18,7 +24,7 @@
         android:layout_alignLeft="@+id/imageView6"
         android:layout_alignStart="@+id/imageView6" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView6"
@@ -27,7 +33,7 @@
         android:layout_alignLeft="@+id/imageView"
         android:layout_alignStart="@+id/imageView" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView5"
@@ -36,7 +42,7 @@
         android:layout_alignLeft="@+id/imageView2"
         android:layout_alignStart="@+id/imageView2" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
@@ -45,7 +51,7 @@
         android:layout_alignLeft="@+id/imageView5"
         android:layout_alignStart="@+id/imageView5"/>
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView8"
@@ -54,7 +60,7 @@
         android:layout_alignLeft="@+id/imageView7"
         android:layout_alignStart="@+id/imageView7" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView12"
@@ -63,7 +69,7 @@
         android:layout_alignLeft="@+id/imageView11"
         android:layout_alignStart="@+id/imageView11" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView11"
@@ -72,7 +78,7 @@
         android:layout_alignLeft="@+id/imageView10"
         android:layout_alignStart="@+id/imageView10" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
@@ -81,7 +87,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView2"
@@ -92,7 +98,7 @@
         android:layout_alignLeft="@+id/imageView"
         android:layout_alignStart="@+id/imageView" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView17"
@@ -101,7 +107,7 @@
         android:layout_below="@+id/imageView"
         android:layout_toRightOf="@+id/imageView" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView18"
@@ -110,7 +116,7 @@
         android:layout_alignLeft="@+id/imageView17"
         android:layout_alignStart="@+id/imageView17" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView19"
@@ -119,7 +125,7 @@
         android:layout_alignLeft="@+id/imageView18"
         android:layout_alignStart="@+id/imageView18" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
@@ -128,7 +134,7 @@
         android:layout_alignLeft="@+id/imageView4"
         android:layout_alignStart="@+id/imageView4" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView9"
@@ -136,7 +142,7 @@
         android:layout_below="@+id/imageView8"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView13"
@@ -145,7 +151,7 @@
         android:layout_alignLeft="@+id/imageView12"
         android:layout_alignStart="@+id/imageView12" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView16"
@@ -154,7 +160,7 @@
         android:layout_alignLeft="@+id/imageView15"
         android:layout_alignStart="@+id/imageView15" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView15"
@@ -163,7 +169,7 @@
         android:layout_alignLeft="@+id/imageView14"
         android:layout_alignStart="@+id/imageView14" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView14"
@@ -172,7 +178,7 @@
         android:layout_toLeftOf="@+id/imageView2"
         android:layout_marginRight="64dp" />
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView10"
@@ -181,47 +187,43 @@
         android:layout_toLeftOf="@+id/imageView5"
         android:layout_marginRight="64dp" />
 
-    <Button
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pause Game"
-        android:id="@+id/pauseButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:layout_width="wrap_content"
+        <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pause Game"
+        android:id="@+id/pauseButton"/>
+
+        <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Build"
-        android:id="@+id/buildButton"
-        android:layout_above="@+id/imageView10"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/pauseButton"
-        android:layout_alignStart="@+id/pauseButton" />
+        android:id="@+id/buildButton"/>
 
-    <Button
-        android:layout_width="wrap_content"
+        <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Trade"
-        android:id="@+id/tradeButton"
-        android:layout_above="@+id/imageView17"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/buildButton"
-        android:layout_alignStart="@+id/buildButton" />
+        android:id="@+id/tradeButton"/>
 
-    <Button
-        android:layout_width="wrap_content"
+        <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="End Turn"
-        android:id="@+id/endTurnButton"
-        android:layout_above="@+id/imageView5"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/tradeButton"
-        android:layout_alignStart="@+id/tradeButton" />
+        android:id="@+id/endTurnButton"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
 

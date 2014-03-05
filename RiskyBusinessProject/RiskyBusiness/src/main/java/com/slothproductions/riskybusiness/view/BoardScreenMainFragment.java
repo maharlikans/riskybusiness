@@ -31,6 +31,7 @@ public class BoardScreenMainFragment extends Fragment {
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
+    private RelativeLayout mMainBoardFragment;
     private RelativeLayout mHexParent;
     private Button mBtnPause;
     private Button mBtnEndTurn;
@@ -57,6 +58,7 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
+        mMainBoardFragment = (RelativeLayout)v.findViewById(R.id.mainBoardFragment);
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +126,7 @@ public class BoardScreenMainFragment extends Fragment {
             tv.setTextSize(30);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
+            tv.setRotation(-30);
             mHexParent.addView(tv, lp);
         }
     }
