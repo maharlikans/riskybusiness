@@ -10,10 +10,15 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.DiceRoll;
@@ -48,6 +53,22 @@ public class BoardScreen extends FragmentActivity {
         return true;
     }
 
+    public void placeCornerObject(MotionEvent event) {
+        ImageView mTempCity = new ImageView(this);
+        mTempCity.setId((int)System.currentTimeMillis());
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+
+        int x = (int)event.getX();
+        int y = (int)event.getY();
+
+        lp.leftMargin = x;
+        lp.topMargin = y;
+
+        mTempCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
+        RelativeLayout mMainBoardFragment = (RelativeLayout)findViewById(R.id.mainBoardFragment);
+        mMainBoardFragment.addView(mTempCity, lp);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -58,6 +79,12 @@ public class BoardScreen extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        placeCornerObject(event);
+        return super.onTouchEvent(event);
     }
 
     @Override
