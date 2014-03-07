@@ -56,15 +56,17 @@ public class BoardScreen extends FragmentActivity {
     public void placeCornerObject(MotionEvent event) {
         ImageView mTempCity = new ImageView(this);
         mTempCity.setId((int)System.currentTimeMillis());
+        mTempCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 
         int x = (int)event.getX();
         int y = (int)event.getY();
+        x-=25;
+        y-=22;
 
         lp.leftMargin = x;
         lp.topMargin = y;
 
-        mTempCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
         RelativeLayout mMainBoardFragment = (RelativeLayout)findViewById(R.id.mainBoardFragment);
         mMainBoardFragment.addView(mTempCity, lp);
     }
@@ -81,11 +83,11 @@ public class BoardScreen extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public boolean onTouchEvent(MotionEvent event) {
         placeCornerObject(event);
         return super.onTouchEvent(event);
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

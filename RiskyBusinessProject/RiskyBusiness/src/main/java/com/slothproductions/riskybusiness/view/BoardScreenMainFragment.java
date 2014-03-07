@@ -32,7 +32,7 @@ public class BoardScreenMainFragment extends Fragment {
     private BoardScreen mBoardScreen;
     private Board mBoardData;
     private RelativeLayout mMainBoardFragment;
-    private RelativeLayout mHexParent;
+    private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnPause;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
@@ -59,6 +59,12 @@ public class BoardScreenMainFragment extends Fragment {
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
         mMainBoardFragment = (RelativeLayout)v.findViewById(R.id.mainBoardFragment);
+        mHexParent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findBottomRightCorner();
+            }
+        });
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -100,13 +106,48 @@ public class BoardScreenMainFragment extends Fragment {
         return v;
     }
 
+    //loop through indices, check which resource in board, color appropriately using code similar to below
+    void addColorsToBoard() {
+        for (int i = 0; i < mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            switch(mBoardData.hexes.get(i).type) {
+                case LUMBER:
+                    iv.setColorFilter(Color.GREEN);
+                    break;
+                case BRICK:
+                    iv.setColorFilter(Color.RED);
+                    break;
+                case WOOL:
+                    iv.setColorFilter(Color.LTGRAY);
+                    break;
+                case GRAIN:
+                    iv.setColorFilter(Color.GRAY);
+                    break;
+                case ORE:
+                    iv.setColorFilter(Color.DKGRAY);
+                    break;
+                case DESERT:
+                    iv.setColorFilter(Color.YELLOW);
+            }
+        }
+    }
+
+    /**
+     * adds dice roll values to the board and displays them
+     * <p>
+     *     Iterates through the arraylist of hexes, grabbing what the roll value should be.
+     *     The corresponding hex image from the view is then found, and its location is grabbed.
+     *     The textview is placed relative to the location of the hex
+     * </p>
+     *
+     */
     void addNumbersToBoard() {
         int l = mBoardData.hexes.size();
         for (int i = 0; i < l; i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             TextView tv = new TextView(getActivity());
             tv.setId((int)System.currentTimeMillis());
-            LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             if (mBoardData.hexes.get(i).roll < 0) {
                 continue;
             }
@@ -131,29 +172,93 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
-    //loop through indices, check which resource in board, color appropriately using code similar to below
-    void addColorsToBoard() {
-        for (int i = 0; i < mBoardData.hexes.size(); i++) {
+    //Places a circle image at the top corner of all the hexes
+    void findTopCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
-            switch(mBoardData.hexes.get(i).type) {
-                case LUMBER:
-                    iv.setColorFilter(Color.GREEN);
-                    break;
-                case BRICK:
-                    iv.setColorFilter(Color.RED);
-                    break;
-                case WOOL:
-                    iv.setColorFilter(Color.LTGRAY);
-                    break;
-                case GRAIN:
-                    iv.setColorFilter(Color.GRAY);
-                    break;
-                case ORE:
-                    iv.setColorFilter(Color.DKGRAY);
-                    break;
-                case DESERT:
-                    iv.setColorFilter(Color.YELLOW);
-            }
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25-63; //+130
+            lp.topMargin = iv.getTop()-25-33; //+112
+            mHexParent.addView(mTempCity, lp);
+        }
+    }
+
+    //Places a circle image at the bottom corner of all the hexes
+    void findBottomCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25+65; //+130
+            lp.topMargin = iv.getTop()-25+192; //+112
+            mHexParent.addView(mTempCity, lp);
+        }
+    }
+
+    //Places a circle image at the top right corner of all the hexes
+    void findTopRightCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25+65;
+            lp.topMargin = iv.getTop()-25-31;
+            mHexParent.addView(mTempCity, lp);
+        }
+    }
+
+    //Places a circle image at the top left corner of all the hexes
+    void findTopLeftCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25-125;
+            lp.topMargin = iv.getTop()-25+78;
+            mHexParent.addView(mTempCity, lp);
+        }
+    }
+
+    //Places a circle image at the bottom left corner of all the hexes
+    void findBottomLeftCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25-62;
+            lp.topMargin = iv.getTop()-25+192;
+            mHexParent.addView(mTempCity, lp);
+        }
+    }
+
+    //Places a circle image at the bottom right corner of all the hexes
+    void findBottomRightCorner() {
+        for (int i = 0; i< mBoardData.hexes.size(); i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            ImageView mTempCity = new ImageView(getActivity());
+            mTempCity.setId((int)System.currentTimeMillis());
+            mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+            mTempCity.setRotation(-30);
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            lp.leftMargin = iv.getLeft()-25+130;
+            lp.topMargin = iv.getTop()-25+82;
+            mHexParent.addView(mTempCity, lp);
         }
     }
 
