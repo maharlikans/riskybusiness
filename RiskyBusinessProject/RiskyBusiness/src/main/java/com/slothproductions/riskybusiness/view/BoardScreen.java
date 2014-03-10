@@ -68,8 +68,7 @@ public class BoardScreen extends FragmentActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
-        //frag.placeCornerObject(event);
-        frag.findTopCorner();
+        frag.placeCornerObject(event);
         return super.onTouchEvent(event);
     }
 

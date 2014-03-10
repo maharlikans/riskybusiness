@@ -34,10 +34,6 @@ import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
 
-    //TODO: Find actual center x and center y
-    private int centerX = 1280;
-    private int centerY = 800;
-
     private BoardScreen mBoardScreen;
     private Board mBoardData;
     private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
@@ -110,8 +106,7 @@ public class BoardScreenMainFragment extends Fragment {
                 public void onGlobalLayout() {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    //centerY = mHexParent.getHeight()/2;
-                    centerX = mHexParent.getWidth()/2;
+                    //This is where add numbers should be implemented (i think)
                 }});
             }
 
@@ -186,7 +181,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     //Places a circle image at the top corner of all the hexes
-    void findTopCorner() {
+    void findTopLeftCorner() {
         for (int i = 0; i< mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             ImageView mTempCity = new ImageView(getActivity());
@@ -200,7 +195,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     //Places a circle image at the bottom corner of all the hexes
-    void findBottomCorner() {
+    void findBottomRightCorner() {
         for (int i = 0; i< mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             ImageView mTempCity = new ImageView(getActivity());
@@ -228,7 +223,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     //Places a circle image at the top left corner of all the hexes
-    void findTopLeftCorner() {
+    void findMidLeftCorner() {
         for (int i = 0; i< mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             ImageView mTempCity = new ImageView(getActivity());
@@ -256,7 +251,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     //Places a circle image at the bottom right corner of all the hexes
-    void findBottomRightCorner() {
+    void findMidRightCorner() {
         for (int i = 0; i< mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             ImageView mTempCity = new ImageView(getActivity());
@@ -280,13 +275,11 @@ public class BoardScreenMainFragment extends Fragment {
      * returns false if tapLocation was not close enough to a corner to place it
      */
     boolean placeCornerObject(MotionEvent tapEvent) {
-        int xTap = (int)(tapEvent.getX()-centerX);
-        int yTap = (int)(1.7*(2*centerY-tapEvent.getY()-centerY));
-        //convert x and y tap to equivalent locations in angled adjustment
-        int tapX = (int)(xTap*Math.cos(Math.PI/6)-yTap*Math.sin(Math.PI/6)+centerX);
-        int tapY = (int)(xTap*Math.sin(Math.PI/6)+yTap*Math.cos(Math.PI/6));
-        tapY = (int) (tapY/1.7);
-        tapY=centerY-tapY;
+        int xTap = (int)tapEvent.getX();
+        int yTap = (int)tapEvent.getY();
+
+        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
+        //right now it just checks topleftcorner
         for (int i =0; i < mBoardData.hexes.size(); i++) {
             Hex temp = mBoardData.hexes.get(i);
             for (int j = 0; j < 6; j++) {
@@ -306,13 +299,13 @@ public class BoardScreenMainFragment extends Fragment {
             int highY = y+50;
 
             //compare tap x,y locations against valid x and y range for top corner
-            if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            if (xTap >= lowX && xTap <=highX && yTap>=lowY && yTap<=highY) {
                 //place object here
                 ImageView mTempObject = new ImageView(getActivity());
                 mTempObject.setId((int)System.currentTimeMillis());
                 mTempObject.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
                 LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-                lp.leftMargin = x-25;
+                lp.leftMargin = x-25; //note the -25 is to center the image on the location
                 lp.topMargin = y-25;
 
                 mHexParent.addView(mTempObject, lp);
