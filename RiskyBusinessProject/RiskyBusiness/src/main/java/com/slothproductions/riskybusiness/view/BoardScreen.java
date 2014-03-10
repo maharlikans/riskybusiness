@@ -44,7 +44,6 @@ public class BoardScreen extends FragmentActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         

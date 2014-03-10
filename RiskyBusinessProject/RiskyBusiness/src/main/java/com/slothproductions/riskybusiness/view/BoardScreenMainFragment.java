@@ -2,25 +2,18 @@ package com.slothproductions.riskybusiness.view;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.Image;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -144,10 +137,10 @@ public class BoardScreenMainFragment extends Fragment {
 
     /**
      * adds dice roll values to the board and displays them
-     * <p>
-     *     Iterates through the arraylist of hexes, grabbing what the roll value should be.
-     *     The corresponding hex image from the view is then found, and its location is grabbed.
-     *     The textview is placed relative to the location of the hex
+     *
+     *Iterates through the arraylist of hexes, grabbing what the roll value should be.
+     *The corresponding hex image from the view is then found, and its location is grabbed.
+     *The textview is placed relative to the location of the hex
      *
      */
     void addNumbersToBoard() {
