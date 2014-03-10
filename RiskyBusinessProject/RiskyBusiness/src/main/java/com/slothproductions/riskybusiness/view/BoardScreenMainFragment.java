@@ -180,6 +180,7 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
+    //NOTE: find...Corner() methods are used for testing purposes to find the locations of each corner.
     //Places a circle image at the top corner of all the hexes
     void findTopLeftCorner() {
         for (int i = 0; i< mBoardData.hexes.size(); i++) {
@@ -275,8 +276,9 @@ public class BoardScreenMainFragment extends Fragment {
      * returns false if tapLocation was not close enough to a corner to place it
      */
     boolean placeCornerObject(MotionEvent tapEvent) {
-        int xTap = (int)tapEvent.getX();
-        int yTap = (int)tapEvent.getY();
+        //get location of x and y taps, and adjust for padding
+        int xTap = (int)tapEvent.getX()-128;
+        int yTap = (int)tapEvent.getY()-34;
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         //right now it just checks topleftcorner
@@ -317,7 +319,7 @@ public class BoardScreenMainFragment extends Fragment {
         if (mLastToast!= null) {
             mLastToast.cancel();
         }
-        mLastToast = Toast.makeText(getActivity(), "Invalid Corner Object Placement (needs to be on top corner)",
+        mLastToast = Toast.makeText(getActivity(), "Invalid Corner Object Placement (needs to be on top left corner)",
                 Toast.LENGTH_SHORT);
         mLastToast.show();
 
