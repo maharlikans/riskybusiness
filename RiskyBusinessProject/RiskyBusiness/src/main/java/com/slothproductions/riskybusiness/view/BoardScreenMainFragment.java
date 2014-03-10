@@ -305,10 +305,10 @@ public class BoardScreenMainFragment extends Fragment {
                 //place object here
                 ImageView mTempObject = new ImageView(getActivity());
                 mTempObject.setId((int)System.currentTimeMillis());
-                mTempObject.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                mTempObject.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
                 LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
                 lp.leftMargin = x-25; //note the -25 is to center the image on the location
-                lp.topMargin = y-25;
+                lp.topMargin = y-22;
 
                 mHexParent.addView(mTempObject, lp);
                 return true;
