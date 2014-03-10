@@ -68,7 +68,11 @@ public class BoardScreen extends FragmentActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
-        frag.placeCornerObject(event);
+        ImageView mCity = new ImageView(this);
+        mCity.setId((int)System.currentTimeMillis());
+        mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
+
+        frag.placeCornerObject(event, mCity);
         return super.onTouchEvent(event);
     }
 
