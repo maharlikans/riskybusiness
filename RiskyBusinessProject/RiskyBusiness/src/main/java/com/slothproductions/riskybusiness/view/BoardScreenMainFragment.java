@@ -5,18 +5,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.Image;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,13 +23,13 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.DiceRoll;
+import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
-    private RelativeLayout mMainBoardFragment;
-    private RelativeLayout mHexParent;
+    private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnPause;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
@@ -58,7 +55,6 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
-        mMainBoardFragment = (RelativeLayout)v.findViewById(R.id.mainBoardFragment);
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -95,40 +91,22 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
+        ViewTreeObserver vto = mHexParent.getViewTreeObserver();
+        if (vto != null) {
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout() {
+                    //remove listener to ensure only one call is made.
+                    mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+                    addNumbersToBoard();
+                }});
+            }
+
         addColorsToBoard();
 
         return v;
-    }
-
-    void addNumbersToBoard() {
-        int l = mBoardData.hexes.size();
-        for (int i = 0; i < l; i++) {
-            ImageView iv = (ImageView)mHexParent.getChildAt(i);
-            TextView tv = new TextView(getActivity());
-            tv.setId((int)System.currentTimeMillis());
-            LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-            if (mBoardData.hexes.get(i).roll < 0) {
-                continue;
-            }
-            else if (mBoardData.hexes.get(i).roll > 9) {
-                lp.leftMargin = iv.getLeft()-35;
-                lp.rightMargin = iv.getRight()+35;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
-            else {
-                lp.leftMargin = iv.getLeft()-15;
-                lp.rightMargin = iv.getRight()+15;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
-            tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
-            tv.setTextSize(30);
-            tv.setTypeface(null, Typeface.BOLD);
-            tv.setTextColor(getResources().getColor(R.color.blue_background));
-            tv.setRotation(-30);
-            mHexParent.addView(tv, lp);
-        }
     }
 
     //loop through indices, check which resource in board, color appropriately using code similar to below
@@ -157,17 +135,222 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        Log.d("ONSTART", "Fragment Called Start");
-        super.onStart();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                addNumbersToBoard();
+    /**
+     * adds dice roll values to the board and displays them
+     *<p>
+     *Iterates through the arraylist of hexes, grabbing what the roll value should be.
+     *The corresponding hex image from the view is then found, and its location is grabbed.
+     *The textview is placed relative to the location of the hex
+     *
+     */
+    void addNumbersToBoard() {
+        int l = mBoardData.hexes.size();
+        for (int i = 0; i < l; i++) {
+            ImageView iv = (ImageView)mHexParent.getChildAt(i);
+            TextView tv = new TextView(getActivity());
+            tv.setId((int)System.currentTimeMillis());
+            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+            if (mBoardData.hexes.get(i).roll < 0) {
+                continue;
             }
-        }, 50);
-        Log.d("ONSTART", "Fragment Finished Start");
+            else if (mBoardData.hexes.get(i).roll > 9) {
+                lp.leftMargin = iv.getLeft()-35;
+                lp.rightMargin = iv.getRight()+35;
+                lp.topMargin = iv.getTop()+35;
+                lp.bottomMargin = iv.getBottom()-35;
+            }
+            else {
+                lp.leftMargin = iv.getLeft()-15;
+                lp.rightMargin = iv.getRight()+15;
+                lp.topMargin = iv.getTop()+35;
+                lp.bottomMargin = iv.getBottom()-35;
+            }
+            tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
+            tv.setTextSize(30);
+            tv.setTypeface(null, Typeface.BOLD);
+            tv.setTextColor(getResources().getColor(R.color.blue_background));
+            mHexParent.addView(tv, lp);
+        }
+    }
+
+    /**places given image centered at the specified x and y coordinates
+     *
+     * @param x The x coordinate for item placement
+     * @param y The y coordinate for item placement
+     * @param image The item that will be placed on the screen
+     */
+    void placeImage(int x, int y, ImageView image) {
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+
+        //center object on location with margins
+        lp.leftMargin = x-image.getWidth()/2 - image.getDrawable().getIntrinsicWidth()/2;
+        lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
+
+        mHexParent.addView(image, lp);
+    }
+
+    /**Places a specified object at the top left corner of a specified tile if the tap location
+     * is close enough to the corner of the object
+     *
+     * NOTE: The other add..Corner() methods do the same thing, but with different corners
+     *
+     * @param tapX the x coordinate for the tap
+     * @param tapY the y coordinate for the tap
+     * @param mTile the tile that the image will be placed at the corner of
+     * @param mCornerObject The object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
+     */
+    boolean addTopLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of top left vertex of tile
+        int x = mTile.getLeft()-63;
+        int y = mTile.getTop()-33;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for top corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addTopRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of Top Right vertex of tile
+        int x = mTile.getLeft()+65;
+        int y = mTile.getTop()-31;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addMidRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of Middle Right vertex of tile
+        int x = mTile.getLeft()+130;
+        int y = mTile.getTop()+82;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of Bottom Right vertex of tile
+        int x = mTile.getLeft()+65;
+        int y = mTile.getTop()+192;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of Bottom Left vertex of tile
+        int x = mTile.getLeft()-62;
+        int y = mTile.getTop()+192;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addMidLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
+        //gets the location of Middle Left vertex of tile
+        int x = mTile.getLeft()-125;
+        int y = mTile.getTop()+78;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mCornerObject);
+            return true;
+        }
+        return false;
+    }
+
+    /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
+     * also checks to see if a location is available for an item to be placed.
+     *
+     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
+     * @param mCornerObject the Object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
+     */
+    boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
+        //get location of x and y taps, and adjust for padding
+        int xTap = (int)tapEvent.getX()-128;
+        int yTap = (int)tapEvent.getY()-34;
+
+        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
+        for (int i =0; i < mBoardData.hexes.size(); i++) {
+            Hex temp = mBoardData.hexes.get(i);
+            for (int j = 0; j < 6; j++) {
+                //check to see if vertex is available to be checked, then checks location compared to tap.
+            }
+            //grabbing the tile
+            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
+
+            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
+            if (addTopLeftCorner(xTap, yTap, mTile, mCornerObject) || addTopRightCorner(xTap, yTap, mTile, mCornerObject) || addMidRightCorner(xTap, yTap, mTile, mCornerObject)
+                    || addBottomRightCorner(xTap, yTap, mTile, mCornerObject) || addBottomLeftCorner(xTap, yTap, mTile, mCornerObject) || addMidLeftCorner(xTap, yTap, mTile, mCornerObject)) {
+                return true;
+            }
+        }
+
+        //object can't be placed, make toast
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+        }
+        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the corner of a tile)",
+                Toast.LENGTH_SHORT);
+        mLastToast.show();
+
+        return false;
     }
 
     public void showPauseDialog() {
@@ -281,6 +464,5 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.show();
     }
-
 }
 

@@ -10,10 +10,15 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.DiceRoll;
@@ -29,7 +34,7 @@ public class BoardScreen extends FragmentActivity {
         setContentView(R.layout.activity_board_screen);
 
         FragmentManager fm = getSupportFragmentManager();
-        mBoardScreenFragment = fm.findFragmentById(R.id.BoardContainer);
+        mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -38,7 +43,6 @@ public class BoardScreen extends FragmentActivity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +62,17 @@ public class BoardScreen extends FragmentActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
+        ImageView mCity = new ImageView(this);
+        mCity.setId((int)System.currentTimeMillis());
+        mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
+
+        frag.placeCornerObject(event, mCity);
+        return super.onTouchEvent(event);
     }
 
     @Override
