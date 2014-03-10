@@ -27,7 +27,6 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
-    private BoardScreenMainFragment mBoardScreenMainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class BoardScreen extends FragmentActivity {
         setContentView(R.layout.activity_board_screen);
 
         FragmentManager fm = getSupportFragmentManager();
-        mBoardScreenFragment = fm.findFragmentById(R.id.BoardContainer);
+        mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -54,24 +53,6 @@ public class BoardScreen extends FragmentActivity {
         return true;
     }
 
-    public void placeCornerObject(MotionEvent event) {
-        ImageView mTempCity = new ImageView(this);
-        mTempCity.setId((int)System.currentTimeMillis());
-        mTempCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-
-        int x = (int)event.getX();
-        int y = (int)event.getY();
-        x-=25;
-        y-=22;
-
-        lp.leftMargin = x;
-        lp.topMargin = y;
-
-        RelativeLayout mMainBoardFragment = (RelativeLayout)findViewById(R.id.mainBoardFragment);
-        mMainBoardFragment.addView(mTempCity, lp);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -87,8 +68,8 @@ public class BoardScreen extends FragmentActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
-        frag.placeCornerObject(event);
-        //frag.findTopCorner();
+        //frag.placeCornerObject(event);
+        frag.findTopCorner();
         return super.onTouchEvent(event);
     }
 

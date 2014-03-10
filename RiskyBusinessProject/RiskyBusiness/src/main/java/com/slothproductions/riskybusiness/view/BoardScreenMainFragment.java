@@ -40,7 +40,6 @@ public class BoardScreenMainFragment extends Fragment {
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
-    private RelativeLayout mMainBoardFragment;
     private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnPause;
     private Button mBtnEndTurn;
@@ -67,7 +66,6 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
-        mMainBoardFragment = (RelativeLayout)v.findViewById(R.id.mainBoardFragment);
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +181,6 @@ public class BoardScreenMainFragment extends Fragment {
             tv.setTextSize(30);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
-            tv.setRotation(-30);
             mHexParent.addView(tv, lp);
         }
     }
@@ -195,7 +192,6 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTempCity = new ImageView(getActivity());
             mTempCity.setId((int)System.currentTimeMillis());
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-            mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             lp.leftMargin = iv.getLeft()-25-63; //+162
             lp.topMargin = iv.getTop()-25-33; //-38
@@ -210,7 +206,6 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTempCity = new ImageView(getActivity());
             mTempCity.setId((int)System.currentTimeMillis());
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-            mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             lp.leftMargin = iv.getLeft()-25+65; //+130
             lp.topMargin = iv.getTop()-25+192; //+112
@@ -225,7 +220,6 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTempCity = new ImageView(getActivity());
             mTempCity.setId((int)System.currentTimeMillis());
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-            mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             lp.leftMargin = iv.getLeft()-25+65;
             lp.topMargin = iv.getTop()-25-31;
@@ -240,7 +234,6 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTempCity = new ImageView(getActivity());
             mTempCity.setId((int)System.currentTimeMillis());
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-            mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             lp.leftMargin = iv.getLeft()-25-125;
             lp.topMargin = iv.getTop()-25+78;
@@ -255,7 +248,6 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTempCity = new ImageView(getActivity());
             mTempCity.setId((int)System.currentTimeMillis());
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-            mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             lp.leftMargin = iv.getLeft()-25-62;
             lp.topMargin = iv.getTop()-25+192;
@@ -319,7 +311,6 @@ public class BoardScreenMainFragment extends Fragment {
                 ImageView mTempObject = new ImageView(getActivity());
                 mTempObject.setId((int)System.currentTimeMillis());
                 mTempObject.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
-                mTempObject.setRotation(-30);
                 LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
                 lp.leftMargin = x-25;
                 lp.topMargin = y-25;
