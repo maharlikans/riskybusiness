@@ -2,7 +2,9 @@ package com.slothproductions.riskybusiness.view;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
@@ -13,8 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,8 +30,13 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.DiceRoll;
+import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
+
+    //TODO: Find actual center x and center y
+    private int centerX = 1280;
+    private int centerY = 800;
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
@@ -59,12 +68,6 @@ public class BoardScreenMainFragment extends Fragment {
 
         mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
         mMainBoardFragment = (RelativeLayout)v.findViewById(R.id.mainBoardFragment);
-        mHexParent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findBottomRightCorner();
-            }
-        });
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +103,19 @@ public class BoardScreenMainFragment extends Fragment {
                 showTradeDialog();
             }
         });
+
+        ViewTreeObserver vto = mHexParent.getViewTreeObserver();
+        if (vto != null) {
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout() {
+                    //remove listener to ensure only one call is made.
+                    mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    //centerY = mHexParent.getHeight()/2;
+                    centerX = mHexParent.getWidth()/2;
+                }});
+            }
 
         addColorsToBoard();
 
@@ -181,8 +197,8 @@ public class BoardScreenMainFragment extends Fragment {
             mTempCity.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
             mTempCity.setRotation(-30);
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-            lp.leftMargin = iv.getLeft()-25-63; //+130
-            lp.topMargin = iv.getTop()-25-33; //+112
+            lp.leftMargin = iv.getLeft()-25-63; //+162
+            lp.topMargin = iv.getTop()-25-33; //-38
             mHexParent.addView(mTempCity, lp);
         }
     }
@@ -260,6 +276,68 @@ public class BoardScreenMainFragment extends Fragment {
             lp.topMargin = iv.getTop()-25+82;
             mHexParent.addView(mTempCity, lp);
         }
+    }
+
+    /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
+     * also checks to see if a location is available for an item to be placed.
+     *
+     * @param tapEvent
+     * @return boolean
+     *
+     * returns true if item could be placed
+     * returns false if tapLocation was not close enough to a corner to place it
+     */
+    boolean placeCornerObject(MotionEvent tapEvent) {
+        int xTap = (int)(tapEvent.getX()-centerX);
+        int yTap = (int)(1.7*(2*centerY-tapEvent.getY()-centerY));
+        //convert x and y tap to equivalent locations in angled adjustment
+        int tapX = (int)(xTap*Math.cos(Math.PI/6)-yTap*Math.sin(Math.PI/6)+centerX);
+        int tapY = (int)(xTap*Math.sin(Math.PI/6)+yTap*Math.cos(Math.PI/6));
+        tapY = (int) (tapY/1.7);
+        tapY=centerY-tapY;
+        for (int i =0; i < mBoardData.hexes.size(); i++) {
+            Hex temp = mBoardData.hexes.get(i);
+            for (int j = 0; j < 6; j++) {
+                //check to see if vertex is available to be checked, then checks location compared to tap.
+            }
+            //grabbing the tile
+            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
+
+            //gets the location of top vertex of tile
+            int x = mTile.getLeft()-63;
+            int y = mTile.getTop()-33;
+
+            //range that is valid location
+            int lowX = x-50;
+            int highX = x+50;
+            int lowY = y-50;
+            int highY = y+50;
+
+            //compare tap x,y locations against valid x and y range for top corner
+            if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+                //place object here
+                ImageView mTempObject = new ImageView(getActivity());
+                mTempObject.setId((int)System.currentTimeMillis());
+                mTempObject.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                mTempObject.setRotation(-30);
+                LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+                lp.leftMargin = x-25;
+                lp.topMargin = y-25;
+
+                mHexParent.addView(mTempObject, lp);
+                return true;
+            }
+        }
+
+        //object can't be placed, make toast
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+        }
+        mLastToast = Toast.makeText(getActivity(), "Invalid Corner Object Placement (needs to be on top corner)",
+                Toast.LENGTH_SHORT);
+        mLastToast.show();
+
+        return false;
     }
 
     @Override
@@ -386,6 +464,5 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.show();
     }
-
 }
 

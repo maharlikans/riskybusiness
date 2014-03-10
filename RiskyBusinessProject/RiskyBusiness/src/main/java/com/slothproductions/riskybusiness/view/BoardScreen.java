@@ -27,6 +27,7 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
+    private BoardScreenMainFragment mBoardScreenMainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +84,13 @@ public class BoardScreen extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*@Override
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        placeCornerObject(event);
+        BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
+        frag.placeCornerObject(event);
+        //frag.findTopCorner();
         return super.onTouchEvent(event);
-    }*/
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
