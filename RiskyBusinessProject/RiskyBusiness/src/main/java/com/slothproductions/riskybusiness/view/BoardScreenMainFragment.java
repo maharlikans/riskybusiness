@@ -106,7 +106,8 @@ public class BoardScreenMainFragment extends Fragment {
                 public void onGlobalLayout() {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    //This is where add numbers should be implemented (i think)
+
+                    addNumbersToBoard();
                 }});
             }
 
@@ -179,6 +180,12 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
+    /**places given image centered at the specified x and y coordinates
+     *
+     * @param x The x coordinate for item placement
+     * @param y The y coordinate for item placement
+     * @param image The item that will be placed on the screen
+     */
     void placeImage(int x, int y, ImageView image) {
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 
@@ -189,6 +196,17 @@ public class BoardScreenMainFragment extends Fragment {
         mHexParent.addView(image, lp);
     }
 
+    /**Places a specified object at the top left corner of a specified tile if the tap location
+     * is close enough to the corner of the object
+     *
+     * NOTE: The other add..Corner() methods do the same thing, but with different corners
+     *
+     * @param tapX the x coordinate for the tap
+     * @param tapY the y coordinate for the tap
+     * @param mTile the tile that the image will be placed at the corner of
+     * @param mCornerObject The object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
+     */
     boolean addTopLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of top left vertex of tile
         int x = mTile.getLeft()-63;
@@ -306,11 +324,9 @@ public class BoardScreenMainFragment extends Fragment {
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
      * also checks to see if a location is available for an item to be placed.
      *
-     * @param tapEvent
-     * @return boolean
-     *
-     * returns true if item could be placed
-     * returns false if tapLocation was not close enough to a corner to place it
+     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
+     * @param mCornerObject the Object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
      */
     boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
         //get location of x and y taps, and adjust for padding
@@ -342,19 +358,6 @@ public class BoardScreenMainFragment extends Fragment {
         mLastToast.show();
 
         return false;
-    }
-
-    @Override
-    public void onStart() {
-        Log.d("ONSTART", "Fragment Called Start");
-        super.onStart();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                addNumbersToBoard();
-            }
-        }, 50);
-        Log.d("ONSTART", "Fragment Finished Start");
     }
 
     public void showPauseDialog() {
