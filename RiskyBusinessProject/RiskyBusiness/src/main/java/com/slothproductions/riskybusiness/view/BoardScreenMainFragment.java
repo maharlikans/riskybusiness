@@ -137,7 +137,7 @@ public class BoardScreenMainFragment extends Fragment {
 
     /**
      * adds dice roll values to the board and displays them
-     *
+     *<p>
      *Iterates through the arraylist of hexes, grabbing what the roll value should be.
      *The corresponding hex image from the view is then found, and its location is grabbed.
      *The textview is placed relative to the location of the hex
