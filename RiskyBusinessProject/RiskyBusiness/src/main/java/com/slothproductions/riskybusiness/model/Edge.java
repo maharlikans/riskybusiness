@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Edge {
 	public int index;
-	public int owner;
+	public Player owner;
 	public boolean road;
 
 	ArrayList<Vertex> vertices;
@@ -12,7 +12,7 @@ public class Edge {
 
 	public Edge (int index) {
 		this.index = index;
-		this.owner = -1;
+		this.owner = null;
 		this.road = false;
 		this.vertices = new ArrayList<Vertex>();
 		this.hexes = new ArrayList<Hex>();
