@@ -29,7 +29,7 @@ public class BoardScreenMainFragment extends Fragment {
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
-    private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
+    private ZoomableLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnPause;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
@@ -54,7 +54,7 @@ public class BoardScreenMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
         Log.d("VIEWCALLED", "View was inflated");
 
-        mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
+        mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
