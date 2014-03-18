@@ -27,6 +27,7 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
+    private ZoomableLayout mHexParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class BoardScreen extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
+        mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -72,6 +74,9 @@ public class BoardScreen extends FragmentActivity {
         mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
 
         frag.placeCornerObject(event, mCity);
+
+        //mHexParent.zoom(event);
+
         return super.onTouchEvent(event);
     }
 

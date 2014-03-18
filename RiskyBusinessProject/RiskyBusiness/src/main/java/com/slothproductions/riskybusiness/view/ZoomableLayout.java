@@ -46,10 +46,16 @@ public class ZoomableLayout extends RelativeLayout {
         detector = new ScaleGestureDetector(getContext(), new ScaleListener());
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         detector.onTouchEvent(event);
         super.onTouchEvent(event);
+        return true;
+    }
+
+    public boolean zoom(MotionEvent event) {
+        detector.onTouchEvent(event);
         return true;
     }
 
