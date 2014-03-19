@@ -43,7 +43,7 @@ public class ZoomableLayout extends RelativeLayout {
         setWillNotDraw(false);
     }
 
-    boolean zoom(MotionEvent event) {
+    boolean Zoom(MotionEvent event) {
         Log.d(TAG, "Zoom Called");
         mPivotX = event.getX();
         mPivotY = event.getY();
@@ -53,6 +53,13 @@ public class ZoomableLayout extends RelativeLayout {
         else {
             mScaleFactor = 2;
         }
+        invalidate();
+        return true;
+    }
+
+    boolean Pan(MotionEvent start, float x, float y) {
+        mPivotX += x;
+        mPivotY += y;
         invalidate();
         return true;
     }
