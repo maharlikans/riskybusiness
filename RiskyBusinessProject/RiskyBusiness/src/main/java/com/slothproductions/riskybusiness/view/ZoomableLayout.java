@@ -20,8 +20,8 @@ public class ZoomableLayout extends RelativeLayout {
     private static float MIN_ZOOM = 1f;
     private static float MAX_ZOOM = 2f;
 
-    private float mPivotX;
-    private float mPivotY;
+    private float mCenterX;
+    private float mCenterY;
     private float mScaleFactor = 1.f;
 
     DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
@@ -43,10 +43,10 @@ public class ZoomableLayout extends RelativeLayout {
         setWillNotDraw(false);
     }
 
-    boolean Zoom(MotionEvent event) {
+    public boolean Zoom(MotionEvent event) {
         Log.d(TAG, "Zoom Called");
-        mPivotX = event.getX();
-        mPivotY = event.getY();
+        mCenterX = event.getX();
+        mCenterY = event.getY();
         if (mScaleFactor == 2) {
             mScaleFactor = 1;
         }
@@ -57,11 +57,28 @@ public class ZoomableLayout extends RelativeLayout {
         return true;
     }
 
-    boolean Pan(MotionEvent start, float x, float y) {
-        mPivotX += x;
-        mPivotY += y;
+    public boolean Pan(MotionEvent start, float x, float y) {
+        mCenterX += x;
+        mCenterY += y;
         invalidate();
         return true;
+    }
+
+    public boolean isZoom() {
+        if (mScaleFactor == 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public float getPanX() {
+        return mCenterX;
+    }
+
+    public float getPanY() {
+        return mCenterY;
     }
 
     @Override
@@ -73,7 +90,7 @@ public class ZoomableLayout extends RelativeLayout {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.scale(mScaleFactor, mScaleFactor, mPivotX, mPivotY);
+        canvas.scale(mScaleFactor, mScaleFactor, mCenterX, mCenterY);
         canvas.save();
         super.dispatchDraw(canvas);
         canvas.restore();

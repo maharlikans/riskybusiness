@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -39,6 +40,9 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnTrade;
 
     private Toast mLastToast;
+
+    private int height;
+    private int width;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,22 @@ public class BoardScreenMainFragment extends Fragment {
                     ImageView mCity = new ImageView(getActivity());
                     mCity.setId((int)System.currentTimeMillis());
                     mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
-                    placeCornerObject(e, mCity);
+                    //placeCornerObject(e, mCity);
+                    int x, y;
+                    if (mHexParent.isZoom()) {
+                        x = (int)(((e.getX()-128)-1280)/2.0+1280-64);
+                        y = (int)(((e.getY()-32)-752)/2.0+752-16);
+                    }
+                    else {
+                        x = (int)(e.getX()-128);
+                        y = (int)(e.getY()-32);
+                    }
+                    placeImage(x, y, mCity);
+                    String s = "Tap X = " + x + " Tap Y  = " + y;
+                    String s2 = "Layout X = " + width + " Layout Y  = " + height;
+                    Log.d(TAG, s2);
+                    Log.d(TAG, s);
+
                     return super.onSingleTapConfirmed(e);
                 }
 
@@ -81,7 +100,7 @@ public class BoardScreenMainFragment extends Fragment {
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) {
                     Log.d(TAG, "Scroll Detected");
                     mHexParent.Pan(e1, x, y);
-                    return super.onScroll(e1,e2,x,y);
+                    return super.onScroll(e1, e2, x, y);
                 }
             });
 
@@ -137,6 +156,10 @@ public class BoardScreenMainFragment extends Fragment {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     addNumbersToBoard();
+                    DisplayMetrics displaymetrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                    height = displaymetrics.heightPixels;
+                    width = displaymetrics.widthPixels;
                 }});
             }
 
