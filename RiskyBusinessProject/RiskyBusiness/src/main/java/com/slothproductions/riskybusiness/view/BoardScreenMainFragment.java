@@ -24,6 +24,7 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Hex;
 
@@ -80,8 +81,10 @@ public class BoardScreenMainFragment extends Fragment {
                     //placeCornerObject(e, mCity);
                     int x, y;
                     if (mHexParent.isZoom()) {
-                        x = (int)(((e.getX()-128)-1280)/2.0+1280-64);
-                        y = (int)(((e.getY()-32)-752)/2.0+752-16);
+                        Coordinate coordinate = new Coordinate(e.getX(),e.getY());
+                        coordinate.mapZoomCoordinates(2);
+                        x = (int)coordinate.getX();
+                        y = (int)coordinate.getY();
                     }
                     else {
                         x = (int)(e.getX()-128);
