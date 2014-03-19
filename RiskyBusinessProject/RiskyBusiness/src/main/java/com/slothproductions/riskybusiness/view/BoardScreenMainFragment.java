@@ -376,7 +376,7 @@ public class BoardScreenMainFragment extends Fragment {
         int x,y;
         if (mHexParent.isZoom()) {
             Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-            coordinate.mapZoomCoordinates(2);
+            coordinate.mapZoomCoordinates(mHexParent);
             x = (int)coordinate.getX();
             y = (int)coordinate.getY();
         }

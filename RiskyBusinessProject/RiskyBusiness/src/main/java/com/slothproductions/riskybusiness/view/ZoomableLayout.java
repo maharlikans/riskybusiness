@@ -47,11 +47,11 @@ public class ZoomableLayout extends RelativeLayout {
         Log.d(TAG, "Zoom Called");
         mCenterX = event.getX();
         mCenterY = event.getY();
-        if (mScaleFactor == 2) {
-            mScaleFactor = 1;
+        if (mScaleFactor == MAX_ZOOM) {
+            mScaleFactor = MIN_ZOOM;
         }
         else {
-            mScaleFactor = 2;
+            mScaleFactor = MAX_ZOOM;
         }
         invalidate();
         return true;
@@ -60,8 +60,20 @@ public class ZoomableLayout extends RelativeLayout {
     public boolean Pan(MotionEvent start, float x, float y) {
         mCenterX += x;
         mCenterY += y;
+        if (isInBoundsX() && isInBoundsY()) {
+        }
+        else if (isInBoundsX() && !isInBoundsY()) {
+            mCenterY -=y;
+        }
+        else if (!isInBoundsX() && isInBoundsY()) {
+            mCenterX-=x;
+        }
+        else {
+            mCenterX-=x;
+            mCenterY -=y;
+        }
         invalidate();
-        return true;
+        return false;
     }
 
     public boolean isZoom() {
@@ -73,12 +85,36 @@ public class ZoomableLayout extends RelativeLayout {
         }
     }
 
+    public boolean isInBoundsX() {
+        if (mCenterX >= 2560) {
+            return false;
+        }
+        else if (mCenterX <= 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isInBoundsY() {
+        if (mCenterY >= 1504) {
+            return false;
+        }
+        else if (mCenterY <= 0) {
+            return false;
+        }
+        return true;
+    }
+
     public float getPanX() {
         return mCenterX;
     }
 
     public float getPanY() {
         return mCenterY;
+    }
+
+    public float getZoom() {
+        return mScaleFactor;
     }
 
     @Override

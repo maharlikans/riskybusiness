@@ -1,5 +1,7 @@
 package com.slothproductions.riskybusiness.model;
 
+import com.slothproductions.riskybusiness.view.ZoomableLayout;
+
 /**
  * Created by Joseph on 3/19/14.
  */
@@ -21,17 +23,21 @@ public class Coordinate {
     }
 
     //this is spread out just so that I can see what is going on.
-    public void mapZoomCoordinates(int zoomLevel) {
+    public void mapZoomCoordinates(ZoomableLayout layout) {
+        int zoomLevel = (int)layout.getZoom();
+
+        float centerX = layout.getPanX();
         x = x-128; //adjust for padding
-        x = x-1280; //subtract center x
+        x = x-centerX; //subtract center x
         x = x/zoomLevel; //adjust for zoom
-        x = x + 1280; //re add center
+        x = x + centerX; //re add center
         x = x - 64; // adjust for padding/2
 
+        float centerY = layout.getPanY();
         y = y-32; //adjust for padding
-        y = y-752; //subtract center x
+        y = y-centerY; //subtract center x
         y = y/zoomLevel; //adjust for zoom
-        y = y + 752; //re add center
+        y = y + centerY; //re add center
         y = y - 16; // adjust for padding/2
     }
 
