@@ -78,20 +78,8 @@ public class BoardScreenMainFragment extends Fragment {
                     ImageView mCity = new ImageView(getActivity());
                     mCity.setId((int)System.currentTimeMillis());
                     mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
-                    //placeCornerObject(e, mCity);
-                    int x, y;
-                    if (mHexParent.isZoom()) {
-                        Coordinate coordinate = new Coordinate(e.getX(),e.getY());
-                        coordinate.mapZoomCoordinates(2);
-                        x = (int)coordinate.getX();
-                        y = (int)coordinate.getY();
-                    }
-                    else {
-                        x = (int)(e.getX()-128);
-                        y = (int)(e.getY()-32);
-                    }
-                    placeImage(x, y, mCity);
-                    String s = "Tap X = " + x + " Tap Y  = " + y;
+                    placeCornerObject(e, mCity);
+                    String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
                     String s2 = "Layout X = " + width + " Layout Y  = " + height;
                     Log.d(TAG, s2);
                     Log.d(TAG, s);
@@ -385,8 +373,17 @@ public class BoardScreenMainFragment extends Fragment {
      */
     boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
         //get location of x and y taps, and adjust for padding
-        int xTap = (int)tapEvent.getX()-128;
-        int yTap = (int)tapEvent.getY()-34;
+        int x,y;
+        if (mHexParent.isZoom()) {
+            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+            coordinate.mapZoomCoordinates(2);
+            x = (int)coordinate.getX();
+            y = (int)coordinate.getY();
+        }
+        else {
+            x = (int)(tapEvent.getX()-128);
+            y = (int)(tapEvent.getY()-32);
+        }
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < mBoardData.hexes.size(); i++) {
@@ -398,8 +395,8 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTile = (ImageView) mHexParent.getChildAt(i);
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(xTap, yTap, mTile, mCornerObject) || addTopRightCorner(xTap, yTap, mTile, mCornerObject) || addMidRightCorner(xTap, yTap, mTile, mCornerObject)
-                    || addBottomRightCorner(xTap, yTap, mTile, mCornerObject) || addBottomLeftCorner(xTap, yTap, mTile, mCornerObject) || addMidLeftCorner(xTap, yTap, mTile, mCornerObject)) {
+            if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
+                    || addBottomRightCorner(x, y, mTile, mCornerObject) || addBottomLeftCorner(x, y, mTile, mCornerObject) || addMidLeftCorner(x, y, mTile, mCornerObject)) {
                 return true;
             }
         }
