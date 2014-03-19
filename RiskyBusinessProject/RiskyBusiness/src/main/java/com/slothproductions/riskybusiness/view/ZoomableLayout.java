@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.RelativeLayout;
+import android.view.GestureDetector;
 
 import java.io.Console;
 import java.util.jar.Attributes;
@@ -22,7 +23,6 @@ public class ZoomableLayout extends RelativeLayout {
     private float mPivotX;
     private float mPivotY;
     private float mScaleFactor = 1.f;
-    private ScaleGestureDetector detector;
 
     DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
     int displayWidth = metrics.widthPixels;
@@ -31,31 +31,35 @@ public class ZoomableLayout extends RelativeLayout {
     public ZoomableLayout(Context context) {
         super(context);
         setWillNotDraw(false);
-        detector = new ScaleGestureDetector(getContext(), new ScaleListener());
     }
 
     public ZoomableLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
-        detector = new ScaleGestureDetector(getContext(), new ScaleListener());
     }
 
     public ZoomableLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setWillNotDraw(false);
-        detector = new ScaleGestureDetector(getContext(), new ScaleListener());
     }
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        detector.onTouchEvent(event);
-        super.onTouchEvent(event);
+    boolean zoom(MotionEvent event) {
+        Log.d(TAG, "Zoom Called");
+        mPivotX = event.getX();
+        mPivotY = event.getY();
+        if (mScaleFactor == 2) {
+            mScaleFactor = 1;
+        }
+        else {
+            mScaleFactor = 2;
+        }
+        invalidate();
         return true;
     }
 
-    public boolean zoom(MotionEvent event) {
-        detector.onTouchEvent(event);
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
         return true;
     }
 
@@ -66,17 +70,5 @@ public class ZoomableLayout extends RelativeLayout {
         canvas.save();
         super.dispatchDraw(canvas);
         canvas.restore();
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mPivotX = detector.getFocusX();
-            mPivotY = detector.getFocusY();
-            mScaleFactor *= detector.getScaleFactor();
-            mScaleFactor = Math.max(MIN_ZOOM, Math.min(mScaleFactor, MAX_ZOOM));
-            invalidate();
-            return true;
-        }
     }
 }

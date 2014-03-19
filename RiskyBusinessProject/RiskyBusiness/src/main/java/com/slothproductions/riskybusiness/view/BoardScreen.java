@@ -66,6 +66,7 @@ public class BoardScreen extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
@@ -78,12 +79,12 @@ public class BoardScreen extends FragmentActivity {
         //mHexParent.zoom(event);
 
         return super.onTouchEvent(event);
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.d("KEYPRESSED", "back button was pressed");
+            Log.d("KEYPRESSED", "Back Button was pressed");
             showExitDialog();
             return true;
         }

@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
+
+    private final static String TAG = "Board Screen";
 
     private BoardScreen mBoardScreen;
     private Board mBoardData;
@@ -55,6 +58,29 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        mHexParent.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d(TAG, "Double Tap Event Detected");
+                    mHexParent.zoom(e);
+                    return super.onDoubleTap(e);
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    Log.d(TAG, "Single Tap Detected, not Zooming");
+                    return super.onSingleTapConfirmed(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gestureDetector.onTouchEvent(motionEvent))
+                    return true;
+                return false;
+            }
+        });
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +125,6 @@ public class BoardScreenMainFragment extends Fragment {
                 public void onGlobalLayout() {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
                     addNumbersToBoard();
                 }});
             }
