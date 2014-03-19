@@ -1,22 +1,83 @@
 package com.slothproductions.riskybusiness.model;
 
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.lang.RuntimeException;
+
+/* TODO: Settlement should be its own class, having value and Buildingtype. Rename Settlement to Building */
 
 public class Vertex {
-	public int index;
-	public int owner;
-	public int type;
-	public int value;
+	static private int count = 0;
+	final protected List<Hex> hexagons;
+	protected List<Edge> edges;
+	final protected int index;
+	protected Player owner;
+	protected Settlement building;
+	protected MilitaryUnit military;
+	private locked;
 
-	public ArrayList<Hex> hexes;
-	public ArrayList<Edge> edges;
+    final public class ImmutableVertex {
+        public int getOwner() {
+            return index;
+        }
+    	
+        public Player getOwner() {
+            return owner;
+        }
+        
+        public Settlement getSettlement() {
+            return type;
+        }
 
-	public Vertex(int index) {
-		this.index = index;
-		this.owner = -1;
-		this.type = 0;
-		this.value = 0;
-		this.hexes = new ArrayList<Hex>();
-		this.edges = new ArrayList<Edge>();
+        public Settlement getMilitary() {
+            return military;
+        }        
+    }
+
+	protected SettlementPair settlement;
+    final protected ImmutableVertex immutable;
+	
+    protected Vertex(Board board, Hexagon h1, Hexagon h2, Hexagon h3) {
+    	locked = false;
+		index = ++count;
+        hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
+        owner = type = military = null;
+        immutable = new ImmutableVertex();
+        h1.addVertex(this);
+        if (h2 != null) h2.addVertex(this);
+        if (h3 != null) h3.addVertex(this);
+        board.addVertex(this);
+        edges = new ArrayList<Edges>();
 	}
+	
+	final protected void addEdge(Edge e) {
+		if (!locked) {
+			edges.add(e);
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	
+	final protected void lock() {
+		locked = true;
+		edges = Collections.unmodifiableList(edges);
+	}
+
+    final protected SettlementPair getSettlement() {
+        return settlement;
+    }
+
+    final protected void setOwner(Player p) {
+        owner = p;
+    }
+    
+    final protected void setBuilding(Settlement b) {
+        building = b;
+    }
+    
+    final protected void setMilitary(MilitaryUnit t) {
+        military = u;
+    }
 }

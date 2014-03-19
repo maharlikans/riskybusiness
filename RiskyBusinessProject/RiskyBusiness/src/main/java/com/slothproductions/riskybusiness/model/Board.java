@@ -7,15 +7,39 @@ import java.util.*;
 public class Board {
 
     private final String TAG = "BOARDDATA";
+    private boolean locked = false;
 
     public static enum Resource {
         LUMBER, BRICK, WOOL, GRAIN, ORE, DESERT
     };
 
-    public ArrayList<Hex> hexes;
-    public ArrayList<Edge> edges;
-    public ArrayList<Vertex> vertices;
-    public ArrayList<ArrayList<Hex>> diceRolls;
+    protected List<Hex> hexes;
+    protected List<Vertex> vertices;
+    protected List<Edge> edges;
+    protected List<ArrayList<Hex>> diceRolls;
+    
+    protected void addVertex(Vertex v) {
+    	if (!locked) {
+    		vertices.add(v);
+    	} else {
+			throw new RuntimeException(); 
+    	}
+    }
+    
+    protected void addEdge(Edge e) {
+    	if (!locked) {
+    		edges.add(e);
+    	} else {
+			throw new RuntimeException(); 
+    	}
+    }
+    
+	final protected void lock() {
+		locked = true;
+		hexes = Collections.unmodifiableList(hexes);
+		vertices = Collections.unmodifiableList(vertices);
+		edges = Collections.unmodifiableList(edges);
+	}
 
     public Board (int numPlayers) {
         hexes = new ArrayList<Hex>();
