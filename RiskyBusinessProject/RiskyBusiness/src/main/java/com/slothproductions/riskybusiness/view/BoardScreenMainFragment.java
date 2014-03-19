@@ -70,6 +70,10 @@ public class BoardScreenMainFragment extends Fragment {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     Log.d(TAG, "Single Tap Detected, not Zooming");
+                    ImageView mCity = new ImageView(getActivity());
+                    mCity.setId((int)System.currentTimeMillis());
+                    mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
+                    placeCornerObject(e, mCity);
                     return super.onSingleTapConfirmed(e);
                 }
 
