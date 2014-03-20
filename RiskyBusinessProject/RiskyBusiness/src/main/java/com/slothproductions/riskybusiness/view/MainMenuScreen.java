@@ -41,7 +41,7 @@ public class MainMenuScreen extends Activity {
         });
 
         //Deals with the Options Button
-       /* mOptions = (ImageView)findViewById(R.id.options);
+       mOptions = (ImageView)findViewById(R.id.options);
         mStartNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +49,7 @@ public class MainMenuScreen extends Activity {
                 Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
                 startActivity(i);
             }
-        });*/
+        });
 
 
 
