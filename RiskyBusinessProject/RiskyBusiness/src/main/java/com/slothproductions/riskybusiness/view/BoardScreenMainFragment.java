@@ -276,6 +276,21 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
+    void setBuildItem(MenuItem item) {
+        if (item.getItemId() == R.id.road) {
+            buildItem = BuildItem.ROAD;
+        }
+        else if (item.getItemId() == R.id.soldier) {
+            buildItem = BuildItem.SOLDIER;
+        }
+        else if (item.getItemId() == R.id.settlement) {
+            buildItem = BuildItem.SETTLEMENT;
+        }
+        else {
+            buildItem = BuildItem.CITY;
+        }
+    }
+
     /**places given image centered at the specified x and y coordinates
      *
      * @param x The x coordinate for item placement
@@ -465,21 +480,6 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
-    void setBuildItem(MenuItem item) {
-        if (item.getItemId() == R.id.road) {
-            buildItem = BuildItem.ROAD;
-        }
-        else if (item.getItemId() == R.id.soldier) {
-            buildItem = BuildItem.SOLDIER;
-        }
-        else if (item.getItemId() == R.id.settlement) {
-            buildItem = BuildItem.SETTLEMENT;
-        }
-        else {
-            buildItem = BuildItem.CITY;
-        }
-    }
-
     public void showOptionsDialog() {
         AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
@@ -518,7 +518,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        alertOptionsDialog.setPositiveButton("Return to Game", new DialogInterface.OnClickListener() {
+        alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
