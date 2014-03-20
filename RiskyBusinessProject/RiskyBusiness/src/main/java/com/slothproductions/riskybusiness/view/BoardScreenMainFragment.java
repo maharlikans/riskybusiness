@@ -40,7 +40,7 @@ public class BoardScreenMainFragment extends Fragment {
     private BoardScreen mBoardScreen;
     private Board mBoardData;
     private ZoomableLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
-    private Button mBtnPause;
+    private Button mBtnOptions;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
     private Button mBtnTrade;
@@ -111,11 +111,11 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        mBtnPause = (Button)v.findViewById(R.id.pauseButton);
-        mBtnPause.setOnClickListener(new View.OnClickListener() {
+        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
+        mBtnOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPauseDialog();
+                showOptionsDialog();
             }
         });
 
@@ -433,13 +433,13 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
-    public void showPauseDialog() {
-        AlertDialog.Builder alertpauseDialog = new AlertDialog.Builder(getActivity());
+    public void showOptionsDialog() {
+        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
-        alertpauseDialog.setTitle("Pause Screen");
-        alertpauseDialog.setMessage("Game Paused.");
+        alertOptionsDialog.setTitle("Options");
 
-        alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
+
+        alertOptionsDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -450,7 +450,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        alertpauseDialog.show();
+        alertOptionsDialog.show();
     }
 
     /*public void showBuildDialog(){
