@@ -56,7 +56,7 @@ public class BoardScreenMainFragment extends Fragment {
     private int dice1;
     private int dice2;
 
-    private DiceRoll viceDice;
+    private DiceRoll viceDice = new DiceRoll();
 
     public static enum BuildItem {
         NONE, ROAD, SOLDIER, SETTLEMENT, CITY
@@ -158,26 +158,16 @@ public class BoardScreenMainFragment extends Fragment {
 
         //Adds functionality to the End Turn Button
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        if(mBtnEndTurn.getText().equals("End Turn")){
-
              mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
-                @Override
-            public void onClick(View v){
-                    showEndTurnDialog();
-                }
-            });
-
-            }
-        else if(mBtnEndTurn.getText().equals("Roll Dice")) {
-               mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                    showRollDialog();
-                    mBtnEndTurn.setText("End Turn");
-                }
-            });
-
-        }
+                 @Override
+                   public void onClick(View v) {
+                       if (mBtnEndTurn.getText().equals("End Turn")) {
+                            showEndTurnDialog();
+                        } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
+                           showRollDialog();
+                          }
+                   }
+              });
 
         buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
@@ -583,14 +573,74 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showRollDialog() {
-           dice1 = viceDice.roll().getDice1();
-           dice2 = viceDice.roll().getDice2();
-           String total = viceDice.roll().getResults();
-            int sum = dice1 + dice2;
+        viceDice.roll();
+        dice1 = viceDice.getFirstDice();
+        dice2 = viceDice.getSecondDice();
 
-        mLastToast = Toast.makeText(getActivity(), "Dice1: " + dice1 + " dice2: " + dice2 + "Dice Totals: " + sum + "ViceDice results: " + total ,
-                Toast.LENGTH_SHORT);
-        mLastToast.show();
+        ImageView outputdice1 = new ImageView(getActivity());
+        outputdice1.setId((int)System.currentTimeMillis());
+
+        ImageView outputdice2 = new ImageView(getActivity());
+        outputdice2.setId((int)System.currentTimeMillis());
+
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+
+       switch(dice1){
+           case 1:
+               outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+           case 2:
+               outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+           case 3:
+               outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+           case 4:
+               outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+           case 5:
+               outputdice1.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+           case 6:
+               outputdice1.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+               placeImage(lp.leftMargin,lp.bottomMargin, outputdice1);
+               break;
+       }
+        int offset = outputdice2.getMaxWidth() + 10;
+      switch (dice2) {
+          case 1:
+              outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+          case 2:
+              outputdice2.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+          case 3:
+              outputdice2.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+          case 4:
+              outputdice2.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+          case 5:
+              outputdice2.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+          case 6:
+              outputdice2.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+              placeImage(offset,lp.bottomMargin, outputdice2);
+              break;
+
+      }
+
+        mBtnEndTurn.setText("End Turn");
 
 
     }

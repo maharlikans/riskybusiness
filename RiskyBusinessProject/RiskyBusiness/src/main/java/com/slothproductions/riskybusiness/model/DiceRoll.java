@@ -6,38 +6,21 @@ import java.util.Random;
 
 public class DiceRoll {
 
-    public DiceRoll(){};
 
-    private static Random rng = new SecureRandom();
+    private static Random randDice1 = new SecureRandom();
+    private static Random randDice2 = new SecureRandom();
 
-    public static class RollTriplet {
-        public final byte first;
-        public final byte second;
-        public final byte result;
+    public int first;
+    public int second;
+    public int result;
 
-        protected RollTriplet(int f, int s) {
-            if (f >= 1 && f <= 6 && s >= 1 && s <= 6) {
-                first = (byte)f;
-                second = (byte)s;
-                result = (byte)(f+s);
-            } else {
-                throw new InvalidParameterException();
-            }
-        }
-        public String getResults(){
-            return Integer.toString(result);
-        }
-
-        public int getDice1(){return first;}    //gets the first dice roll
-        public int getDice2(){return second;}   //gets the second dice roll
-
+    public void roll() {
+        first = 1 + randDice1.nextInt(6);
+        second = 1 + randDice2.nextInt(6);
+        result = first+second;
     }
 
-    public static RollTriplet roll() {
-        int r = rng.nextInt(35);
-        return new RollTriplet(r/6 + 1, r%6 + 1);
-    }
-
-
-
+    public int getFirstDice() {return first;}
+    public int getSecondDice() {return second;}
+    public int getResults() {return result;}
 }
