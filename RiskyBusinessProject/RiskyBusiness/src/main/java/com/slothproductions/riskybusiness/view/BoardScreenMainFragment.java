@@ -63,6 +63,7 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was inflated");
 
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        //Note: this code should probably go somewhere else I'll fix it later
         mHexParent.setOnTouchListener(new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -79,6 +80,8 @@ public class BoardScreenMainFragment extends Fragment {
                     mCity.setId((int)System.currentTimeMillis());
                     mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
                     placeCornerObject(e, mCity);
+
+                    //For Debugging
                     String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
                     String s2 = "Layout X = " + width + " Layout Y  = " + height;
                     Log.d(TAG, s2);

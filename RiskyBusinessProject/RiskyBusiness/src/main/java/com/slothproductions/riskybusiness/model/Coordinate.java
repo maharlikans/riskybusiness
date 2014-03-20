@@ -22,7 +22,11 @@ public class Coordinate {
         return y;
     }
 
-    //this is spread out just so that I can see what is going on.
+    /**Maps the coordinates from the location tapped on the screen to the given layout
+     * takes into account zoom and pan factor. Everything is spread out so it is easy to see what is going on.
+     *
+     * @param layout
+     */
     public void mapZoomCoordinates(ZoomableLayout layout) {
         int zoomLevel = (int)layout.getZoom();
 
