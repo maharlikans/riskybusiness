@@ -484,6 +484,7 @@ public class BoardScreenMainFragment extends Fragment {
         AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
         alertOptionsDialog.setTitle("Options");
+        alertOptionsDialog.setCanceledOnTouchOutside(false);
 
         alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
