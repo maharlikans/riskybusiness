@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/road"
+        android:title="Road"/>
+
+    <item
+        android:id="@+id/soldier"
+        android:title="Soldier"/>
+
+    <item
+        android:id="@+id/settlement"
+        android:title="Settlement"/>
+    <item
+        android:id="@+id/city"
+        android:title="City"/>
+</menu>

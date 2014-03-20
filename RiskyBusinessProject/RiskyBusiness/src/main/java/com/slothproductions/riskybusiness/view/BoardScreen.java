@@ -27,6 +27,7 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
+    private ZoomableLayout mHexParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class BoardScreen extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
+        mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -64,6 +66,7 @@ public class BoardScreen extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
@@ -72,13 +75,16 @@ public class BoardScreen extends FragmentActivity {
         mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
 
         frag.placeCornerObject(event, mCity);
+
+        //mHexParent.zoom(event);
+
         return super.onTouchEvent(event);
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.d("KEYPRESSED", "back button was pressed");
+            Log.d("KEYPRESSED", "Back Button was pressed");
             showExitDialog();
             return true;
         }
@@ -88,26 +94,16 @@ public class BoardScreen extends FragmentActivity {
     public void showExitDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-        alertDialog.setTitle("Save Game?");
-        alertDialog.setMessage("Do you want to save this game?");
+        alertDialog.setTitle("Exiting Game");
+        alertDialog.setMessage("All unsaved progess will be lost. Are you sure you want to exit the game?");
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                // Save the game state here
-                Toast.makeText(BoardScreen.this, "Game Saved",
-                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(BoardScreen.this, "Game was not saved", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        alertDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //return to screen
             }

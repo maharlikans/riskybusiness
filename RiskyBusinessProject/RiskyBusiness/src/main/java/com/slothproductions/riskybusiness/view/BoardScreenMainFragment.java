@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,23 +21,40 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View.OnClickListener;
+import android.widget.PopupMenu;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
 
+    private final static String TAG = "Board Screen";
+
     private BoardScreen mBoardScreen;
     private Board mBoardData;
-    private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
-    private Button mBtnPause;
+    private ZoomableLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
+    private Button mBtnOptions;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+    private BuildItem buildItem;
+
     private Toast mLastToast;
+
+    private int height;
+    private int width;
+
+    public static enum BuildItem {
+        NONE, ROAD, SOLDIER, SETTLEMENT, CITY
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,13 +73,80 @@ public class BoardScreenMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
         Log.d("VIEWCALLED", "View was inflated");
 
-        mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
+        mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        //Note: this code should probably go somewhere else I'll fix it later
+        mHexParent.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d(TAG, "Double Tap Event Detected");
+                    mHexParent.Zoom(e);
+                    return super.onDoubleTap(e);
+                }
 
-        mBtnPause = (Button)v.findViewById(R.id.pauseButton);
-        mBtnPause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    ImageView item = new ImageView(getActivity());
+                    item.setId((int)System.currentTimeMillis());
+                    Log.d(TAG, "Single Tap Detected");
+                    switch (buildItem) {
+                        case NONE:
+                            Log.d(TAG, "No Build Item Selected");
+                            break;
+                        case ROAD:
+                            Log.d(TAG, "Road Will be Placed at Tap Location");
+                            //item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
+                            //placeSideObject(e, item);
+                            break;
+                        case SOLDIER:
+                            Log.d(TAG, "Soldier will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                        case SETTLEMENT:
+                            Log.d(TAG, "Settlement will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("settlement", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                        case CITY:
+                            Log.d(TAG, "City will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                    }
+
+                    buildItem = buildItem.NONE;
+
+                    //For Debugging
+                    String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
+                    String s2 = "Layout X = " + width + " Layout Y  = " + height;
+                    Log.d(TAG, s2);
+                    Log.d(TAG, s);
+
+                    return super.onSingleTapConfirmed(e);
+                }
+
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) {
+                    Log.d(TAG, "Scroll Detected");
+                    mHexParent.Pan(e1, x, y);
+                    return super.onScroll(e1, e2, x, y);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gestureDetector.onTouchEvent(motionEvent))
+                    return true;
+                return false;
+            }
+        });
+
+        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
+        mBtnOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPauseDialog();
+                showOptionsDialog();
             }
         });
 
@@ -73,12 +159,26 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
+        buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnBuild.setOnClickListener(new View.OnClickListener(){
             @Override
-        public void onClick(View v){
-                showBuildDialog();
+            public void onClick(View v){
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), mBtnBuild);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        setBuildItem(item);
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
             }
         });
 
@@ -99,8 +199,11 @@ public class BoardScreenMainFragment extends Fragment {
                 public void onGlobalLayout() {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
                     addNumbersToBoard();
+                    DisplayMetrics displaymetrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                    height = displaymetrics.heightPixels;
+                    width = displaymetrics.widthPixels;
                 }});
             }
 
@@ -170,6 +273,21 @@ public class BoardScreenMainFragment extends Fragment {
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
             mHexParent.addView(tv, lp);
+        }
+    }
+
+    void setBuildItem(MenuItem item) {
+        if (item.getItemId() == R.id.road) {
+            buildItem = BuildItem.ROAD;
+        }
+        else if (item.getItemId() == R.id.soldier) {
+            buildItem = BuildItem.SOLDIER;
+        }
+        else if (item.getItemId() == R.id.settlement) {
+            buildItem = BuildItem.SETTLEMENT;
+        }
+        else {
+            buildItem = BuildItem.CITY;
         }
     }
 
@@ -323,8 +441,17 @@ public class BoardScreenMainFragment extends Fragment {
      */
     boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
         //get location of x and y taps, and adjust for padding
-        int xTap = (int)tapEvent.getX()-128;
-        int yTap = (int)tapEvent.getY()-34;
+        int x,y;
+        if (mHexParent.isZoom()) {
+            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+            coordinate.mapZoomCoordinates(mHexParent);
+            x = (int)coordinate.getX();
+            y = (int)coordinate.getY();
+        }
+        else {
+            x = (int)(tapEvent.getX()-128);
+            y = (int)(tapEvent.getY()-32);
+        }
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < mBoardData.hexes.size(); i++) {
@@ -336,8 +463,8 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTile = (ImageView) mHexParent.getChildAt(i);
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(xTap, yTap, mTile, mCornerObject) || addTopRightCorner(xTap, yTap, mTile, mCornerObject) || addMidRightCorner(xTap, yTap, mTile, mCornerObject)
-                    || addBottomRightCorner(xTap, yTap, mTile, mCornerObject) || addBottomLeftCorner(xTap, yTap, mTile, mCornerObject) || addMidLeftCorner(xTap, yTap, mTile, mCornerObject)) {
+            if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
+                    || addBottomRightCorner(x, y, mTile, mCornerObject) || addBottomLeftCorner(x, y, mTile, mCornerObject) || addMidLeftCorner(x, y, mTile, mCornerObject)) {
                 return true;
             }
         }
@@ -353,13 +480,45 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
-    public void showPauseDialog() {
-        AlertDialog.Builder alertpauseDialog = new AlertDialog.Builder(getActivity());
+    public void showOptionsDialog() {
+        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
-        alertpauseDialog.setTitle("Pause Screen");
-        alertpauseDialog.setMessage("Game Paused.");
+        alertOptionsDialog.setTitle("Options");
 
-        alertpauseDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
+        alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
+
+        alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Going to Game Rules page...",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
+
+        alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Game Saved!",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
+
+        /*alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -368,39 +527,9 @@ public class BoardScreenMainFragment extends Fragment {
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
             }
-        });
+        });*/
 
-        alertpauseDialog.show();
-    }
-
-    public void showBuildDialog(){
-        AlertDialog.Builder alertBuildDialog = new AlertDialog.Builder(getActivity());
-
-        alertBuildDialog.setTitle("Build");
-        alertBuildDialog.setMessage("Build stuff");
-
-        alertBuildDialog.setPositiveButton("Build", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build all the stuffs",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.setNegativeButton("Cancel" , new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.show();
+        alertOptionsDialog.show();
     }
 
     public void showTradeDialog(){
@@ -464,5 +593,7 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.show();
     }
+
+
 }
 
