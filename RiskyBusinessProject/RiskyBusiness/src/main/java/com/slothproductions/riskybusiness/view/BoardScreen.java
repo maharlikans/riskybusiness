@@ -94,26 +94,17 @@ public class BoardScreen extends FragmentActivity {
     public void showExitDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
-        alertDialog.setTitle("Save Game?");
-        alertDialog.setMessage("Do you want to save this game?");
+        alertDialog.setTitle("Exiting Game");
+        alertDialog.setMessage("Any progress not saved will be lost. Are you sure you want to exit the game?");
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 // Save the game state here
-                Toast.makeText(BoardScreen.this, "Game Saved",
-                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
 
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(BoardScreen.this, "Game was not saved", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        alertDialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //return to screen
             }
