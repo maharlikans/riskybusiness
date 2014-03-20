@@ -45,10 +45,16 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+    private BuildItem buildItem;
+
     private Toast mLastToast;
 
     private int height;
     private int width;
+
+    public static enum BuildItem {
+        NONE, ROAD, SOLDIER, SETTLEMENT, CITY
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,11 +86,36 @@ public class BoardScreenMainFragment extends Fragment {
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    Log.d(TAG, "Single Tap Detected, not Zooming");
-                    ImageView mCity = new ImageView(getActivity());
-                    mCity.setId((int)System.currentTimeMillis());
-                    mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
-                    placeCornerObject(e, mCity);
+                    ImageView item = new ImageView(getActivity());
+                    item.setId((int)System.currentTimeMillis());
+                    Log.d(TAG, "Single Tap Detected");
+                    switch (buildItem) {
+                        case NONE:
+                            Log.d(TAG, "No Build Item Selected");
+                            break;
+                        case ROAD:
+                            Log.d(TAG, "Road Will be Placed at Tap Location");
+                            //item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
+                            //placeSideObject(e, item);
+                            break;
+                        case SOLDIER:
+                            Log.d(TAG, "Soldier will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                        case SETTLEMENT:
+                            Log.d(TAG, "Settlement will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("settlement", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                        case CITY:
+                            Log.d(TAG, "City will be Placed at Tap Location");
+                            item.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
+                            placeCornerObject(e, item);
+                            break;
+                    }
+
+                    buildItem = buildItem.NONE;
 
                     //For Debugging
                     String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
@@ -128,6 +159,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
+        buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnBuild.setOnClickListener(new View.OnClickListener(){
@@ -141,7 +173,7 @@ public class BoardScreenMainFragment extends Fragment {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(getActivity(),"Build Item Selected: " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        setBuildItem(item);
                         return true;
                     }
                 });
@@ -433,6 +465,21 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
+    void setBuildItem(MenuItem item) {
+        if (item.getItemId() == R.id.road) {
+            buildItem = BuildItem.ROAD;
+        }
+        else if (item.getItemId() == R.id.soldier) {
+            buildItem = BuildItem.SOLDIER;
+        }
+        else if (item.getItemId() == R.id.settlement) {
+            buildItem = BuildItem.SETTLEMENT;
+        }
+        else {
+            buildItem = BuildItem.CITY;
+        }
+    }
+
     public void showOptionsDialog() {
         AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
@@ -452,36 +499,6 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.show();
     }
-
-    /*public void showBuildDialog(){
-        AlertDialog.Builder alertBuildDialog = new AlertDialog.Builder(getActivity());
-
-        alertBuildDialog.setTitle("Build");
-        alertBuildDialog.setMessage("Build stuff");
-
-        alertBuildDialog.setPositiveButton("Build", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build all the stuffs",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.setNegativeButton("Cancel" , new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.show();
-    }*/
 
     public void showTradeDialog(){
         AlertDialog.Builder alertTradeDialog = new AlertDialog.Builder(getActivity());
@@ -544,5 +561,7 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.show();
     }
+
+
 }
 
