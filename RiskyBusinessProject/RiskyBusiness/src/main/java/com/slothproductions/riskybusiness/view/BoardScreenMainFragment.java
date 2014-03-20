@@ -496,7 +496,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        alertOptionsDialog.setPositiveButton("How to Play", new DialogInterface.OnClickListener() {
+        alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -507,7 +507,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        alertOptionsDialog.setPositiveButton("Save Game", new DialogInterface.OnClickListener() {
+        alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -518,7 +518,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
-        alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
+        /*alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -527,7 +527,7 @@ public class BoardScreenMainFragment extends Fragment {
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
             }
-        });
+        });*/
 
         alertOptionsDialog.show();
     }
