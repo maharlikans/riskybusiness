@@ -5,7 +5,7 @@ import com.slothproductions.riskybusiness.lib.exception.AccessLevelException;
 
 public class Edge {
 	static private int count = 0;
-	final protected List<Hexagon> hexagons;
+	final protected List<Hex> hexagons;
 	final protected List<Vertex> vertices;
     final public ImmutableEdge immutable;
 	final public int index;
@@ -25,20 +25,22 @@ public class Edge {
         }
     }
 
-    public Edge(Board board, Hexagon h1, Hexagon h2, Vertex v1, Vertex v2) {
+    public Edge(Board board, Hex h1, Hex h2, Vertex v1, Vertex v2) {
     	index = ++count;
     	hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
     	vertices = Collections.unmodifiableList(Arrays.asList(v1, v2));
         immutable = new ImmutableEdge();
         owner = null;
+        /* currently does not compile Ricardo, please fix
     	h1.addEdge(this);
     	if (h2 != null) h2.addEdge(this);
     	v1.addEdge(this);
     	if (v2 != null)  v2.addEdge(this);
     	board.addEdge(this);
+    	*/
     }
 
-    public List<Hexagon> getHexagons() {
+    public List<Hex> getHexagons() {
         return hexagons;
     }
 

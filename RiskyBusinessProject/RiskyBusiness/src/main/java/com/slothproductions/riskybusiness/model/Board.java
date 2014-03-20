@@ -13,7 +13,8 @@ public class Board {
         LUMBER, BRICK, WOOL, GRAIN, ORE, DESERT
     };
 
-    protected List<Hex> hexes;
+    //hexes was changed to public because i need to access it somehow
+    public List<Hex> hexes;
     protected List<Vertex> vertices;
     protected List<Edge> edges;
     protected List<ArrayList<Hex>> diceRolls;

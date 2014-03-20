@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.model;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.lang.RuntimeException;
 /* TODO: Settlement should be its own class, having value and Buildingtype. Rename Settlement to Building */
 
 public class Vertex {
+    /*Does not compile, ricardo please fix
 	static private int count = 0;
 	final protected List<Hex> hexagons;
 	protected List<Edge> edges;
@@ -16,7 +18,7 @@ public class Vertex {
 	protected Player owner;
 	protected Settlement building;
 	protected MilitaryUnit military;
-	private locked;
+	private boolean locked;
 
     final public class ImmutableVertex {
         public int getOwner() {
@@ -39,7 +41,7 @@ public class Vertex {
 	protected SettlementPair settlement;
     final protected ImmutableVertex immutable;
 	
-    protected Vertex(Board board, Hexagon h1, Hexagon h2, Hexagon h3) {
+    protected Vertex(Board board, Hex h1, Hex h2, Hex h3) {
     	locked = false;
 		index = ++count;
         hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
@@ -49,7 +51,7 @@ public class Vertex {
         if (h2 != null) h2.addVertex(this);
         if (h3 != null) h3.addVertex(this);
         board.addVertex(this);
-        edges = new ArrayList<Edges>();
+        edges = new ArrayList<Edge>();
 	}
 	
 	final protected void addEdge(Edge e) {
@@ -80,4 +82,5 @@ public class Vertex {
     final protected void setMilitary(MilitaryUnit t) {
         military = u;
     }
+    */
 }
