@@ -36,6 +36,11 @@
             android:theme="@style/BoardTheme"
             android:screenOrientation="sensorLandscape">
         </activity>
+        <activity
+            android:name="com.slothproductions.riskybusiness.view.GameSetupScreen"
+            android:label="@string/title_game_setup_screen"
+            android:screenOrientation="sensorLandscape">
+        </activity>
     </application>
 
 </manifest>

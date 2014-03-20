@@ -28,14 +28,13 @@ public class MainMenuScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
 
-
         //Deals with the Start Button
         mStartNew = (ImageView)findViewById(R.id.start_new);
         mStartNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to main menu activity
-                Intent i = new Intent(MainMenuScreen.this, BoardScreen.class);
+                Intent i = new Intent(MainMenuScreen.this, GameSetupScreen.class);
                 startActivity(i);
             }
         });
