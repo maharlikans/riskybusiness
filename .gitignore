@@ -4,3 +4,7 @@
 *.jar
 *.war
 *.ear
+
+# weird annoying project files
+appcompat*.xml
+support*.xml
