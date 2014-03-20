@@ -438,8 +438,40 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setTitle("Options");
 
+        alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
 
-        alertOptionsDialog.setPositiveButton("Return", new DialogInterface.OnClickListener() {
+        alertOptionsDialog.setPositiveButton("How to Play", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Going to Game Rules page...",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
+
+        alertOptionsDialog.setPositiveButton("Save Game", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if (mLastToast!= null) {
+                    mLastToast.cancel();
+                }
+                mLastToast = Toast.makeText(getActivity(), "Game Saved!",
+                        Toast.LENGTH_SHORT);
+                mLastToast.show();
+            }
+        });
+
+        alertOptionsDialog.setPositiveButton("Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
@@ -452,36 +484,6 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.show();
     }
-
-    /*public void showBuildDialog(){
-        AlertDialog.Builder alertBuildDialog = new AlertDialog.Builder(getActivity());
-
-        alertBuildDialog.setTitle("Build");
-        alertBuildDialog.setMessage("Build stuff");
-
-        alertBuildDialog.setPositiveButton("Build", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build all the stuffs",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.setNegativeButton("Cancel" , new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Build Canceled", Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });
-
-        alertBuildDialog.show();
-    }*/
 
     public void showTradeDialog(){
         AlertDialog.Builder alertTradeDialog = new AlertDialog.Builder(getActivity());
