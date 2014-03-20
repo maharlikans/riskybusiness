@@ -24,9 +24,13 @@ public class DiceRoll {
                 throw new InvalidParameterException();
             }
         }
-        public String toString(){
+        public String getResults(){
             return Integer.toString(result);
         }
+
+        public int getDice1(){return first;}    //gets the first dice roll
+        public int getDice2(){return second;}   //gets the second dice roll
+
     }
 
     public static RollTriplet roll() {

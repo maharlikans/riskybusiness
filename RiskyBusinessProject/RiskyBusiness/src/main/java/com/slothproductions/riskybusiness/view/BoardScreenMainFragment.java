@@ -45,12 +45,18 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+
     private BuildItem buildItem;
 
     private Toast mLastToast;
 
     private int height;
     private int width;
+
+    private int dice1;
+    private int dice2;
+
+    private DiceRoll viceDice;
 
     public static enum BuildItem {
         NONE, ROAD, SOLDIER, SETTLEMENT, CITY
@@ -152,12 +158,26 @@ public class BoardScreenMainFragment extends Fragment {
 
         //Adds functionality to the End Turn Button
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
-            @Override
-        public void onClick(View v){
-                showEndTurnDialog();
+        if(mBtnEndTurn.getText().equals("End Turn")){
+
+             mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
+                @Override
+            public void onClick(View v){
+                    showEndTurnDialog();
+                }
+            });
+
             }
-        });
+        else if(mBtnEndTurn.getText().equals("Roll Dice")) {
+               mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){
+                    showRollDialog();
+                    mBtnEndTurn.setText("End Turn");
+                }
+            });
+
+        }
 
         buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
@@ -167,6 +187,7 @@ public class BoardScreenMainFragment extends Fragment {
             public void onClick(View v){
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(getActivity(), mBtnBuild);
+
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
@@ -531,7 +552,6 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showEndTurnDialog() {
-        final DiceRoll dRoll = new DiceRoll();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
         alertDialog.setTitle("End Turn?");
@@ -542,9 +562,9 @@ public class BoardScreenMainFragment extends Fragment {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
                 }
-                mLastToast = Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
-                        Toast.LENGTH_SHORT);
+                mLastToast = Toast.makeText(getActivity(), "Turn ended", Toast.LENGTH_SHORT);
                 mLastToast.show();
+                mBtnEndTurn.setText("Roll Dice");
 
             }
         });
@@ -562,6 +582,17 @@ public class BoardScreenMainFragment extends Fragment {
         alertDialog.show();
     }
 
+    public void showRollDialog() {
+           dice1 = viceDice.roll().getDice1();
+           dice2 = viceDice.roll().getDice2();
+           String total = viceDice.roll().getResults();
+            int sum = dice1 + dice2;
 
+        mLastToast = Toast.makeText(getActivity(), "Dice1: " + dice1 + " dice2: " + dice2 + "Dice Totals: " + sum + "ViceDice results: " + total ,
+                Toast.LENGTH_SHORT);
+        mLastToast.show();
+
+
+    }
 }
 
