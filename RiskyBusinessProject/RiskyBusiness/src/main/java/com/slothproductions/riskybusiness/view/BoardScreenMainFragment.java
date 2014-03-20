@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,20 +24,26 @@ import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Hex;
 
 public class BoardScreenMainFragment extends Fragment {
 
+    private final static String TAG = "Board Screen";
+
     private BoardScreen mBoardScreen;
     private Board mBoardData;
-    private RelativeLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
+    private ZoomableLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnPause;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
     private Button mBtnTrade;
 
     private Toast mLastToast;
+
+    private int height;
+    private int width;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +62,49 @@ public class BoardScreenMainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
         Log.d("VIEWCALLED", "View was inflated");
 
-        mHexParent = (RelativeLayout)v.findViewById(R.id.hexParent);
+        mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        //Note: this code should probably go somewhere else I'll fix it later
+        mHexParent.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d(TAG, "Double Tap Event Detected");
+                    mHexParent.Zoom(e);
+                    return super.onDoubleTap(e);
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    Log.d(TAG, "Single Tap Detected, not Zooming");
+                    ImageView mCity = new ImageView(getActivity());
+                    mCity.setId((int)System.currentTimeMillis());
+                    mCity.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
+                    placeCornerObject(e, mCity);
+
+                    //For Debugging
+                    String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
+                    String s2 = "Layout X = " + width + " Layout Y  = " + height;
+                    Log.d(TAG, s2);
+                    Log.d(TAG, s);
+
+                    return super.onSingleTapConfirmed(e);
+                }
+
+                @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) {
+                    Log.d(TAG, "Scroll Detected");
+                    mHexParent.Pan(e1, x, y);
+                    return super.onScroll(e1, e2, x, y);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gestureDetector.onTouchEvent(motionEvent))
+                    return true;
+                return false;
+            }
+        });
 
         mBtnPause = (Button)v.findViewById(R.id.pauseButton);
         mBtnPause.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +149,11 @@ public class BoardScreenMainFragment extends Fragment {
                 public void onGlobalLayout() {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
                     addNumbersToBoard();
+                    DisplayMetrics displaymetrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+                    height = displaymetrics.heightPixels;
+                    width = displaymetrics.widthPixels;
                 }});
             }
 
@@ -323,8 +376,17 @@ public class BoardScreenMainFragment extends Fragment {
      */
     boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
         //get location of x and y taps, and adjust for padding
-        int xTap = (int)tapEvent.getX()-128;
-        int yTap = (int)tapEvent.getY()-34;
+        int x,y;
+        if (mHexParent.isZoom()) {
+            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+            coordinate.mapZoomCoordinates(mHexParent);
+            x = (int)coordinate.getX();
+            y = (int)coordinate.getY();
+        }
+        else {
+            x = (int)(tapEvent.getX()-128);
+            y = (int)(tapEvent.getY()-32);
+        }
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < mBoardData.hexes.size(); i++) {
@@ -336,8 +398,8 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView mTile = (ImageView) mHexParent.getChildAt(i);
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(xTap, yTap, mTile, mCornerObject) || addTopRightCorner(xTap, yTap, mTile, mCornerObject) || addMidRightCorner(xTap, yTap, mTile, mCornerObject)
-                    || addBottomRightCorner(xTap, yTap, mTile, mCornerObject) || addBottomLeftCorner(xTap, yTap, mTile, mCornerObject) || addMidLeftCorner(xTap, yTap, mTile, mCornerObject)) {
+            if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
+                    || addBottomRightCorner(x, y, mTile, mCornerObject) || addBottomLeftCorner(x, y, mTile, mCornerObject) || addMidLeftCorner(x, y, mTile, mCornerObject)) {
                 return true;
             }
         }

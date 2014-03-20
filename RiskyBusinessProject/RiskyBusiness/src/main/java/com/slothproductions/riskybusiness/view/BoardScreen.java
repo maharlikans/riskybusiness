@@ -27,6 +27,7 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
+    private ZoomableLayout mHexParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class BoardScreen extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
+        mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -64,6 +66,7 @@ public class BoardScreen extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
@@ -72,13 +75,16 @@ public class BoardScreen extends FragmentActivity {
         mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
 
         frag.placeCornerObject(event, mCity);
+
+        //mHexParent.zoom(event);
+
         return super.onTouchEvent(event);
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.d("KEYPRESSED", "back button was pressed");
+            Log.d("KEYPRESSED", "Back Button was pressed");
             showExitDialog();
             return true;
         }
