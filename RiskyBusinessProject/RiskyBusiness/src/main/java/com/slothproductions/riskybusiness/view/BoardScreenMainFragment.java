@@ -21,6 +21,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View.OnClickListener;
+import android.widget.PopupMenu;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
@@ -127,8 +132,21 @@ public class BoardScreenMainFragment extends Fragment {
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnBuild.setOnClickListener(new View.OnClickListener(){
             @Override
-        public void onClick(View v){
-                showBuildDialog();
+            public void onClick(View v){
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getActivity(), mBtnBuild);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(getActivity(),"Build Item Selected: " + item.getTitle(),Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
             }
         });
 
@@ -435,7 +453,7 @@ public class BoardScreenMainFragment extends Fragment {
         alertpauseDialog.show();
     }
 
-    public void showBuildDialog(){
+    /*public void showBuildDialog(){
         AlertDialog.Builder alertBuildDialog = new AlertDialog.Builder(getActivity());
 
         alertBuildDialog.setTitle("Build");
@@ -463,7 +481,7 @@ public class BoardScreenMainFragment extends Fragment {
         });
 
         alertBuildDialog.show();
-    }
+    }*/
 
     public void showTradeDialog(){
         AlertDialog.Builder alertTradeDialog = new AlertDialog.Builder(getActivity());
