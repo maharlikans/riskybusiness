@@ -481,10 +481,10 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showOptionsDialog() {
-        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
+        AlertDialog alertOptionsDialog = new AlertDialog(getActivity());
 
         alertOptionsDialog.setTitle("Options");
-        alertOptionsDialog.setCanceledOnTouchOutside(false);
+        alertOptionsDialog.setCancelable(false);
 
         alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -516,6 +516,7 @@ public class BoardScreenMainFragment extends Fragment {
                 mLastToast = Toast.makeText(getActivity(), "Game Saved!",
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
+
             }
         });
 
