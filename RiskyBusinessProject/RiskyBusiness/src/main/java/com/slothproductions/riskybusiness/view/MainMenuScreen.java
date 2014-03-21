@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.View.R;
 
-
-
 public class MainMenuScreen extends Activity {
 
     private ImageView mExit;
