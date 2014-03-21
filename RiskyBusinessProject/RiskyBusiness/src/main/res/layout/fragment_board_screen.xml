@@ -183,6 +183,7 @@
             android:layout_toLeftOf="@+id/imageView5"
             android:layout_marginRight="64dp" />
 
+
     </com.slothproductions.riskybusiness.view.ZoomableLayout>
 
     <LinearLayout
@@ -233,6 +234,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>
 
