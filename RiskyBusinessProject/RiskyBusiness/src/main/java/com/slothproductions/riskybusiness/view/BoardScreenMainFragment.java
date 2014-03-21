@@ -503,17 +503,18 @@ public class BoardScreenMainFragment extends Fragment {
 
     boolean addTopLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of top left vertex of tile
-        int x = mTile.getLeft()-63;
-        int y = mTile.getTop()-33;
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+22;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
+        int lowX = x-20;
+        int highX = x+20;
         int lowY = y-50;
         int highY = y+50;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
             placeImage(x, y, mSideObject);
             return true;
         }
@@ -522,17 +523,18 @@ public class BoardScreenMainFragment extends Fragment {
 
     boolean addTopRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Top Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()-31;
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+25;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
+        int lowX = x-20;
+        int highX = x+20;
         int lowY = y-50;
         int highY = y+50;
 
         //compare tap x,y locations against valid x and y range for corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
             placeImage(x, y, mSideObject);
             return true;
         }
@@ -541,17 +543,18 @@ public class BoardScreenMainFragment extends Fragment {
 
     boolean addBottomRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Bottom Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()+192;
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+138;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
+        int lowX = x-20;
+        int highX = x+20;
         int lowY = y-50;
         int highY = y+50;
 
         //compare tap x,y locations against valid x and y range for corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
             placeImage(x, y, mSideObject);
             return true;
         }
@@ -560,17 +563,18 @@ public class BoardScreenMainFragment extends Fragment {
 
     boolean addBottomLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Bottom Left vertex of tile
-        int x = mTile.getLeft()-62;
-        int y = mTile.getTop()+192;
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+135;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
+        int lowX = x-20;
+        int highX = x+20;
         int lowY = y-50;
         int highY = y+50;
 
         //compare tap x,y locations against valid x and y range for corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
             placeImage(x, y, mSideObject);
             return true;
         }
