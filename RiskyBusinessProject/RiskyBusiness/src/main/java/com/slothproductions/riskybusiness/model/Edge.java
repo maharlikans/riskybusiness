@@ -31,13 +31,13 @@ public class Edge {
     	vertices = Collections.unmodifiableList(Arrays.asList(v1, v2));
         immutable = new ImmutableEdge();
         owner = null;
-        /* currently does not compile Ricardo, please fix
+        currently does not compile Ricardo, please fix
     	h1.addEdge(this);
     	if (h2 != null) h2.addEdge(this);
     	v1.addEdge(this);
     	if (v2 != null)  v2.addEdge(this);
     	board.addEdge(this);
-    	*/
+
     }
 
     public List<Hex> getHexagons() {

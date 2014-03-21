@@ -9,7 +9,7 @@ import java.lang.RuntimeException;
 
 /* TODO: Settlement should be its own class, having value and Buildingtype. Rename Settlement to Building */
 
-public class Vertex {/*
+public class Vertex {
 	static private int count = 0;
 	final protected List<Hex> hexagons;
 	protected List<Edge> edges;
@@ -81,5 +81,4 @@ public class Vertex {/*
     final protected void setMilitary(MilitaryUnit t) {
         military = u;
     }
-*/
 }

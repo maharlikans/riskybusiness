@@ -115,8 +115,6 @@ public class BoardScreenMainFragment extends Fragment {
                             break;
                     }
 
-                    item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
-                    placeSideObject(e, item);
                     buildItem = buildItem.NONE;
 
                     //For Debugging
