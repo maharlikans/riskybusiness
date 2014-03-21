@@ -4,11 +4,27 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    
-    <Spinner
-        android:id="@+id/num_players_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_num_players"
+            android:textSize="24dp"
+            android:textColor="@color/white"/>
+
+        <Spinner
+            android:id="@+id/num_players_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:id="@+id/player_1_linear"
@@ -168,9 +184,77 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/start_game_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/victory_points"
+            android:textSize="24dp"
+            android:textColor="@color/white"/>
+
+        <Spinner
+            android:id="@+id/victory_points_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/variable_board_generation"
+            android:textSize="24dp"
+            android:textColor="@color/white"/>
+
+        <ToggleButton
+            android:id="@+id/variable_board_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/attacks"
+            android:textSize="24dp"
+            android:textColor="@color/white"/>
+
+        <ToggleButton
+            android:id="@+id/attacks_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/start_game_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_game"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
