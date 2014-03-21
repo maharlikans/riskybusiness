@@ -4,7 +4,7 @@ package com.slothproductions.riskybusiness.model;
  * Created by riv on 16.03.14.
  */
 
-public enum GameActions {
+public enum GameAction {
     ESTABLISH_SETTLEMENT(new ResourceDescription[]{new ResourceDescription(5, Resource.WOOL)});
 
     final ResourceDescription[] resources_needed;
@@ -21,7 +21,7 @@ public enum GameActions {
         Object o;
     }
 
-    GameActions(ResourceDescription[] needed) {
+    GameAction(ResourceDescription[] needed) {
         this.resources_needed = needed;
     }
 }

@@ -1,6 +1,6 @@
 package com.slothproductions.riskybusiness.model;
 
-public enum Settlement {
+public enum BuildingType {
     SETTLEMENT,
     VILLAGE,
     CITY
