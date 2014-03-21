@@ -104,7 +104,7 @@ public class BoardScreenMainFragment extends Fragment {
                             placeCornerObject(e, item);
                             break;
                         case SETTLEMENT:
-                            Log.d(TAG, "Settlement will be Placed at Tap Location");
+                            Log.d(TAG, "BuildingType will be Placed at Tap Location");
                             item.setImageResource(getResources().getIdentifier("settlement", "drawable", getActivity().getPackageName()));
                             placeCornerObject(e, item);
                             break;

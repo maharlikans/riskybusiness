@@ -5,7 +5,7 @@ package com.slothproductions.riskybusiness.model;
  */
 
 public enum GameAction {
-    ESTABLISH_SETTLEMENT(new ResourceDescription[]{new ResourceDescription(5, Resource.WOOL)});
+    ESTABLISH_SETTLEMENT(new ResourceDescription[]{new ResourceDescription(5, Resource.ORE)});
 
     final ResourceDescription[] resources_needed;
 

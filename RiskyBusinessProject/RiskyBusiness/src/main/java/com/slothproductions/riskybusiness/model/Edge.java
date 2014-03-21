@@ -27,17 +27,25 @@ public class Edge {
 
     public Edge(Board board, Hex h1, Hex h2, Vertex v1, Vertex v2) {
     	index = ++count;
-    	hexagons = Collections.unmodifiableList(Arrays.asList(h1, h2));
-    	vertices = Collections.unmodifiableList(Arrays.asList(v1, v2));
+        ArrayList<Hex> tmp = new ArrayList<Hex>();
+        ArrayList<Vertex> tmp2 = new ArrayList<Vertex>();
+        tmp.add(h1);
+        tmp2.add(v1);
         immutable = new ImmutableEdge();
         owner = null;
-        /* currently does not compile Ricardo, please fix
     	h1.addEdge(this);
-    	if (h2 != null) h2.addEdge(this);
+    	if (h2 != null) {
+            tmp.add(h2);
+            h2.addEdge(this);
+        }
     	v1.addEdge(this);
-    	if (v2 != null)  v2.addEdge(this);
+    	if (v2 != null) {
+            tmp2.add(v2);
+            v2.addEdge(this);
+        }
+        hexagons = Collections.unmodifiableList(tmp);
+        vertices = Collections.unmodifiableList(tmp2);
     	board.addEdge(this);
-    	*/
     }
 
     public List<Hex> getHexagons() {

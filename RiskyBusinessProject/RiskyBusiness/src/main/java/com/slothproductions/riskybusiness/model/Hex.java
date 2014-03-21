@@ -1,23 +1,58 @@
 package com.slothproductions.riskybusiness.model;
 
 import java.util.*;
-import com.slothproductions.riskybusiness.model.Board.Resource;
 
 public class Hex {
-	public Resource type;
-	public int index;
-	public int roll;
+    static private int count = 0;
+	final public Resource type;
+	final public int index;
+	final public int roll;
+    final private Board board;
 
-	ArrayList<Vertex> vertices;
-	ArrayList<Edge> edges;
-	ArrayList<Hex> adjacent;
+	protected List<Vertex> vertices;
+	protected List<Edge> edges;
+	protected List<Hex> adjacent;
+    private boolean locked;
 
-	public Hex(int index, Resource type, int roll) {
-		this.index = index;
-		this.type = type;
-		this.roll = roll;
-		this.vertices = new ArrayList<Vertex>();
-		this.edges = new ArrayList<Edge>();
-		this.adjacent = new ArrayList<Hex>();
+	public Hex(Board b, Resource t, int r) {
+        board = b;
+		index = ++count;
+		type = t;
+		roll = r;
+		vertices = new ArrayList<Vertex>();
+		edges = new ArrayList<Edge>();
+		adjacent = new ArrayList<Hex>();
+        board.addHex(this);
 	}
+
+    final protected void addVertex(Vertex v) {
+        if (!locked) {
+            vertices.add(v);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    final protected void addEdge(Edge e) {
+        if (!locked) {
+            edges.add(e);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    final protected void addAdjacent(Hex h) {
+        if (!locked) {
+            adjacent.add(h);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    final protected void lock() {
+        locked = true;
+        vertices = Collections.unmodifiableList(vertices);
+        edges = Collections.unmodifiableList(edges);
+        adjacent = Collections.unmodifiableList(adjacent);
+    }
 }

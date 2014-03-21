@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Player {
-    public Map<Resource, Integer> resources;
-    public ArrayList<Edge> edges;
-    public ArrayList<Vertex> vertices;
-    public ArrayList<MilitaryUnit> military_units;
+    final private Board.PlayerAccounting.ImmutablePlayerAccounting accounting;
 
-    public void effect(GameActions action) {
+    public Player(Board.PlayerAccounting.ImmutablePlayerAccounting a) {
+        accounting = a;
+    }
+
+    public void effect(GameAction action) {
         /* TODO: Code to effect action */
     }
 }

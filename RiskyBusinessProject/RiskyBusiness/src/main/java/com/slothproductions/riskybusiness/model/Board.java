@@ -5,20 +5,65 @@ import android.util.Log;
 import java.util.*;
 
 public class Board {
+    protected class PlayerAccounting {
+        protected class ImmutablePlayerAccounting {
+            public int resource(Resource r) {
+                return resources.get(r);
+            }
+
+            public ArrayList<Edge.ImmutableEdge> getEdges() {
+                return immutableEdges;
+            }
+
+            public ArrayList<Vertex.ImmutableVertex> getVertices() {
+                return immutableVertices;
+            }
+
+            public ArrayList<MilitaryUnit.ImmutableMilitaryUnit> getMilitaryUnit() {
+                return immutableMilitaryUnits;
+            }
+        }
+
+        protected PlayerAccounting() {
+            resources = new HashMap<Resource, Integer>();
+            immutableEdges = new ArrayList<Edge.ImmutableEdge>();
+            immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
+            immutableMilitaryUnits = new ArrayList<MilitaryUnit.ImmutableMilitaryUnit>();
+            edges = new ArrayList<Edge>();
+            vertices = new ArrayList<Vertex>();
+            militaryUnits = new ArrayList<MilitaryUnit>();
+        }
+
+        private Map<Resource, Integer> resources;
+        private ArrayList<Edge.ImmutableEdge> immutableEdges;
+        private ArrayList<Vertex.ImmutableVertex> immutableVertices;
+        private ArrayList<MilitaryUnit.ImmutableMilitaryUnit> immutableMilitaryUnits;
+        private ArrayList<Edge> edges;
+        private ArrayList<Vertex> vertices;
+        private ArrayList<MilitaryUnit> militaryUnits;
+    }
 
     private final String TAG = "BOARDDATA";
     private boolean locked = false;
 
-    public static enum Resource {
-        LUMBER, BRICK, WOOL, GRAIN, ORE, DESERT
-    };
-
     //hexes was changed to public because i need to access it somehow
     public List<Hex> hexes;
     protected List<Vertex> vertices;
+    protected List<MilitaryUnit> militaryUnits;
     protected List<Edge> edges;
+    protected List<Player> players;
     protected List<ArrayList<Hex>> diceRolls;
-    
+
+    private Map<Player, PlayerAccounting> playerAccounting;
+
+    protected void addHex(Hex h) {
+        if (!locked) {
+            hexes.add(h);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
     protected void addVertex(Vertex v) {
     	if (!locked) {
     		vertices.add(v);
@@ -48,11 +93,14 @@ public class Board {
         // hexes that make up the board.
         int radius = 3;
 
+
+        /* TODO: Loop to generate players */
+
         ArrayList<Resource> resources = generateResources();
 
         // Initializing values for the innermost ring with a single hex. This
         // is done manually as there is no pattern for this one.
-        Hex center = new Hex(0, resources.get(0), -1);
+        Hex center = new Hex(resources.get(0), -1);
         hexes.add(center);
         int index = 1;
 
@@ -61,7 +109,7 @@ public class Board {
             int minIndex = index;
             int maxIndex = counter * (counter + 1) * 3;
             for (; index <= maxIndex; index++) {
-                Hex current = new Hex(index, resources.get(index), -1);
+                Hex current = new Hex(resources.get(index), -1);
                 if ((index - minIndex) % counter == 0) { // On a corner of the ring
                     current.adjacent.add(hexes.get(innerIndex));
                     hexes.get(innerIndex).adjacent.add(current);
