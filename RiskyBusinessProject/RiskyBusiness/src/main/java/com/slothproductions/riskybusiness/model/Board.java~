@@ -70,7 +70,7 @@ public class Board {
     	} else {
 			throw new RuntimeException(); 
     	}
-    }	
+    }
     
     protected void addEdge(Edge e) {
     	if (!locked) {

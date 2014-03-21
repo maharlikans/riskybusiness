@@ -1,25 +1,28 @@
+package com.slothproductions.riskybusiness.model;
 
 import java.util.*;
-import com.slothproductions.riskybusiness.model.Resource;
 
 public class Hex {
-    final protected Resource type;
-    final protected int index;
-    protected int roll;
+    static private int count = 0;
+	final public Resource type;
+	final public int index;
+	final public int roll;
+    final private Board board;
 
-	List<Vertex> vertices;
-	List<Edge> edges;
-	List<Hex> adjacent;
-
+	protected List<Vertex> vertices;
+	protected List<Edge> edges;
+	protected List<Hex> adjacent;
     private boolean locked;
 
-	public Hex(int index, Resource type) {
-		this.index = index;
-		this.type = type;
-		this.vertices = new ArrayList<Vertex>();
-		this.edges = new ArrayList<Edge>();
-		this.adjacent = new ArrayList<Hex>();
-        this.locked = false;
+	public Hex(Board b, Resource t, int r) {
+        board = b;
+		index = ++count;
+		type = t;
+		roll = r;
+		vertices = new ArrayList<Vertex>();
+		edges = new ArrayList<Edge>();
+		adjacent = new ArrayList<Hex>();
+        board.addHex(this);
 	}
 
     final protected void addVertex(Vertex v) {
@@ -38,15 +41,17 @@ public class Hex {
         }
     }
 
-    final protected void setRoll(int r) {
-        roll = r;
+    final protected void addAdjacent(Hex h) {
+        if (!locked) {
+            adjacent.add(h);
+        } else {
+            throw new RuntimeException();
+        }
     }
 
-    final protected void lock() {
-        locked = true;
-        edges = Collections.unmodifiableList(edges);
-        vertices = Collections.unmodifiableList(vertices);
-    }
+    /*final protected void setRoll(int r) {
+        roll = r;
+    }*/
 
     final protected boolean isAdjacent(int index) {
         boolean ret = false;
@@ -55,4 +60,12 @@ public class Hex {
                 ret = true;
         return ret;
     }
+
+    final protected void lock() {
+        locked = true;
+        vertices = Collections.unmodifiableList(vertices);
+        edges = Collections.unmodifiableList(edges);
+        adjacent = Collections.unmodifiableList(adjacent);
+    }
 }
+
