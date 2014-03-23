@@ -7,7 +7,6 @@ import java.util.List;
 import java.lang.RuntimeException;
 
 public class Vertex {
-	static private int count = 0;
 	final protected List<Hex> hexagons;
 	protected List<Edge> edges;
 	final protected int index;
@@ -35,10 +34,20 @@ public class Vertex {
     }
 
     final protected ImmutableVertex immutable;
+
+    final static List<Hex> sharedHexes(Vertex v1, Vertex v2) {
+        ArrayList<Hex> shared = new ArrayList<Hex>();
+        for (Hex h : v1.hexagons) {
+            if (v2.hexagons.contains(h)) {
+                shared.add(h);
+            }
+        }
+        return Collections.unmodifiableList(shared);
+    }
 	
-    protected Vertex(Board board, Hex h1, Hex h2, Hex h3) {
+    protected Vertex(int i, Hex h1, Hex h2, Hex h3) {
     	locked = false;
-		index = ++count;
+		index = i;
         ArrayList<Hex> tmp = new ArrayList<Hex>();
         tmp.add(h1);
         owner = null;
@@ -54,7 +63,6 @@ public class Vertex {
             tmp.add(h3);
             h3.addVertex(this);
         }
-        board.addVertex(this);
         hexagons = Collections.unmodifiableList(tmp);
         edges = new ArrayList<Edge>();
 	}
@@ -71,6 +79,22 @@ public class Vertex {
 		locked = true;
 		edges = Collections.unmodifiableList(edges);
 	}
+
+    final protected boolean isVertexOf(Hex h) {
+        return hexagons.contains(h);
+    }
+
+    final protected boolean isAdjacent(Vertex v) {
+        int s = hexagons.size();
+        if (s >= 2 && v.hexagons.size() >= 2) {
+            for (int i=0, c=0; i<s;i++) {
+                if (v.hexagons.contains(hexagons.get(i)) && ++c==2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     final protected Building getBuilding() {
         return building;

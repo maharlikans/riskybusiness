@@ -4,7 +4,6 @@ import java.util.*;
 import com.slothproductions.riskybusiness.lib.exception.AccessLevelException;
 
 public class Edge {
-	static private int count = 0;
 	final protected List<Hex> hexagons;
 	final protected List<Vertex> vertices;
     final public ImmutableEdge immutable;
@@ -25,8 +24,8 @@ public class Edge {
         }
     }
 
-    public Edge(Board board, Hex h1, Hex h2, Vertex v1, Vertex v2) {
-    	index = ++count;
+    public Edge(int i, Hex h1, Hex h2, Vertex v1, Vertex v2) {
+    	index = i;
         ArrayList<Hex> tmp = new ArrayList<Hex>();
         ArrayList<Vertex> tmp2 = new ArrayList<Vertex>();
         tmp.add(h1);
@@ -45,7 +44,6 @@ public class Edge {
         }
         hexagons = Collections.unmodifiableList(tmp);
         vertices = Collections.unmodifiableList(tmp2);
-    	board.addEdge(this);
     }
 
     public List<Hex> getHexagons() {
