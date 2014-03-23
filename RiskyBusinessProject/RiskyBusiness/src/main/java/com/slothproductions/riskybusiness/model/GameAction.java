@@ -14,28 +14,28 @@ import java.util.Map;
 public enum GameAction {
     BUILD_ROAD(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.BRICK, 1);
-        put(Resource.WOOD, 1);
+        put(Resource.LUMBER, 1);
     }}, new HashMap<String, ArgumentType>(){{
         put("edge", ArgumentType.EDGE);
     }}),
     BUILD_SETTLEMENT(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.BRICK, 1);
-        put(Resource.WOOD, 1);
-        put(Resource.SHEEP, 1);
-        put(Resource.WHEAT, 1);
+        put(Resource.LUMBER, 1);
+        put(Resource.WOOL, 1);
+        put(Resource.GRAIN, 1);
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
     UPGRADE_SETTLEMENT_TO_CITY(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 2);
-        put(Resource.WHEAT, 2);
+        put(Resource.GRAIN, 2);
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
     ESTABLISH_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 1);
-        put(Resource.SHEEP, 1);
-        put(Resource.WHEAT, 1);
+        put(Resource.WOOL, 1);
+        put(Resource.GRAIN, 1);
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),

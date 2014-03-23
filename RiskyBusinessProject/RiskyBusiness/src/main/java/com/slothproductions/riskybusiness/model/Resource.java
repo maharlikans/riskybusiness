@@ -4,7 +4,7 @@ public enum Resource {
     GOLD,
     BRICK,
     ORE,
-    WHEAT,
-    SHEEP,
-    WOOD;
+    GRAIN,
+    WOOL,
+    LUMBER;
 }

@@ -258,11 +258,11 @@ public class Board implements java.io.Serializable {
                 if (pos<elements) resources[pos++] = Resource.ORE;
             }
             for (int i = 0; pos<elements && i < 4; i ++) {
-                resources[pos++] = Resource.WHEAT;
+                resources[pos++] = Resource.GRAIN;
                 if (pos<elements) {
-                    resources[pos++] = Resource.SHEEP;
+                    resources[pos++] = Resource.WOOL;
                     if (pos<elements) {
-                        resources[pos++] = Resource.WOOD;
+                        resources[pos++] = Resource.LUMBER;
                     }
                 }
             }

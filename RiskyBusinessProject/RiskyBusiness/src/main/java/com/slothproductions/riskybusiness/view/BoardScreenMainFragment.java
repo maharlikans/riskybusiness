@@ -62,8 +62,9 @@ public class BoardScreenMainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mBoardScreen = new BoardScreen();
 
+        String[] players = new String[]{"Player1", "Player2", "Player3", "Player4"};
         Log.d("BOARDDATA", "Board Data Start");
-        mBoardData = new Board(4);
+        mBoardData = new Board(players);
         Log.d("BOARDDATA", "Board Data Finished");
     }
 
@@ -232,7 +233,7 @@ public class BoardScreenMainFragment extends Fragment {
                 case ORE:
                     iv.setColorFilter(Color.DKGRAY);
                     break;
-                case DESERT:
+                case GOLD:
                     iv.setColorFilter(Color.YELLOW);
             }
         }
@@ -481,7 +482,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showOptionsDialog() {
-        AlertDialog alertOptionsDialog = new AlertDialog(getActivity());
+        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
         alertOptionsDialog.setTitle("Options");
         alertOptionsDialog.setCancelable(false);
@@ -519,17 +520,6 @@ public class BoardScreenMainFragment extends Fragment {
 
             }
         });
-
-        /*alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Returning to game...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });*/
 
         alertOptionsDialog.show();
     }
