@@ -85,7 +85,7 @@ public class Board implements java.io.Serializable {
     protected List<Player> players;
     protected List<ArrayList<Hex>> diceRolls;
 
-    private Map<Player, PlayerAccounting> playerAccounting;
+    private HashMap<Player, PlayerAccounting> playerAccounting;
 
     private int ringUpperIndex(int ring) {
         return ring * (ring + 1) * 3;
@@ -93,8 +93,13 @@ public class Board implements java.io.Serializable {
 
     public Board (String [] playerNames) {
         prng = new SecureRandom();
-
+        vertices = new ArrayList<Vertex>();
+        edges = new ArrayList<Edge>();
+        militaryUnits = new ArrayList<MilitaryUnit>();
+        players = new ArrayList<Player>();
         hexes = new ArrayList<Hex>();
+        playerAccounting = new HashMap<Player, PlayerAccounting>();
+
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
         int radius = 3;
@@ -275,6 +280,35 @@ public class Board implements java.io.Serializable {
 
     private int[] generateRolls() {
         int[] rollsArray = {
+                8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
+        };
+
+        ArrayList<Integer> rolls = new ArrayList<Integer>();
+        for (int i : rollsArray)
+            rolls.add(i);
+        Collections.shuffle(rolls);
+        rolls.add(0, -1);
+
+        for (int i = 0; i <19; i ++) {
+            if (hexes.get(i).type == Resource.GOLD){
+                int temp = rolls.get(i);
+                rolls.set(0, temp);
+                rolls.set(i, 7);
+                Log.d(TAG, "Gold Roll Value Added");
+            }
+        }
+
+        int[] rollsArr = new int[19];
+
+        //move shuffled rolls arraylist to a rollsArr[] int for returning
+        for (int i = 0; i < 19; i++) {
+            rollsArr[i] = rolls.get(i);
+        }
+
+        return rollsArr;
+
+        /* the code that doesnt work
+        int[] rollsArray = {
                 2, 3, 3, 4, 4, 5, 5, 9, 9, 10, 10, 11, 11, 12
         };
 
@@ -313,6 +347,7 @@ public class Board implements java.io.Serializable {
         }
 
         return ret;
+        */
     }
 
     protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
