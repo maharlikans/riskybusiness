@@ -45,12 +45,18 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+
     private BuildItem buildItem;
 
     private Toast mLastToast;
 
     private int height;
     private int width;
+
+    private int dice1;
+    private int dice2;
+
+    private DiceRoll viceDice = new DiceRoll();
 
     public static enum BuildItem {
         NONE, ROAD, SOLDIER, SETTLEMENT, CITY
@@ -153,12 +159,16 @@ public class BoardScreenMainFragment extends Fragment {
 
         //Adds functionality to the End Turn Button
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
-            @Override
-        public void onClick(View v){
-                showEndTurnDialog();
-            }
-        });
+             mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if (mBtnEndTurn.getText().equals("End Turn")) {
+                            showEndTurnDialog();
+                        } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
+                           showRollDialog();
+                          }
+                   }
+              });
 
         buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
@@ -168,6 +178,7 @@ public class BoardScreenMainFragment extends Fragment {
             public void onClick(View v){
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(getActivity(), mBtnBuild);
+
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
@@ -721,7 +732,6 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showEndTurnDialog() {
-        final DiceRoll dRoll = new DiceRoll();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
         alertDialog.setTitle("End Turn?");
@@ -732,9 +742,9 @@ public class BoardScreenMainFragment extends Fragment {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
                 }
-                mLastToast = Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
-                        Toast.LENGTH_SHORT);
+                mLastToast = Toast.makeText(getActivity(), "Turn ended", Toast.LENGTH_SHORT);
                 mLastToast.show();
+                mBtnEndTurn.setText("Roll Dice");
 
             }
         });
@@ -752,6 +762,97 @@ public class BoardScreenMainFragment extends Fragment {
         alertDialog.show();
     }
 
+    public void showRollDialog() {
+        viceDice.roll();
+        dice1 = viceDice.getFirstDice();
+        dice2 = viceDice.getSecondDice();
 
+        ImageView outputdice1 = new ImageView(getActivity());
+        outputdice1.setId((int)System.currentTimeMillis());
+
+
+
+        LayoutParams lpDice1 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+
+       switch(dice1){
+           case 1:
+               outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 2:
+               outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+           case 3:
+               outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);        //Crashes here?
+               break;
+           case 4:
+               outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 5:
+               outputdice1.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 6:
+               outputdice1.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+       }
+
+        ImageView outputdice2 = new ImageView(getActivity());
+        outputdice2.setId((int)System.currentTimeMillis()+1);
+
+        LayoutParams lpDice2 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lpDice2.addRule(RelativeLayout.RIGHT_OF, outputdice1.getId());
+        lpDice2.addRule(RelativeLayout.ALIGN_BOTTOM, outputdice1.getId());
+
+
+        switch (dice2) {
+          case 1:
+              outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 2:
+              outputdice2.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 3:
+              outputdice2.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 4:
+              outputdice2.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 5:
+              outputdice2.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 6:
+              outputdice2.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+
+      }
+
+        mBtnEndTurn.setText("End Turn");
+
+
+    }
 }
 

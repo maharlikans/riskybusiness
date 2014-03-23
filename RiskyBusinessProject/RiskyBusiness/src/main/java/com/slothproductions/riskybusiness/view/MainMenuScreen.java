@@ -39,7 +39,7 @@ public class MainMenuScreen extends Activity {
                 startActivity(i);
             }
         });
-
+        /*
         //Deals with the Options Button
        mOptions = (ImageView)findViewById(R.id.options);
        mOptions.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class MainMenuScreen extends Activity {
                 startActivity(i);
             }
         });
-
+*/
 
 
         //Deals with the exit button.
