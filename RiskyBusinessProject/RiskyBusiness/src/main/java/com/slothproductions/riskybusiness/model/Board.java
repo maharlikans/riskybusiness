@@ -12,6 +12,10 @@ public class Board {
                 return resources.get(r);
             }
 
+            public int getPoints() {
+                return points;
+            }
+
             public ArrayList<Edge.ImmutableEdge> getEdges() {
                 return immutableEdges;
             }
@@ -26,6 +30,7 @@ public class Board {
         }
 
         protected PlayerAccounting() {
+            points = 0;
             resources = new HashMap<Resource, Integer>();
             immutableEdges = new ArrayList<Edge.ImmutableEdge>();
             immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
@@ -35,6 +40,7 @@ public class Board {
             militaryUnits = new ArrayList<MilitaryUnit>();
         }
 
+        private int points;
         private Map<Resource, Integer> resources;
         private ArrayList<Edge.ImmutableEdge> immutableEdges;
         private ArrayList<Vertex.ImmutableVertex> immutableVertices;
