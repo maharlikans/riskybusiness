@@ -25,6 +25,7 @@ public class MilitaryUnit {
     public MilitaryUnit(Vertex v) {
         player = v.owner;
         location = v;
+        /* TODO: Set initial health */
     }
 
     public Player getPlayer() {

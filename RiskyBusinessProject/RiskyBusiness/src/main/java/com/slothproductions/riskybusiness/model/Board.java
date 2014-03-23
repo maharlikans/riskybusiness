@@ -35,6 +35,7 @@ public class Board {
         }
 
         protected PlayerAccounting() {
+            immutable = new ImmutablePlayerAccounting();
             points = 0;
             resources = new HashMap<Resource, Integer>();
             immutableEdges = new ArrayList<Edge.ImmutableEdge>();
@@ -45,6 +46,7 @@ public class Board {
             militaryUnits = new ArrayList<MilitaryUnit>();
         }
 
+        public ImmutablePlayerAccounting immutable;
         private int points;
         private Map<Resource, Integer> resources;
         private ArrayList<Edge.ImmutableEdge> immutableEdges;
@@ -73,7 +75,7 @@ public class Board {
         return ring * (ring + 1) * 3;
     }
 
-    public Board (int numPlayers) {
+    public Board (String [] playerNames) {
         prng = new SecureRandom();
 
         hexes = new ArrayList<Hex>();
@@ -200,6 +202,15 @@ public class Board {
         }
 
         Log.d(TAG, "Finished Locking Board Elements");
+
+        Log.d(TAG, "Generating Players");
+        for(String name: playerNames) {
+            PlayerAccounting pa = new PlayerAccounting();
+            Player p = new Player(name, pa.immutable);
+            players.add(p);
+            playerAccounting.put(p, pa);
+        }
+        Log.d(TAG, "Finished Generating Players");
     }
 
     private void shuffleArray(Object[] array) {

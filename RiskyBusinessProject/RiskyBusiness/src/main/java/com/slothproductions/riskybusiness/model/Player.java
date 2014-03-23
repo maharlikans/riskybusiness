@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Player {
+    final String name;
+
     final private Board.PlayerAccounting.ImmutablePlayerAccounting accounting;
 
-    public Player(Board.PlayerAccounting.ImmutablePlayerAccounting a) {
+    public Player(String n, Board.PlayerAccounting.ImmutablePlayerAccounting a) {
+        name = n;
         accounting = a;
     }
 
