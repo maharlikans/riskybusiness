@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -690,12 +691,8 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Going to Game Rules page...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
+                Intent i = new Intent(getActivity().getApplicationContext(), GameRules.class);
+                startActivity(i);
             }
         });
 
