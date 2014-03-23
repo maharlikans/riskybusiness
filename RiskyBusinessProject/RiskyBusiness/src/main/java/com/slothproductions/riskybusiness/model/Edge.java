@@ -1,9 +1,9 @@
 package com.slothproductions.riskybusiness.model;
 
 import java.util.*;
-import com.slothproductions.riskybusiness.lib.exception.AccessLevelException;
 
-public class Edge {
+public class Edge implements java.io.Serializable {
+    private static final long serialVersionUID = 293823348L;
 	final protected List<Hex> hexagons;
 	final protected List<Vertex> vertices;
     final public ImmutableEdge immutable;
@@ -11,7 +11,8 @@ public class Edge {
     protected Player owner;
 	public boolean road;
 
-    public final class ImmutableEdge {
+    public final class ImmutableEdge implements java.io.Serializable {
+        private static final long serialVersionUID = -354785748L;
         public Player getOwner() {
             return owner;
         }

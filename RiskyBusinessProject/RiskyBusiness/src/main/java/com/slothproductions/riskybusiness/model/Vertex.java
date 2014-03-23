@@ -6,7 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.lang.RuntimeException;
 
-public class Vertex {
+public class Vertex implements java.io.Serializable {
+    private static final long serialVersionUID = 298019793L;
 	final protected List<Hex> hexagons;
 	protected List<Edge> edges;
 	final protected int index;
@@ -15,7 +16,8 @@ public class Vertex {
 	protected MilitaryUnit military;
 	private boolean locked;
 
-    final public class ImmutableVertex {
+    final public class ImmutableVertex implements java.io.Serializable {
+        private static final long serialVersionUID = 758148154L;
         public int getIndex() {
             return index;
         }

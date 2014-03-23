@@ -6,9 +6,13 @@ import java.security.InvalidParameterException;
 import java.security.SecureRandom;
 import java.util.*;
 
-public class Board {
-    protected class PlayerAccounting {
-        protected class ImmutablePlayerAccounting {
+public class Board implements java.io.Serializable {
+    private static final long serialVersionUID = -915315565L;
+    protected class PlayerAccounting implements java.io.Serializable {
+        private static final long serialVersionUID = -677559079L;
+
+        protected class ImmutablePlayerAccounting implements java.io.Serializable {
+            private static final long serialVersionUID = 173077997L;
             public int resource(Resource r) {
                 return resources.get(r);
             }
@@ -37,7 +41,7 @@ public class Board {
         protected PlayerAccounting() {
             immutable = new ImmutablePlayerAccounting();
             points = 0;
-            resources = new HashMap<Resource, Integer>();
+            resources = new EnumMap<Resource, Integer>(Resource.class);
             immutableEdges = new ArrayList<Edge.ImmutableEdge>();
             immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
             immutableMilitaryUnits = new ArrayList<MilitaryUnit.ImmutableMilitaryUnit>();

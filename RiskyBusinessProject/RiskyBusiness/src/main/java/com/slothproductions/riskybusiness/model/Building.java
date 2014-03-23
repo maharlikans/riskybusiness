@@ -3,8 +3,10 @@ package com.slothproductions.riskybusiness.model;
 /**
  * Created by riv on 20.03.14.
  */
-public class Building {
-    public class ImmutableBuilding {
+public class Building implements java.io.Serializable {
+    private static final long serialVersionUID = -349421070L;
+    public class ImmutableBuilding implements java.io.Serializable {
+        private static final long serialVersionUID = -211440880L;
         final BuildingType getType() {
             return type;
         }

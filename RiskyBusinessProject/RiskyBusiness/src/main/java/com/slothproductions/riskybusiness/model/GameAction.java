@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.model;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,46 +12,61 @@ import java.util.Map;
  */
 
 public enum GameAction {
-    BUILD_ROAD(new ResourceDescription[] {new ResourceDescription(1, Resource.BRICK), new ResourceDescription(1, Resource.WOOD)}, new HashMap<String, ArgumentType>(){{
+    BUILD_ROAD(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.BRICK, 1);
+        put(Resource.WOOD, 1);
+    }}, new HashMap<String, ArgumentType>(){{
         put("edge", ArgumentType.EDGE);
     }}),
-    BUILD_SETTLEMENT(new ResourceDescription[] {new ResourceDescription(1, Resource.BRICK), new ResourceDescription(1, Resource.WOOD), new ResourceDescription(1, Resource.SHEEP), new ResourceDescription(1, Resource.WHEAT)}, new HashMap<String, ArgumentType>(){{
+    BUILD_SETTLEMENT(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.BRICK, 1);
+        put(Resource.WOOD, 1);
+        put(Resource.SHEEP, 1);
+        put(Resource.WHEAT, 1);
+    }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    UPGRADE_SETTLEMENT_TO_CITY(new ResourceDescription[] {new ResourceDescription(2, Resource.ORE), new ResourceDescription(2, Resource.WHEAT)}, new HashMap<String, ArgumentType>(){{
+    UPGRADE_SETTLEMENT_TO_CITY(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.ORE, 2);
+        put(Resource.WHEAT, 2);
+    }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    ESTABLISH_MILITARY_UNIT(new ResourceDescription[] {new ResourceDescription(1, Resource.ORE), new ResourceDescription(1, Resource.SHEEP), new ResourceDescription(1, Resource.WHEAT)}, new HashMap<String, ArgumentType>(){{
+    ESTABLISH_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.ORE, 1);
+        put(Resource.SHEEP, 1);
+        put(Resource.WHEAT, 1);
+    }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    MOVE_MILITARY_UNIT(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
+    MOVE_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("vertex_from", ArgumentType.VERTEX);
         put("edge_across", ArgumentType.EDGE);
     }}),
-    ATTACK(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
+    ATTACK(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    PUBLIC_TRADE(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
+    PUBLIC_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
         put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
         put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
         put("buy_amount", ArgumentType.RESOURCE_TYPE);
     }}),
-    PRIVATE_TRADE(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
+    PRIVATE_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("partner", ArgumentType.PLAYER);
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
         put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
         put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
         put("buy_amount", ArgumentType.RESOURCE_TYPE);
     }}),
-    BANK_TRADE(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
+    BANK_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
         put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
         put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
     }})
     ;
 
-    final List<ResourceDescription> resourcesNeeded;
+    final Map<Resource, Integer> resourcesNeeded;
     final Map<String, ArgumentType> arguments;
 
     /* Used when calling an action */
@@ -80,8 +96,8 @@ public enum GameAction {
         }
     }
 
-    GameAction(ResourceDescription[] needed, Map<String, ArgumentType> a) {
-        resourcesNeeded = Collections.unmodifiableList(Arrays.asList(needed));
+    GameAction(Map<Resource, Integer> needed, Map<String, ArgumentType> a) {
+        resourcesNeeded = Collections.unmodifiableMap(needed);
         arguments = Collections.unmodifiableMap(a);
     }
 }

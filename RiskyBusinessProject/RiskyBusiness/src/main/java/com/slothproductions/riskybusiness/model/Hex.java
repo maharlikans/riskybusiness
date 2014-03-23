@@ -2,7 +2,8 @@ package com.slothproductions.riskybusiness.model;
 
 import java.util.*;
 
-public class Hex {
+public class Hex implements java.io.Serializable {
+    private static final long serialVersionUID = 286476240L;
 	final public Resource type;
 	final public int index;
 	private int roll;

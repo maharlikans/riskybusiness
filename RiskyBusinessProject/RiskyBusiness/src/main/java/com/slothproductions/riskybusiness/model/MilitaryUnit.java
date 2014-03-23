@@ -3,7 +3,8 @@ package com.slothproductions.riskybusiness.model;
 /**
  * Created by riv on 16.03.14.
  */
-public class MilitaryUnit {
+public class MilitaryUnit implements java.io.Serializable {
+    private static final long serialVersionUID = -967850348L;
     final class ImmutableMilitaryUnit {
         public Player getPlayer() {
             return player;
