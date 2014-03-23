@@ -3,6 +3,8 @@ package com.slothproductions.riskybusiness.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,18 +26,21 @@ public class GameRules extends Activity {
     private Button mBtnAttacking;
     private Button mBtnWinning;
 
-    ImageView item = new ImageView(getActivity());
+    ImageView item;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gamerules_screen);
 
+        item = (ImageView)findViewById(R.id.game_rule_image);
+        item.setVisibility(View.INVISIBLE);
+
         mBtnEPTurn = (Button)findViewById(R.id.eachPlayersTurnButton);
         mBtnEPTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("eachplayersturn", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("eachplayersturn", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -43,8 +48,8 @@ public class GameRules extends Activity {
         mBtnResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("resources", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("resources", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -52,8 +57,8 @@ public class GameRules extends Activity {
         mBtnTrading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("trading", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("trading", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -61,8 +66,8 @@ public class GameRules extends Activity {
         mBtnBuilding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("building", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("building", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -70,8 +75,8 @@ public class GameRules extends Activity {
         mBtnMilitary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("military", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("military", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -79,8 +84,8 @@ public class GameRules extends Activity {
         mBtnAttacking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item.setImageResource(getResources().getIdentifier("attacking", "drawable", getActivity().getPackageName()));
-
+                item.setImageResource(getResources().getIdentifier("attacking", "drawable", getPackageName()));
+                item.setVisibility(View.VISIBLE);
             }
         });
 
@@ -88,9 +93,28 @@ public class GameRules extends Activity {
         mBtnWinning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               item.setImageResource(getResources().getIdentifier("winning", "drawable", getActivity().getPackageName()));
+               item.setImageResource(getResources().getIdentifier("winning", "drawable", getPackageName()));
+               item.setVisibility(View.VISIBLE);
             }
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d("KEYPRESSED", "Back Button was pressed");
+            if (item.getVisibility() == View.INVISIBLE) {
+                return super.onKeyDown(keyCode, event);
+            }
+            else {
+                removeCurrentRule();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void removeCurrentRule() {
+        item.setVisibility(View.INVISIBLE);
+    }
 }

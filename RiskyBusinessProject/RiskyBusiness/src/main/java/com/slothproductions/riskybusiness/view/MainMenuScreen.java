@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.View.R;
@@ -18,7 +20,7 @@ import com.View.R;
 public class MainMenuScreen extends Activity {
 
     private ImageView mExit;
-    private ImageView mHighScores;
+    private ImageView mGameRules;
     private ImageView mLoadSaved;
     private ImageView mOptions;
     private ImageView mStartNew;
@@ -27,7 +29,6 @@ public class MainMenuScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
-
 
         //Deals with the Start Button
         mStartNew = (ImageView)findViewById(R.id.start_new);
@@ -40,16 +41,27 @@ public class MainMenuScreen extends Activity {
             }
         });
 
+        /*
+        mGameRules = (ImageView)findViewById(R.id.game_rules);
+        mGameRules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Should proceed to Game Rules activity
+                Intent i = new Intent(MainMenuScreen.this, GameRules.class);
+                startActivity(i);
+            }
+        });
+
         //Deals with the Options Button
-       /*mOptions = (ImageView)findViewById(R.id.options);
-       mStartNew.setOnClickListener(new View.OnClickListener() {
+       mOptions = (ImageView)findViewById(R.id.options);
+       mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to Options Activity
                 Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
                 startActivity(i);
             }
-        });*/
+        });
 
 
 
@@ -60,7 +72,7 @@ public class MainMenuScreen extends Activity {
             public void onClick(View view) {
                 finish();
             }
-        });
+        });*/
 
     }
 
