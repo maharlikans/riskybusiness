@@ -63,7 +63,7 @@ public class MainMenuScreen extends Activity {
             }
         });
 
-
+        */
 
         //Deals with the exit button.
         mExit = (ImageView)findViewById(R.id.exit);
@@ -72,7 +72,7 @@ public class MainMenuScreen extends Activity {
             public void onClick(View view) {
                 finish();
             }
-        });*/
+        });
 
     }
 
