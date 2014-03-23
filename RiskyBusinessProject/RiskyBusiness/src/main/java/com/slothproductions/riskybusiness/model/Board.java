@@ -2,9 +2,21 @@ package com.slothproductions.riskybusiness.model;
 
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.InvalidKeyException;
 import java.security.InvalidParameterException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
+
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class Board implements java.io.Serializable {
     private static final long serialVersionUID = -915315565L;
@@ -338,6 +350,59 @@ public class Board implements java.io.Serializable {
 
         /* TODO: Effect the game action */
 
+        return null;
+    }
+
+    /* TODO: For now, password is a 16 bytes integer. Later on, implement composing password
+    * somehow, e.g., by asking users to enter a token and hashing them together */
+    public static void saveGame(Board board, String password) {
+        try {
+            /* TODO: Decide on file name. Maybe this is somehow dynamic */
+            FileOutputStream fos = new FileOutputStream("game.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            SecureWrapper<Board> wrapper = new SecureWrapper(password, board);
+            oos.writeObject(wrapper);
+            oos.close();
+        } catch (FileNotFoundException e) {
+            /* TODO: Do something */
+        } catch (IOException e) {
+            /* TODO: Do something */
+        } catch (InvalidKeyException e) {
+            /* TODO: Do something */
+        } catch (NoSuchPaddingException e) {
+            /* TODO: Do something */
+        }  catch (NoSuchAlgorithmException e) {
+            /* TODO: Do something */
+        }  catch (IllegalBlockSizeException e) {
+            /* TODO: Do something */
+        }
+    }
+
+    /* TODO: For now, password is a 16 bytes integer. Later on, implement composing password
+    * somehow, e.g., by asking users to enter a token and hashing them together */
+    public static Board openGame(String password) {
+        try {
+            /* TODO: Decide on file name. Maybe this is somehow dynamic */
+            FileInputStream fis = new FileInputStream("game.dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            @SuppressWarnings("unchecked")
+            SecureWrapper<Board> wrapper = (SecureWrapper<Board>) ois.readObject();
+            Board b = wrapper.unwrap(password);
+            ois.close();
+
+            /* Delete file */
+            new File("game.dat").delete();
+
+            return b;
+        } catch (FileNotFoundException e) {
+            /* TODO: Do something */
+        } catch (IOException e) {
+            /* TODO: Do something */
+        } catch (ClassNotFoundException e) {
+            /* TODO: Do something */
+        } catch (RuntimeException e) {
+            /* TODO: Do something */
+        }
         return null;
     }
 }
