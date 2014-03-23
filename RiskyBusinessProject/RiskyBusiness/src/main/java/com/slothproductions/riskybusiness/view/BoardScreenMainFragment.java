@@ -481,7 +481,7 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showOptionsDialog() {
-        AlertDialog alertOptionsDialog = new AlertDialog(getActivity());
+        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
         alertOptionsDialog.setTitle("Options");
         alertOptionsDialog.setCancelable(false);

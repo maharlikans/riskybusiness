@@ -8,5 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_board_screen">BoardScreen</string>
+    <string name="sound">Sound</string>
 
 </resources>
