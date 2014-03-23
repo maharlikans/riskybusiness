@@ -10,7 +10,8 @@ public class Player {
         accounting = a;
     }
 
-    public void effect(GameAction action) {
-        /* TODO: Code to effect action */
+    public GameAction.ActionWrapper effect(GameAction action, Map<String, Object> arguments) {
+        /* TODO: Encapsulate any necessary exceptions */
+        return accounting.getBoard().effect(this, action, arguments);
     }
 }

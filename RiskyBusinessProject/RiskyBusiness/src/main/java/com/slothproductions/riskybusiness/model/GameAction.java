@@ -26,10 +26,9 @@ public enum GameAction {
     MOVE_MILITARY_UNIT(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
         put("vertex_from", ArgumentType.VERTEX);
         put("edge_across", ArgumentType.EDGE);
-        put("military_unit", ArgumentType.MILITARY_UNIT);
     }}),
     ATTACK(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
-        put("military_unit", ArgumentType.MILITARY_UNIT);
+        put("vertex", ArgumentType.VERTEX);
     }}),
     PUBLIC_TRADE(new ResourceDescription[] {}, new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
@@ -60,8 +59,7 @@ public enum GameAction {
         RESOURCE_TYPE,
         RESOURCE_QUANTITY,
         EDGE,
-        VERTEX,
-        MILITARY_UNIT;
+        VERTEX;
     }
 
     /* Used for returning the result of an action */

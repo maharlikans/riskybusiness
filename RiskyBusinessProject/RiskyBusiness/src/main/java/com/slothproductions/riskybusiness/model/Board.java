@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.model;
 
 import android.util.Log;
 
+import java.security.InvalidParameterException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -14,6 +15,10 @@ public class Board {
 
             public int getPoints() {
                 return points;
+            }
+
+            public Board getBoard() {
+                return Board.this;
             }
 
             public ArrayList<Edge.ImmutableEdge> getEdges() {
@@ -241,7 +246,7 @@ public class Board {
         return resources;
     }
 
-    int[] generateRolls() {
+    private int[] generateRolls() {
         int[] rollsArray = {
                 2, 3, 3, 4, 4, 5, 5, 9, 9, 10, 10, 11, 11, 12
         };
@@ -281,5 +286,43 @@ public class Board {
         }
 
         return ret;
+    }
+
+    protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
+        if (player == null || action == null || arguments == null) throw new InvalidParameterException();
+        Iterator<Map.Entry<String, GameAction.ArgumentType>> it = action.arguments.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry<String, GameAction.ArgumentType> requiredPair = it.next();
+            Object provided = arguments.get(requiredPair.getKey());
+            if (provided == null) {
+                throw new InvalidParameterException();
+            } else {
+                boolean invalid = false;
+                switch(requiredPair.getValue()) {
+                    case PLAYER:
+                        if (!(provided instanceof Player) || provided == player) invalid = true;
+                        break;
+                    case RESOURCE_TYPE:
+                        if (!(provided instanceof Resource)) invalid = true;
+                        break;
+                    case RESOURCE_QUANTITY:
+                        if (!(provided instanceof Integer) || (Integer)provided < 1) invalid = true;
+                        break;
+                    case EDGE:
+                        if (!(provided instanceof Edge.ImmutableEdge)) invalid = true;
+                        break;
+                    case VERTEX:
+                        if (!(provided instanceof Vertex.ImmutableVertex)) invalid = true;
+                        break;
+                }
+                if (invalid) {
+                    throw new InvalidParameterException();
+                }
+            }
+        }
+
+        /* TODO: Effect the game action */
+
+        return null;
     }
 }
