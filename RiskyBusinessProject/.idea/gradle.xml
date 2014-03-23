@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/RiskyBusiness" />
+            <option value="C:\Users\User\Documents\GitHub\riskybusiness\RiskyBusinessProject" />
+            <option value="C:\Users\User\Documents\GitHub\riskybusiness\RiskyBusinessProject\RiskyBusiness" />
           </set>
         </option>
       </GradleProjectSettings>

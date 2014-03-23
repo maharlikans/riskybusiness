@@ -8,5 +8,19 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_board_screen">BoardScreen</string>
+    <string name="plus">+</string>
+    <string name="res1">WHEAT</string>
+    <string name="res2">SHEEP</string>
+    <string name="res3">BRICK</string>
+    <string name="res4">WOOD</string>
+    <string name="res5">ORE</string>
+    <string name="res6">GOLD</string>
+    <string name="bank4for1">4:1</string>
+    <string name="bank3for1">3:1</string>
+    <string name="bank2for1">2:1</string>
+    <string name="request_trade">Request Trade</string>
+    <string name="confirm_trade">Confirm Trade</string>
+    <string name="counter_trade">Counter Trade</string>
+    <string name="cancel_trade">Cancel Trade</string>
 
 </resources>
