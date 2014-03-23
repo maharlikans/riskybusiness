@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -672,6 +673,7 @@ public class BoardScreenMainFragment extends Fragment {
                 mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
+                Intent i = new Intent(BoardScreenMainFragment.this, )
             }
         });
 
@@ -683,6 +685,7 @@ public class BoardScreenMainFragment extends Fragment {
                 mLastToast = Toast.makeText(getActivity(), "Going to Game Rules page...",
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
+
             }
         });
 
