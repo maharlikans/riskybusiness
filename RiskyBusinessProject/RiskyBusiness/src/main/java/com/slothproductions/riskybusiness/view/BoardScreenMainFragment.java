@@ -62,8 +62,9 @@ public class BoardScreenMainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mBoardScreen = new BoardScreen();
 
+        String[] players = new String[]{"Player1", "Player2", "Player3", "Player4"};
         Log.d("BOARDDATA", "Board Data Start");
-        mBoardData = new Board(4);
+        mBoardData = new Board(players);
         Log.d("BOARDDATA", "Board Data Finished");
     }
 
@@ -95,8 +96,8 @@ public class BoardScreenMainFragment extends Fragment {
                             break;
                         case ROAD:
                             Log.d(TAG, "Road Will be Placed at Tap Location");
-                            //item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
-                            //placeSideObject(e, item);
+                            item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
+                            placeSideObject(e, item);
                             break;
                         case SOLDIER:
                             Log.d(TAG, "Soldier will be Placed at Tap Location");
@@ -232,7 +233,7 @@ public class BoardScreenMainFragment extends Fragment {
                 case ORE:
                     iv.setColorFilter(Color.DKGRAY);
                     break;
-                case DESERT:
+                case GOLD:
                     iv.setColorFilter(Color.YELLOW);
             }
         }
@@ -480,6 +481,172 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
+    boolean addTopEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Top edge of a tile
+        int x = mTile.getLeft();
+        int y = mTile.getTop()-32;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-20;
+        int highY = y+20;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addTopLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of top left edge of tile
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+22;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for top left edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addTopRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Top Right edge of tile
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+25;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Bottom Right edge of tile
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+138;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Bottom Left edge of tile
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+135;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of the middle of the bottom edge of tile
+        int x = mTile.getLeft();
+        int y = mTile.getTop()+192;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-20;
+        int highY = y+20;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
+     * also checks to see if a location is available for an item to be placed.
+     *
+     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
+     * @param mSideObject the Object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
+     */
+    boolean placeSideObject(MotionEvent tapEvent, ImageView mSideObject) {
+        //get location of x and y taps, and adjust for padding
+        int x,y;
+        if (mHexParent.isZoom()) {
+            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+            coordinate.mapZoomCoordinates(mHexParent);
+            x = (int)coordinate.getX();
+            y = (int)coordinate.getY();
+        }
+        else {
+            x = (int)(tapEvent.getX()-128);
+            y = (int)(tapEvent.getY()-32);
+        }
+
+        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
+        for (int i =0; i < mBoardData.hexes.size(); i++) {
+            Hex temp = mBoardData.hexes.get(i);
+            for (int j = 0; j < 6; j++) {
+                //check to see if vertex is available to be checked, then checks location compared to tap.
+            }
+            //grabbing the tile
+            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
+
+            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
+            if (addTopLeftEdge(x, y, mTile, mSideObject) || addTopRightEdge(x, y, mTile, mSideObject) || addTopEdge(x, y, mTile, mSideObject)
+                    || addBottomRightEdge(x, y, mTile, mSideObject) || addBottomLeftEdge(x, y, mTile, mSideObject) || addBottomEdge(x, y, mTile, mSideObject)) {
+                return true;
+            }
+        }
+
+        //object can't be placed, make toast
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+        }
+        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the corner of a tile)",
+                Toast.LENGTH_SHORT);
+        mLastToast.show();
+
+        return false;
+    }
+
     public void showOptionsDialog() {
         AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
@@ -519,17 +686,6 @@ public class BoardScreenMainFragment extends Fragment {
 
             }
         });
-
-        /*alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Returning to game...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });*/
 
         alertOptionsDialog.show();
     }

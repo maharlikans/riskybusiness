@@ -8,31 +8,31 @@ import java.lang.RuntimeException;
 
 public class Vertex implements java.io.Serializable {
     private static final long serialVersionUID = 298019793L;
-	final protected List<Hex> hexagons;
-	protected List<Edge> edges;
-	final protected int index;
-	protected Player owner;
-	protected Building building;
-	protected MilitaryUnit military;
-	private boolean locked;
+    final protected List<Hex> hexagons;
+    protected List<Edge> edges;
+    final protected int index;
+    protected Player owner;
+    protected Building building;
+    protected MilitaryUnit military;
+    private boolean locked;
 
     final public class ImmutableVertex implements java.io.Serializable {
         private static final long serialVersionUID = 758148154L;
         public int getIndex() {
             return index;
         }
-    	
+
         public Player getOwner() {
             return owner;
         }
-        
+
         public Building.ImmutableBuilding getSettlement() {
             return building.immutable;
         }
 
         public MilitaryUnit getMilitary() {
             return military;
-        }        
+        }
     }
 
     final protected ImmutableVertex immutable;
@@ -46,10 +46,10 @@ public class Vertex implements java.io.Serializable {
         }
         return Collections.unmodifiableList(shared);
     }
-	
+
     protected Vertex(int i, Hex h1, Hex h2, Hex h3) {
-    	locked = false;
-		index = i;
+        locked = false;
+        index = i;
         ArrayList<Hex> tmp = new ArrayList<Hex>();
         tmp.add(h1);
         owner = null;
@@ -67,20 +67,20 @@ public class Vertex implements java.io.Serializable {
         }
         hexagons = Collections.unmodifiableList(tmp);
         edges = new ArrayList<Edge>();
-	}
-	
-	final protected void addEdge(Edge e) {
-		if (!locked) {
-			edges.add(e);
-		} else {
-			throw new RuntimeException();
-		}
-	}
-	
-	final protected void lock() {
-		locked = true;
-		edges = Collections.unmodifiableList(edges);
-	}
+    }
+
+    final protected void addEdge(Edge e) {
+        if (!locked) {
+            edges.add(e);
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    final protected void lock() {
+        locked = true;
+        edges = Collections.unmodifiableList(edges);
+    }
 
     final protected boolean isVertexOf(Hex h) {
         return hexagons.contains(h);
@@ -105,13 +105,12 @@ public class Vertex implements java.io.Serializable {
     final protected void setOwner(Player p) {
         owner = p;
     }
-    
+
     final protected void setBuilding(Building b) {
         building = b;
     }
-    
+
     final protected void setMilitary(MilitaryUnit mu) {
         military = mu;
     }
 }
-
