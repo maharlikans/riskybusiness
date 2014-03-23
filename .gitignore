@@ -8,5 +8,9 @@
 *.java~
 
 RiskyBusinessProject/.idea/libraries/support_v4_19_0_0.xml
-
 RiskyBusinessProject/.idea/libraries/appcompat_v7_19_0_0.xml
+
+profiles_settings.xml
+grade.xml
+RiskyBusiness.iml
+RiskyBusinessProject.iml
