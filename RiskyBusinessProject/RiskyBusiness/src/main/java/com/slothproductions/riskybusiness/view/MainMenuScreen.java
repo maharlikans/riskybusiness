@@ -36,18 +36,18 @@ public class MainMenuScreen extends Activity {
                 startActivity(i);
             }
         });
-        /*
+
         //Deals with the Options Button
        mOptions = (ImageView)findViewById(R.id.options);
        mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to Options Activity
-                Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
-                startActivity(i);
+                Intent j = new Intent(MainMenuScreen.this, OptionScreen.class);
+                startActivity(j);   //Crashes here
             }
         });
-*/
+
 
 
         //Deals with the exit button.

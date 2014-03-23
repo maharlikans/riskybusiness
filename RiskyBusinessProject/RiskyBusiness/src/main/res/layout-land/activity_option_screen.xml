@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
-    tools:context="com.example.app.MainActivity"
+    tools:context="com.slothproductions.riskybusiness.view.OptionScreen"
     >
  <RelativeLayout
     android:layout_width="wrap_content"
