@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.model;
 
 import android.util.Log;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 public class Board {
@@ -46,6 +47,8 @@ public class Board {
     private final String TAG = "BOARDDATA";
     private boolean locked = false;
 
+    final private Random prng;
+
     //hexes was changed to public because i need to access it somehow
     public List<Hex> hexes;
     protected List<Vertex> vertices;
@@ -87,33 +90,38 @@ public class Board {
 		edges = Collections.unmodifiableList(edges);
 	}
 
+    private int ringUpperIndex(int ring) {
+        return ring * (ring + 1) * 3;
+    }
+
     public Board (int numPlayers) {
+        prng = new SecureRandom();
+
         hexes = new ArrayList<Hex>();
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
         int radius = 3;
 
-        ArrayList<Resource> resources = generateResources();
+        ArrayList<Resource> resources = generateResources(radius);
 
         // Initializing values for the innermost ring with a single hex. This
         // is done manually as there is no pattern for this one.
         Hex center = new Hex(0, resources.get(0));
         hexes.add(center);
-        int index = 1;
 
-        for (int counter = 1; counter < radius; counter++) {
-            int innerIndex = (counter == 1) ? 0 : (counter - 2) * (counter - 1) * 3 + 1;
+        for (int index = 1, ring = 1; ring < radius; ring++) {
+            int innerIndex = (ring == 1) ? 0 : (ring - 2) * (ring - 1) * 3 + 1;
             int minIndex = index;
-            int maxIndex = counter * (counter + 1) * 3;
+            int maxIndex = ringUpperIndex(ring);
             for (; index <= maxIndex; index++) {
                 Hex current = new Hex(index, resources.get(index));
-                if ((index - minIndex) % counter == 0) { // On a corner of the ring
+                if ((index - minIndex) % ring == 0) { // On a corner of the ring
                     current.adjacent.add(hexes.get(innerIndex));
                     hexes.get(innerIndex).adjacent.add(current);
                 } else {
                     current.adjacent.add(hexes.get(innerIndex));
                     hexes.get(innerIndex).adjacent.add(current);
-                    innerIndex = (index != maxIndex) ? innerIndex + 1 : (counter - 2) * (counter - 1) * 3 + 1;
+                    innerIndex = (index != maxIndex) ? innerIndex + 1 : (ring - 2) * (ring - 1) * 3 + 1;
                     current.adjacent.add(hexes.get(innerIndex));
                     hexes.get(innerIndex).adjacent.add(current);
                 } if (index == maxIndex) {
@@ -194,26 +202,46 @@ public class Board {
 
     }
 
+    private void shuffleArray(Object[] array) {
+        int r;
+        Object tmp;
+        for (int i=0; i<array.length; i++) {
+            r = prng.nextInt()%array.length;
+            if (r != i) {
+                tmp = array[r];
+                array[r] = array[i];
+                array[i] = tmp;
+            }
+        }
+    }
+
     /**
-     * Generates a random list of resources, and returns it. The first resource is always desert.
+     * Generates a random list of resources, and returns it. The first resource is always gold.
      * @return Resource[] a list of type Resource
      */
-    ArrayList<Resource> generateResources() {
-        ArrayList<Resource> resources = new ArrayList<Resource>(19);
+    private Resource[] generateResources(int radius) {
+        int elements = ringUpperIndex(radius) + 1;
+        Resource[] resources = new Resource[elements];
 
-        resources.add(Resource.GOLD);
+        for(int pos=0; pos<elements; ) {
+            resources[pos++] = Resource.GOLD;
 
-        for (int i = 0; i < 3; i++) {
-            resources.add(Resource.BRICK);
-            resources.add(Resource.ORE);
+            for (int i = 0; pos<elements && i < 3; i++) {
+                resources[pos++] = Resource.BRICK;
+                if (pos<elements) resources[pos++] = Resource.ORE;
+            }
+            for (int i = 0; pos<elements && i < 4; i ++) {
+                resources[pos++] = Resource.WHEAT;
+                if (pos<elements) {
+                    resources[pos++] = Resource.SHEEP;
+                    if (pos<elements) {
+                        resources[pos++] = Resource.WOOD;
+                    }
+                }
+            }
         }
-        for (int i = 0; i < 4; i ++) {
-            resources.add(Resource.GRAIN);
-            resources.add(Resource.LUMBER);
-            resources.add(Resource.WOOL);
-        }
 
-        Collections.shuffle(resources);
+        shuffleArray(resources);
 
         return resources;
     }
