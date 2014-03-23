@@ -219,13 +219,13 @@ public class BoardScreenMainFragment extends Fragment {
                 }});
             }
 
-        addColorsToBoard();
+        addResourcesToBoard();
 
         return v;
     }
 
     //loop through indices, check which resource in board, color appropriately using code similar to below
-    void addColorsToBoard() {
+    void addResourcesToBoard() {
         for (int i = 0; i < mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             switch(mBoardData.hexes.get(i).type) {
@@ -264,27 +264,30 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             TextView tv = new TextView(getActivity());
             tv.setId((int)System.currentTimeMillis());
-            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-            if (mBoardData.hexes.get(i).roll < 0) {
-                continue;
+
+            int x = iv.getLeft();
+            int y = iv.getTop();
+
+            y += iv.getDrawable().getIntrinsicHeight()/2;
+
+            ImageView back = new ImageView(getActivity());
+            back.setId((int)System.currentTimeMillis());
+            back.setImageResource(getResources().getIdentifier("textback", "drawable", getActivity().getPackageName()));
+
+            y -= back.getDrawable().getIntrinsicHeight()/2;
+
+            placeImage(x,y,back);
+
+            if (mBoardData.hexes.get(i).roll < 10) {
+                x += 15;
             }
-            else if (mBoardData.hexes.get(i).roll > 9) {
-                lp.leftMargin = iv.getLeft()-35;
-                lp.rightMargin = iv.getRight()+35;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
-            else {
-                lp.leftMargin = iv.getLeft()-15;
-                lp.rightMargin = iv.getRight()+15;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
+
             tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
-            tv.setTextSize(30);
+            tv.setTextSize(20);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
-            mHexParent.addView(tv, lp);
+
+            placeText(x-26,y-30,tv);
         }
     }
 
@@ -313,10 +316,20 @@ public class BoardScreenMainFragment extends Fragment {
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 
         //center object on location with margins
-        lp.leftMargin = x-image.getWidth()/2 - image.getDrawable().getIntrinsicWidth()/2;
+        lp.leftMargin = x-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mHexParent.addView(image, lp);
+    }
+
+    void placeText(int x, int y, TextView text) {
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+
+        //center object on location with margins
+        lp.leftMargin = x;
+        lp.topMargin = y;
+
+        mHexParent.addView(text, lp);
     }
 
     /**Places a specified object at the top left corner of a specified tile if the tap location

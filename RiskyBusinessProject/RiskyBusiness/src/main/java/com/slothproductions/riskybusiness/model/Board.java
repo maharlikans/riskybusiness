@@ -287,7 +287,7 @@ public class Board implements java.io.Serializable {
         for (int i : rollsArray)
             rolls.add(i);
         Collections.shuffle(rolls);
-        rolls.add(0, -1);
+        rolls.add(0, 7);
 
         for (int i = 0; i <19; i ++) {
             if (hexes.get(i).type == Resource.GOLD){
