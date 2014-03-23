@@ -230,22 +230,22 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             switch(mBoardData.hexes.get(i).type) {
                 case LUMBER:
-                    iv.setColorFilter(Color.GREEN);
+                    iv.setImageResource(getResources().getIdentifier("forestresource", "drawable", getActivity().getPackageName()));
                     break;
                 case BRICK:
-                    iv.setColorFilter(Color.RED);
+                    iv.setImageResource(getResources().getIdentifier("brickresource", "drawable", getActivity().getPackageName()));
                     break;
                 case WOOL:
-                    iv.setColorFilter(Color.LTGRAY);
+                    iv.setImageResource(getResources().getIdentifier("pasturesresource", "drawable", getActivity().getPackageName()));
                     break;
                 case GRAIN:
-                    iv.setColorFilter(Color.GRAY);
+                    iv.setImageResource(getResources().getIdentifier("fields", "drawable", getActivity().getPackageName()));
                     break;
                 case ORE:
-                    iv.setColorFilter(Color.DKGRAY);
+                    iv.setImageResource(getResources().getIdentifier("mountainresource", "drawable", getActivity().getPackageName()));
                     break;
                 case GOLD:
-                    iv.setColorFilter(Color.YELLOW);
+                    iv.setImageResource(getResources().getIdentifier("goldresource", "drawable", getActivity().getPackageName()));
             }
         }
     }
