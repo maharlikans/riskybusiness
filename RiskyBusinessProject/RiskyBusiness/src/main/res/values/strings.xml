@@ -21,6 +21,7 @@
     <string name="variable_board_generation">Variable board generation</string>
     <string name="attacks">Attacks</string>
     <string name="start_game">Start Game</string>
+    <string name="title_activity_gamerules_screen">GameRules</string>
 
     <string-array name="num_players_array">
         <item>1</item>
@@ -45,5 +46,6 @@
         <item>12</item>
         <item>13</item>
     </string-array>
+
 
 </resources>
