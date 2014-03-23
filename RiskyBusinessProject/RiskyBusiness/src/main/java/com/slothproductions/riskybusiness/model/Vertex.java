@@ -6,8 +6,15 @@ import java.util.Collections;
 import java.util.List;
 import java.lang.RuntimeException;
 
+<<<<<<< HEAD
 public class Vertex implements java.io.Serializable {
     private static final long serialVersionUID = 298019793L;
+=======
+/* TODO: Settlement should be its own class, having value and Buildingtype. Rename Settlement to Building */
+
+public class Vertex {
+	static private int count = 0;
+>>>>>>> Road-Placement
 	final protected List<Hex> hexagons;
 	protected List<Edge> edges;
 	final protected int index;

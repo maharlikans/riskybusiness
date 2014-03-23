@@ -33,18 +33,28 @@ public class Edge implements java.io.Serializable {
         tmp2.add(v1);
         immutable = new ImmutableEdge();
         owner = null;
+<<<<<<< HEAD
+=======
+        currently does not compile Ricardo, please fix
+>>>>>>> Road-Placement
     	h1.addEdge(this);
     	if (h2 != null) {
             tmp.add(h2);
             h2.addEdge(this);
         }
     	v1.addEdge(this);
+<<<<<<< HEAD
     	if (v2 != null) {
             tmp2.add(v2);
             v2.addEdge(this);
         }
         hexagons = Collections.unmodifiableList(tmp);
         vertices = Collections.unmodifiableList(tmp2);
+=======
+    	if (v2 != null)  v2.addEdge(this);
+    	board.addEdge(this);
+
+>>>>>>> Road-Placement
     }
 
     public List<Hex> getHexagons() {
