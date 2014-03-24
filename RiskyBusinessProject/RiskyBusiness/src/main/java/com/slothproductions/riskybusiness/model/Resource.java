@@ -1,10 +1,10 @@
 package com.slothproductions.riskybusiness.model;
 
 public enum Resource {
-    WHEAT,
-    SHEEP,
+    GOLD,
     BRICK,
-    WOOD,
     ORE,
-    GOLD
-};
+    GRAIN,
+    WOOL,
+    LUMBER;
+}

@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -45,12 +46,18 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+
     private BuildItem buildItem;
 
     private Toast mLastToast;
 
     private int height;
     private int width;
+
+    private int dice1;
+    private int dice2;
+
+    private DiceRoll viceDice = new DiceRoll();
 
     public static enum BuildItem {
         NONE, ROAD, SOLDIER, SETTLEMENT, CITY
@@ -62,8 +69,9 @@ public class BoardScreenMainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mBoardScreen = new BoardScreen();
 
+        String[] players = new String[]{"Player1", "Player2", "Player3", "Player4"};
         Log.d("BOARDDATA", "Board Data Start");
-        mBoardData = new Board(4);
+        mBoardData = new Board(players);
         Log.d("BOARDDATA", "Board Data Finished");
     }
 
@@ -95,8 +103,8 @@ public class BoardScreenMainFragment extends Fragment {
                             break;
                         case ROAD:
                             Log.d(TAG, "Road Will be Placed at Tap Location");
-                            //item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
-                            //placeSideObject(e, item);
+                            item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
+                            placeSideObject(e, item);
                             break;
                         case SOLDIER:
                             Log.d(TAG, "Soldier will be Placed at Tap Location");
@@ -152,12 +160,16 @@ public class BoardScreenMainFragment extends Fragment {
 
         //Adds functionality to the End Turn Button
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
-            @Override
-        public void onClick(View v){
-                showEndTurnDialog();
-            }
-        });
+             mBtnEndTurn.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if (mBtnEndTurn.getText().equals("End Turn")) {
+                            showEndTurnDialog();
+                        } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
+                           showRollDialog();
+                          }
+                   }
+              });
 
         buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
@@ -167,6 +179,7 @@ public class BoardScreenMainFragment extends Fragment {
             public void onClick(View v){
                 //Creating the instance of PopupMenu
                 PopupMenu popup = new PopupMenu(getActivity(), mBtnBuild);
+
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
@@ -207,33 +220,33 @@ public class BoardScreenMainFragment extends Fragment {
                 }});
             }
 
-        addColorsToBoard();
+        addResourcesToBoard();
 
         return v;
     }
 
     //loop through indices, check which resource in board, color appropriately using code similar to below
-    void addColorsToBoard() {
+    void addResourcesToBoard() {
         for (int i = 0; i < mBoardData.hexes.size(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             switch(mBoardData.hexes.get(i).type) {
                 case LUMBER:
-                    iv.setColorFilter(Color.GREEN);
+                    iv.setImageResource(getResources().getIdentifier("forestresource", "drawable", getActivity().getPackageName()));
                     break;
                 case BRICK:
-                    iv.setColorFilter(Color.RED);
+                    iv.setImageResource(getResources().getIdentifier("brickresource", "drawable", getActivity().getPackageName()));
                     break;
                 case WOOL:
-                    iv.setColorFilter(Color.LTGRAY);
+                    iv.setImageResource(getResources().getIdentifier("pasturesresource", "drawable", getActivity().getPackageName()));
                     break;
                 case GRAIN:
-                    iv.setColorFilter(Color.GRAY);
+                    iv.setImageResource(getResources().getIdentifier("fields", "drawable", getActivity().getPackageName()));
                     break;
                 case ORE:
-                    iv.setColorFilter(Color.DKGRAY);
+                    iv.setImageResource(getResources().getIdentifier("mountainresource", "drawable", getActivity().getPackageName()));
                     break;
-                case DESERT:
-                    iv.setColorFilter(Color.YELLOW);
+                case GOLD:
+                    iv.setImageResource(getResources().getIdentifier("goldresource", "drawable", getActivity().getPackageName()));
             }
         }
     }
@@ -252,27 +265,30 @@ public class BoardScreenMainFragment extends Fragment {
             ImageView iv = (ImageView)mHexParent.getChildAt(i);
             TextView tv = new TextView(getActivity());
             tv.setId((int)System.currentTimeMillis());
-            LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-            if (mBoardData.hexes.get(i).roll < 0) {
-                continue;
+
+            int x = iv.getLeft();
+            int y = iv.getTop();
+
+            y += iv.getDrawable().getIntrinsicHeight()/2;
+
+            ImageView back = new ImageView(getActivity());
+            back.setId((int)System.currentTimeMillis());
+            back.setImageResource(getResources().getIdentifier("textback", "drawable", getActivity().getPackageName()));
+
+            y -= back.getDrawable().getIntrinsicHeight()/2;
+
+            placeImage(x,y,back);
+
+            if (mBoardData.hexes.get(i).roll < 10) {
+                x += 15;
             }
-            else if (mBoardData.hexes.get(i).roll > 9) {
-                lp.leftMargin = iv.getLeft()-35;
-                lp.rightMargin = iv.getRight()+35;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
-            else {
-                lp.leftMargin = iv.getLeft()-15;
-                lp.rightMargin = iv.getRight()+15;
-                lp.topMargin = iv.getTop()+35;
-                lp.bottomMargin = iv.getBottom()-35;
-            }
+
             tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
-            tv.setTextSize(30);
+            tv.setTextSize(20);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
-            mHexParent.addView(tv, lp);
+
+            placeText(x-26,y-30,tv);
         }
     }
 
@@ -301,10 +317,20 @@ public class BoardScreenMainFragment extends Fragment {
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 
         //center object on location with margins
-        lp.leftMargin = x-image.getWidth()/2 - image.getDrawable().getIntrinsicWidth()/2;
+        lp.leftMargin = x-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mHexParent.addView(image, lp);
+    }
+
+    void placeText(int x, int y, TextView text) {
+        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+
+        //center object on location with margins
+        lp.leftMargin = x;
+        lp.topMargin = y;
+
+        mHexParent.addView(text, lp);
     }
 
     /**Places a specified object at the top left corner of a specified tile if the tap location
@@ -480,8 +506,174 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
+    boolean addTopEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Top edge of a tile
+        int x = mTile.getLeft();
+        int y = mTile.getTop()-32;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-20;
+        int highY = y+20;
+
+        //compare tap x,y locations against valid x and y range for corner
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addTopLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of top left edge of tile
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+22;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for top left edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addTopRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Top Right edge of tile
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+25;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Bottom Right edge of tile
+        int x = mTile.getLeft()+98;
+        int y = mTile.getTop()+138;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(-60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of Bottom Left edge of tile
+        int x = mTile.getLeft()-95;
+        int y = mTile.getTop()+135;
+
+        //range that is valid location
+        int lowX = x-20;
+        int highX = x+20;
+        int lowY = y-50;
+        int highY = y+50;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            mSideObject.setRotation(60);
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    boolean addBottomEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
+        //gets the location of the middle of the bottom edge of tile
+        int x = mTile.getLeft();
+        int y = mTile.getTop()+192;
+
+        //range that is valid location
+        int lowX = x-50;
+        int highX = x+50;
+        int lowY = y-20;
+        int highY = y+20;
+
+        //compare tap x,y locations against valid x and y range for edge
+        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
+            placeImage(x, y, mSideObject);
+            return true;
+        }
+        return false;
+    }
+
+    /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
+     * also checks to see if a location is available for an item to be placed.
+     *
+     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
+     * @param mSideObject the Object that will be placed at the corner
+     * @return true if the object could be placed, false otherwise
+     */
+    boolean placeSideObject(MotionEvent tapEvent, ImageView mSideObject) {
+        //get location of x and y taps, and adjust for padding
+        int x,y;
+        if (mHexParent.isZoom()) {
+            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+            coordinate.mapZoomCoordinates(mHexParent);
+            x = (int)coordinate.getX();
+            y = (int)coordinate.getY();
+        }
+        else {
+            x = (int)(tapEvent.getX()-128);
+            y = (int)(tapEvent.getY()-32);
+        }
+
+        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
+        for (int i =0; i < mBoardData.hexes.size(); i++) {
+            Hex temp = mBoardData.hexes.get(i);
+            for (int j = 0; j < 6; j++) {
+                //check to see if vertex is available to be checked, then checks location compared to tap.
+            }
+            //grabbing the tile
+            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
+
+            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
+            if (addTopLeftEdge(x, y, mTile, mSideObject) || addTopRightEdge(x, y, mTile, mSideObject) || addTopEdge(x, y, mTile, mSideObject)
+                    || addBottomRightEdge(x, y, mTile, mSideObject) || addBottomLeftEdge(x, y, mTile, mSideObject) || addBottomEdge(x, y, mTile, mSideObject)) {
+                return true;
+            }
+        }
+
+        //object can't be placed, make toast
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+        }
+        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the corner of a tile)",
+                Toast.LENGTH_SHORT);
+        mLastToast.show();
+
+        return false;
+    }
+
     public void showOptionsDialog() {
-        AlertDialog alertOptionsDialog = new AlertDialog(getActivity());
+        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(getActivity());
 
         alertOptionsDialog.setTitle("Options");
         alertOptionsDialog.setCancelable(false);
@@ -499,12 +691,8 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Going to Game Rules page...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
+                Intent i = new Intent(getActivity().getApplicationContext(), GameRules.class);
+                startActivity(i);
             }
         });
 
@@ -519,17 +707,6 @@ public class BoardScreenMainFragment extends Fragment {
 
             }
         });
-
-        /*alertOptionsDialog.setNegativeButton("Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Returning to game...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-            }
-        });*/
 
         alertOptionsDialog.show();
     }
@@ -565,7 +742,6 @@ public class BoardScreenMainFragment extends Fragment {
     }
 
     public void showEndTurnDialog() {
-        final DiceRoll dRoll = new DiceRoll();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
         alertDialog.setTitle("End Turn?");
@@ -576,9 +752,9 @@ public class BoardScreenMainFragment extends Fragment {
                 if (mLastToast!= null) {
                     mLastToast.cancel();
                 }
-                mLastToast = Toast.makeText(getActivity(), "You rolled a " + dRoll.roll().toString(),
-                        Toast.LENGTH_SHORT);
+                mLastToast = Toast.makeText(getActivity(), "Turn ended", Toast.LENGTH_SHORT);
                 mLastToast.show();
+                mBtnEndTurn.setText("Roll Dice");
 
             }
         });
@@ -596,6 +772,97 @@ public class BoardScreenMainFragment extends Fragment {
         alertDialog.show();
     }
 
+    public void showRollDialog() {
+        viceDice.roll();
+        dice1 = viceDice.getFirstDice();
+        dice2 = viceDice.getSecondDice();
 
+        ImageView outputdice1 = new ImageView(getActivity());
+        outputdice1.setId((int)System.currentTimeMillis());
+
+
+
+        LayoutParams lpDice1 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+
+       switch(dice1){
+           case 1:
+               outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 2:
+               outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+           case 3:
+               outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);        //Crashes here?
+               break;
+           case 4:
+               outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 5:
+               outputdice1.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+           case 6:
+               outputdice1.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+               mHexParent.removeView(outputdice1);
+               mHexParent.addView(outputdice1, lpDice1);
+               break;
+       }
+
+        ImageView outputdice2 = new ImageView(getActivity());
+        outputdice2.setId((int)System.currentTimeMillis()+1);
+
+        LayoutParams lpDice2 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        lpDice2.addRule(RelativeLayout.RIGHT_OF, outputdice1.getId());
+        lpDice2.addRule(RelativeLayout.ALIGN_BOTTOM, outputdice1.getId());
+
+
+        switch (dice2) {
+          case 1:
+              outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 2:
+              outputdice2.setImageResource(getResources().getIdentifier("dice2", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 3:
+              outputdice2.setImageResource(getResources().getIdentifier("dice3", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 4:
+              outputdice2.setImageResource(getResources().getIdentifier("dice4", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 5:
+              outputdice2.setImageResource(getResources().getIdentifier("dice5", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+          case 6:
+              outputdice2.setImageResource(getResources().getIdentifier("dice6", "drawable", getActivity().getPackageName()));
+              mHexParent.removeView(outputdice2);
+              mHexParent.addView(outputdice2, lpDice2);
+              break;
+
+      }
+
+        mBtnEndTurn.setText("End Turn");
+
+
+    }
 }
 

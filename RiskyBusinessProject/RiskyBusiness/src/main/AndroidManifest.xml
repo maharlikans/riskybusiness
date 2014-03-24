@@ -32,8 +32,19 @@
         </activity>
         <activity
             android:name="com.slothproductions.riskybusiness.view.BoardScreen"
-            android:label="@string/title_activity_board_screen"
+            android:label="BoardScreen"
             android:theme="@style/BoardTheme"
+            android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+            android:name="com.slothproductions.riskybusiness.view.GameRules"
+            android:label="@string/title_activity_gamerules_screen"
+            android:theme="@style/BoardTheme"
+            android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+            android:name="com.slothproductions.riskybusiness.view.GameSetupScreen"
+            android:label="@string/title_game_setup_screen"
             android:screenOrientation="sensorLandscape">
         </activity>
     </application>

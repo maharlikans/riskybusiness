@@ -2,27 +2,24 @@ package com.slothproductions.riskybusiness.model;
 
 import java.util.*;
 
-public class Hex {
-    static private int count = 0;
+public class Hex implements java.io.Serializable {
+    private static final long serialVersionUID = 286476240L;
 	final public Resource type;
 	final public int index;
-	final public int roll;
-    final private Board board;
+    //temporarily made public for access
+	public int roll;
 
 	protected List<Vertex> vertices;
 	protected List<Edge> edges;
 	protected List<Hex> adjacent;
     private boolean locked;
 
-	public Hex(Board b, Resource t, int r) {
-        board = b;
-		index = ++count;
+	public Hex(int i, Resource t) {
+		index = i;
 		type = t;
-		roll = r;
 		vertices = new ArrayList<Vertex>();
 		edges = new ArrayList<Edge>();
 		adjacent = new ArrayList<Hex>();
-        board.addHex(this);
 	}
 
     final protected void addVertex(Vertex v) {
@@ -49,9 +46,17 @@ public class Hex {
         }
     }
 
-    /*final protected void setRoll(int r) {
-        roll = r;
-    }*/
+    final protected void setRoll(int r) {
+        if (!locked) {
+            roll = r;
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    final protected int getRoll() {
+        return roll;
+    }
 
     final protected boolean isAdjacent(int index) {
         boolean ret = false;
