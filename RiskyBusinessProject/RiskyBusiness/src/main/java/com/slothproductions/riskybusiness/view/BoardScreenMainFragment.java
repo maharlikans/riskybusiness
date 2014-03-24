@@ -114,7 +114,7 @@ public class BoardScreenMainFragment extends Fragment {
                             break;
                         case SOLDIER:
                             Log.d(TAG, "Soldier will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                            item.setImageResource(getResources().getIdentifier("soldier", "drawable", getActivity().getPackageName()));
                             placeCornerObject(e, item);
                             break;
                         case SETTLEMENT:
