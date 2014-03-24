@@ -1,7 +1,6 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,24 +10,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-import android.widget.Button;
-import android.view.View.OnClickListener;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.View.R;
-import com.slothproductions.riskybusiness.model.DiceRoll;
 
 
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
-    private Fragment mTradeFragment;
+    private Fragment mTradeScreenFragment;
     private ZoomableLayout mHexParent;
 
     @Override
@@ -39,7 +28,6 @@ public class BoardScreen extends FragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
         mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
-        mTradeFragment = fm.findFragmentById(R.layout.fragment_trade_screen);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -122,13 +110,23 @@ public class BoardScreen extends FragmentActivity {
         Log.d("ONSTART", "On Start Finished");
     }
 
+    // public method specifically for the BoardScreenMainFragment to call
+    // when the user presses the trade button on the view
     public void onTradeButtonPressed() {
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.BoardContainer, mTradeFragment);
+        mTradeScreenFragment = new TradeScreenFragment();
+
+        fm.beginTransaction()
+                .replace(R.id.BoardContainer, mTradeScreenFragment)
+                .commit();
     }
 
+    // public method implemented specifically for the TradeFragment to call
+    // when the user presses the cancel trade button on the view
     public void onCancelTradeButtonPressed() {
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.BoardContainer, mBoardScreenFragment);
+        fm.beginTransaction()
+                .replace(R.id.BoardContainer, mBoardScreenFragment)
+                .commit();
     }
 }

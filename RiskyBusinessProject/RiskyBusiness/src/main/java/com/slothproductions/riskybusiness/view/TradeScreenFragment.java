@@ -23,7 +23,7 @@ public class TradeScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_trade_screen, parent, false);
-        Button cancelButton = v.findViewById(R.id.cancel_trade_button);
+        Button cancelButton = (Button)v.findViewById(R.id.cancel_trade_button);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +31,8 @@ public class TradeScreenFragment extends Fragment {
                 ((BoardScreen)getActivity()).onCancelTradeButtonPressed();
             }
         });
+
+        return v;
     }
 
 }
