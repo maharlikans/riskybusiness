@@ -28,6 +28,7 @@ public class MainMenuScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
 
+
         //Deals with the Start Button
         mStartNew = (ImageView)findViewById(R.id.start_new);
         mStartNew.setOnClickListener(new View.OnClickListener() {
@@ -39,8 +40,9 @@ public class MainMenuScreen extends Activity {
             }
         });
 
-        /*
-        mGameRules = (ImageView)findViewById(R.id.game_rules);
+        LinearLayout buttonParent = (LinearLayout)mStartNew.getParent();
+
+        mGameRules = (ImageView)buttonParent.getChildAt(2);
         mGameRules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,17 +53,15 @@ public class MainMenuScreen extends Activity {
         });
 
         //Deals with the Options Button
-        mOptions = (ImageView)findViewById(R.id.options);
+        mOptions = (ImageView)buttonParent.getChildAt(3);
         mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Should proceed to Options Activity
-                Intent j = new Intent(MainMenuScreen.this, OptionScreen.class);
-                startActivity(j);   //Crashes here
+                Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
+                startActivity(i);
             }
         });
-        */
-
 
         //Deals with the exit button.
         mExit = (ImageView)findViewById(R.id.exit);
