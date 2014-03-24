@@ -252,7 +252,7 @@ public class Board implements java.io.Serializable {
      * @return Resource[] a list of type Resource
      */
     private Resource[] generateResources(int radius) {
-        int elements = ringUpperIndex(radius) + 1;
+        int elements = ringUpperIndex(radius - 1) + 1;
         Resource[] resources = new Resource[elements];
 
         for(int pos=0; pos<elements; ) {
