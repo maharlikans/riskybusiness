@@ -117,7 +117,7 @@ public class BoardScreen extends FragmentActivity {
         mTradeScreenFragment = new TradeScreenFragment();
 
         fm.beginTransaction()
-                .replace(R.id.BoardContainer, mTradeScreenFragment)
+                .add(R.id.BoardContainer, mTradeScreenFragment)
                 .commit();
     }
 
@@ -126,7 +126,7 @@ public class BoardScreen extends FragmentActivity {
     public void onCancelTradeButtonPressed() {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.BoardContainer, mBoardScreenFragment)
+                .remove(mTradeScreenFragment)
                 .commit();
     }
 }
