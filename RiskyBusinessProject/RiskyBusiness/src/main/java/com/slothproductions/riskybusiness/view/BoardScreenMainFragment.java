@@ -187,7 +187,7 @@ public class BoardScreenMainFragment extends Fragment {
         mBtnTrade.setOnClickListener(new View.OnClickListener(){
             @Override
         public void onClick(View v){
-                showTradeDialog();
+                ((BoardScreen)getActivity()).onTradeButtonPressed();
             }
         });
 

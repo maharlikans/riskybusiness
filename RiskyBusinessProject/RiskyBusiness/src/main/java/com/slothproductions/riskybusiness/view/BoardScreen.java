@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.slothproductions.riskybusiness.model.DiceRoll;
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
+    private Fragment mTradeFragment;
     private ZoomableLayout mHexParent;
 
     @Override
@@ -37,6 +39,7 @@ public class BoardScreen extends FragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
         mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
+        mTradeFragment = fm.findFragmentById(R.layout.fragment_trade_screen);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -117,5 +120,15 @@ public class BoardScreen extends FragmentActivity {
         Log.d("ONSTART", "On Start Called");
         super.onStart();
         Log.d("ONSTART", "On Start Finished");
+    }
+
+    public void onTradeButtonPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.BoardContainer, mTradeFragment);
+    }
+
+    public void onCancelTradeButtonPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.BoardContainer, mBoardScreenFragment);
     }
 }
