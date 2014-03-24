@@ -60,8 +60,8 @@ public class MainMenuScreen extends Activity {
                 startActivity(j);   //Crashes here
             }
         });
-
         */
+
 
         //Deals with the exit button.
         mExit = (ImageView)findViewById(R.id.exit);

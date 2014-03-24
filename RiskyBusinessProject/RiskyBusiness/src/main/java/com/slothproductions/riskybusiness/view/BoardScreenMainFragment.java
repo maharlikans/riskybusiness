@@ -34,6 +34,8 @@ import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Hex;
 
+import java.util.ArrayList;
+
 public class BoardScreenMainFragment extends Fragment {
 
     private final static String TAG = "Board Screen";
@@ -59,6 +61,8 @@ public class BoardScreenMainFragment extends Fragment {
 
     private DiceRoll viceDice = new DiceRoll();
 
+    private ArrayList<ImageView> cornerObjects; //cornerObjects to keep above edge objects
+
     public static enum BuildItem {
         NONE, ROAD, SOLDIER, SETTLEMENT, CITY
     };
@@ -80,6 +84,8 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("VIEWCALLED", "View was called");
         View v = inflater.inflate(R.layout.fragment_board_screen, parent, false);
         Log.d("VIEWCALLED", "View was inflated");
+
+        cornerObjects = new ArrayList<ImageView>();
 
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
         //Note: this code should probably go somewhere else I'll fix it later
@@ -491,6 +497,7 @@ public class BoardScreenMainFragment extends Fragment {
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
                     || addBottomRightCorner(x, y, mTile, mCornerObject) || addBottomLeftCorner(x, y, mTile, mCornerObject) || addMidLeftCorner(x, y, mTile, mCornerObject)) {
+                cornerObjects.add(mCornerObject);
                 return true;
             }
         }
@@ -657,6 +664,7 @@ public class BoardScreenMainFragment extends Fragment {
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftEdge(x, y, mTile, mSideObject) || addTopRightEdge(x, y, mTile, mSideObject) || addTopEdge(x, y, mTile, mSideObject)
                     || addBottomRightEdge(x, y, mTile, mSideObject) || addBottomLeftEdge(x, y, mTile, mSideObject) || addBottomEdge(x, y, mTile, mSideObject)) {
+                raiseCornerObjects();
                 return true;
             }
         }
@@ -670,6 +678,12 @@ public class BoardScreenMainFragment extends Fragment {
         mLastToast.show();
 
         return false;
+    }
+
+    public void raiseCornerObjects() {
+        for (int i =0; i < cornerObjects.size(); i++) {
+            cornerObjects.get(i).bringToFront();
+        }
     }
 
     public void showOptionsDialog() {
