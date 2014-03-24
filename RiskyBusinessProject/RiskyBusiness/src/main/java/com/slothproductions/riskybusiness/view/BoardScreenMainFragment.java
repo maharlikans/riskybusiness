@@ -38,9 +38,8 @@ import java.util.ArrayList;
 
 public class BoardScreenMainFragment extends Fragment {
 
-    private final static String TAG = "Board Screen";
+    private final static String TAG = "Board Screen Fragment";
 
-    private BoardScreen mBoardScreen;
     private Board mBoardData;
     private ZoomableLayout mHexParent;      //RelativeLayout that is the parent of all the hexes
     private Button mBtnOptions;
@@ -48,13 +47,15 @@ public class BoardScreenMainFragment extends Fragment {
     private Button mBtnBuild;
     private Button mBtnTrade;
 
+    private BoardObjectManager mBoardObjectManager;
 
-    private BuildItem buildItem;
+
+    private BoardObject buildItem;
 
     private Toast mLastToast;
 
-    private int height;
-    private int width;
+    private int mHeight;
+    private int mWidth;
 
     private int dice1;
     private int dice2;
@@ -63,17 +64,14 @@ public class BoardScreenMainFragment extends Fragment {
 
     private ArrayList<ImageView> cornerObjects; //cornerObjects to keep above edge objects
 
-    public static enum BuildItem {
-        NONE, ROAD, SOLDIER, SETTLEMENT, CITY
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("ONCREATE", "OnCreate was called");
         super.onCreate(savedInstanceState);
-        mBoardScreen = new BoardScreen();
 
+        //temp array for players to initialize a board for backend
         String[] players = new String[]{"Player1", "Player2", "Player3", "Player4"};
+
         Log.d("BOARDDATA", "Board Data Start");
         mBoardData = new Board(players);
         Log.d("BOARDDATA", "Board Data Finished");
@@ -88,6 +86,7 @@ public class BoardScreenMainFragment extends Fragment {
         cornerObjects = new ArrayList<ImageView>();
 
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        mBoardObjectManager = new BoardObjectManager(mBoardData, mHexParent, getActivity());
         //Note: this code should probably go somewhere else I'll fix it later
         mHexParent.setOnTouchListener(new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
@@ -100,43 +99,8 @@ public class BoardScreenMainFragment extends Fragment {
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    ImageView item = new ImageView(getActivity());
-                    item.setId((int)System.currentTimeMillis());
                     Log.d(TAG, "Single Tap Detected");
-                    switch (buildItem) {
-                        case NONE:
-                            Log.d(TAG, "No Build Item Selected");
-                            break;
-                        case ROAD:
-                            Log.d(TAG, "Road Will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("road", "drawable", getActivity().getPackageName()));
-                            placeSideObject(e, item);
-                            break;
-                        case SOLDIER:
-                            Log.d(TAG, "Soldier will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("soldier", "drawable", getActivity().getPackageName()));
-                            placeCornerObject(e, item);
-                            break;
-                        case SETTLEMENT:
-                            Log.d(TAG, "BuildingType will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("settlement", "drawable", getActivity().getPackageName()));
-                            placeCornerObject(e, item);
-                            break;
-                        case CITY:
-                            Log.d(TAG, "City will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("city", "drawable", getActivity().getPackageName()));
-                            placeCornerObject(e, item);
-                            break;
-                    }
-
-                    buildItem = buildItem.NONE;
-
-                    //For Debugging
-                    String s = "Tap X = " + e.getX() + " Tap Y  = " + e.getY();
-                    String s2 = "Layout X = " + width + " Layout Y  = " + height;
-                    Log.d(TAG, s2);
-                    Log.d(TAG, s);
-
+                    mBoardObjectManager.onSingleTapConfirmed(e);
                     return super.onSingleTapConfirmed(e);
                 }
 
@@ -177,7 +141,6 @@ public class BoardScreenMainFragment extends Fragment {
                    }
               });
 
-        buildItem = BuildItem.NONE;
         //Adds functionality to the Build Button
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnBuild.setOnClickListener(new View.OnClickListener(){
@@ -192,7 +155,7 @@ public class BoardScreenMainFragment extends Fragment {
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        setBuildItem(item);
+                        mBoardObjectManager.setCurrentBuildItem(item);
                         return true;
                     }
                 });
@@ -210,6 +173,7 @@ public class BoardScreenMainFragment extends Fragment {
             }
         });
 
+        //This code will be executed once the hex layout view is inflated
         ViewTreeObserver vto = mHexParent.getViewTreeObserver();
         if (vto != null) {
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -219,10 +183,7 @@ public class BoardScreenMainFragment extends Fragment {
                     //remove listener to ensure only one call is made.
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     addNumbersToBoard();
-                    DisplayMetrics displaymetrics = new DisplayMetrics();
-                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-                    height = displaymetrics.heightPixels;
-                    width = displaymetrics.widthPixels;
+                    getScreenDimensions();
                 }});
             }
 
@@ -298,21 +259,6 @@ public class BoardScreenMainFragment extends Fragment {
         }
     }
 
-    void setBuildItem(MenuItem item) {
-        if (item.getItemId() == R.id.road) {
-            buildItem = BuildItem.ROAD;
-        }
-        else if (item.getItemId() == R.id.soldier) {
-            buildItem = BuildItem.SOLDIER;
-        }
-        else if (item.getItemId() == R.id.settlement) {
-            buildItem = BuildItem.SETTLEMENT;
-        }
-        else {
-            buildItem = BuildItem.CITY;
-        }
-    }
-
     /**places given image centered at the specified x and y coordinates
      *
      * @param x The x coordinate for item placement
@@ -337,353 +283,6 @@ public class BoardScreenMainFragment extends Fragment {
         lp.topMargin = y;
 
         mHexParent.addView(text, lp);
-    }
-
-    /**Places a specified object at the top left corner of a specified tile if the tap location
-     * is close enough to the corner of the object
-     *
-     * NOTE: The other add..Corner() methods do the same thing, but with different corners
-     *
-     * @param tapX the x coordinate for the tap
-     * @param tapY the y coordinate for the tap
-     * @param mTile the tile that the image will be placed at the corner of
-     * @param mCornerObject The object that will be placed at the corner
-     * @return true if the object could be placed, false otherwise
-     */
-    boolean addTopLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of top left vertex of tile
-        int x = mTile.getLeft()-63;
-        int y = mTile.getTop()-33;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for top corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addTopRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of Top Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()-31;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addMidRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of Middle Right vertex of tile
-        int x = mTile.getLeft()+130;
-        int y = mTile.getTop()+82;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addBottomRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of Bottom Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()+192;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addBottomLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of Bottom Left vertex of tile
-        int x = mTile.getLeft()-62;
-        int y = mTile.getTop()+192;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addMidLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
-        //gets the location of Middle Left vertex of tile
-        int x = mTile.getLeft()-125;
-        int y = mTile.getTop()+78;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mCornerObject);
-            return true;
-        }
-        return false;
-    }
-
-    /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
-     * also checks to see if a location is available for an item to be placed.
-     *
-     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
-     * @param mCornerObject the Object that will be placed at the corner
-     * @return true if the object could be placed, false otherwise
-     */
-    boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
-        //get location of x and y taps, and adjust for padding
-        int x,y;
-        if (mHexParent.isZoom()) {
-            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-            coordinate.mapZoomCoordinates(mHexParent);
-            x = (int)coordinate.getX();
-            y = (int)coordinate.getY();
-        }
-        else {
-            x = (int)(tapEvent.getX()-128);
-            y = (int)(tapEvent.getY()-32);
-        }
-
-        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < mBoardData.hexes.size(); i++) {
-            Hex temp = mBoardData.hexes.get(i);
-            for (int j = 0; j < 6; j++) {
-                //check to see if vertex is available to be checked, then checks location compared to tap.
-            }
-            //grabbing the tile
-            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
-
-            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
-                    || addBottomRightCorner(x, y, mTile, mCornerObject) || addBottomLeftCorner(x, y, mTile, mCornerObject) || addMidLeftCorner(x, y, mTile, mCornerObject)) {
-                cornerObjects.add(mCornerObject);
-                return true;
-            }
-        }
-
-        //object can't be placed, make toast
-        if (mLastToast!= null) {
-            mLastToast.cancel();
-        }
-        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the corner of a tile)",
-                Toast.LENGTH_SHORT);
-        mLastToast.show();
-
-        return false;
-    }
-
-    boolean addTopEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of Top edge of a tile
-        int x = mTile.getLeft();
-        int y = mTile.getTop()-32;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-20;
-        int highY = y+20;
-
-        //compare tap x,y locations against valid x and y range for corner
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addTopLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of top left edge of tile
-        int x = mTile.getLeft()-95;
-        int y = mTile.getTop()+22;
-
-        //range that is valid location
-        int lowX = x-20;
-        int highX = x+20;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for top left edge
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            mSideObject.setRotation(-60);
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addTopRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of Top Right edge of tile
-        int x = mTile.getLeft()+98;
-        int y = mTile.getTop()+25;
-
-        //range that is valid location
-        int lowX = x-20;
-        int highX = x+20;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for edge
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            mSideObject.setRotation(60);
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addBottomRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of Bottom Right edge of tile
-        int x = mTile.getLeft()+98;
-        int y = mTile.getTop()+138;
-
-        //range that is valid location
-        int lowX = x-20;
-        int highX = x+20;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for edge
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            mSideObject.setRotation(-60);
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addBottomLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of Bottom Left edge of tile
-        int x = mTile.getLeft()-95;
-        int y = mTile.getTop()+135;
-
-        //range that is valid location
-        int lowX = x-20;
-        int highX = x+20;
-        int lowY = y-50;
-        int highY = y+50;
-
-        //compare tap x,y locations against valid x and y range for edge
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            mSideObject.setRotation(60);
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    boolean addBottomEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
-        //gets the location of the middle of the bottom edge of tile
-        int x = mTile.getLeft();
-        int y = mTile.getTop()+192;
-
-        //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-20;
-        int highY = y+20;
-
-        //compare tap x,y locations against valid x and y range for edge
-        if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            placeImage(x, y, mSideObject);
-            return true;
-        }
-        return false;
-    }
-
-    /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
-     * also checks to see if a location is available for an item to be placed.
-     *
-     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
-     * @param mSideObject the Object that will be placed at the corner
-     * @return true if the object could be placed, false otherwise
-     */
-    boolean placeSideObject(MotionEvent tapEvent, ImageView mSideObject) {
-        //get location of x and y taps, and adjust for padding
-        int x,y;
-        if (mHexParent.isZoom()) {
-            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-            coordinate.mapZoomCoordinates(mHexParent);
-            x = (int)coordinate.getX();
-            y = (int)coordinate.getY();
-        }
-        else {
-            x = (int)(tapEvent.getX()-128);
-            y = (int)(tapEvent.getY()-32);
-        }
-
-        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < mBoardData.hexes.size(); i++) {
-            Hex temp = mBoardData.hexes.get(i);
-            for (int j = 0; j < 6; j++) {
-                //check to see if vertex is available to be checked, then checks location compared to tap.
-            }
-            //grabbing the tile
-            ImageView mTile = (ImageView) mHexParent.getChildAt(i);
-
-            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftEdge(x, y, mTile, mSideObject) || addTopRightEdge(x, y, mTile, mSideObject) || addTopEdge(x, y, mTile, mSideObject)
-                    || addBottomRightEdge(x, y, mTile, mSideObject) || addBottomLeftEdge(x, y, mTile, mSideObject) || addBottomEdge(x, y, mTile, mSideObject)) {
-                raiseCornerObjects();
-                return true;
-            }
-        }
-
-        //object can't be placed, make toast
-        if (mLastToast!= null) {
-            mLastToast.cancel();
-        }
-        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the edge of a tile)",
-                Toast.LENGTH_SHORT);
-        mLastToast.show();
-
-        return false;
-    }
-
-    public void raiseCornerObjects() {
-        for (int i =0; i < cornerObjects.size(); i++) {
-            cornerObjects.get(i).bringToFront();
-        }
     }
 
     public void showOptionsDialog() {
@@ -873,6 +472,13 @@ public class BoardScreenMainFragment extends Fragment {
         mBtnEndTurn.setText("End Turn");
 
 
+    }
+
+    public void getScreenDimensions() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        mHeight = displaymetrics.heightPixels;
+        mWidth = displaymetrics.widthPixels;
     }
 }
 
