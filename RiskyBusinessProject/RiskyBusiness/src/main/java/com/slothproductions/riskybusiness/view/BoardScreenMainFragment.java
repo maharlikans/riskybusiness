@@ -673,7 +673,7 @@ public class BoardScreenMainFragment extends Fragment {
         if (mLastToast!= null) {
             mLastToast.cancel();
         }
-        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the corner of a tile)",
+        mLastToast = Toast.makeText(getActivity(), "Invalid Object Placement (needs to be placed on the edge of a tile)",
                 Toast.LENGTH_SHORT);
         mLastToast.show();
 
