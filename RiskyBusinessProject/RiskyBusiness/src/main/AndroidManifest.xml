@@ -11,7 +11,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name">
+        android:label="@string/app_name" >
         <activity
             android:name="com.slothproductions.riskybusiness.view.SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -27,24 +27,24 @@
         <activity
             android:name="com.slothproductions.riskybusiness.view.MainMenuScreen"
             android:label="MainMenuScreen"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/SplashTheme" >
         </activity>
         <activity
             android:name="com.slothproductions.riskybusiness.view.BoardScreen"
             android:label="@string/title_activity_board_screen"
-            android:theme="@style/BoardTheme"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/BoardTheme" >
         </activity>
         <activity
             android:name="com.slothproductions.riskybusiness.view.GameSetupScreen"
             android:label="@string/title_game_setup_screen"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape" >
         </activity>
         <activity
-            android:name="com.slothproductions.riskybusiness.view.OptionScreen"
+            android:name="com.slothproductions.riskybusiness.view.OptionsScreen"
             android:label="@string/title_activity_options_screen"
-            android:screenOrientation="sensorLandscape">
+            android:screenOrientation="sensorLandscape" >
         </activity>
     </application>
 

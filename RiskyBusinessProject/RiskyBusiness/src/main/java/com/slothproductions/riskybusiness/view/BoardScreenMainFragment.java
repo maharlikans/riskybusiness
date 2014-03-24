@@ -673,7 +673,7 @@ public class BoardScreenMainFragment extends Fragment {
                 mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
                         Toast.LENGTH_SHORT);
                 mLastToast.show();
-                Intent i = new Intent(BoardScreenMainFragment.this, )
+                Intent i = new Intent();
             }
         });
 

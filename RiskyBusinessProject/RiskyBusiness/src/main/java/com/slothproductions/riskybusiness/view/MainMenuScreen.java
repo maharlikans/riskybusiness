@@ -43,7 +43,7 @@ public class MainMenuScreen extends Activity {
             @Override
             public void onClick(View v) {
                 //Should proceed to Options Activity
-                Intent j = new Intent(MainMenuScreen.this, OptionScreen.class);
+                Intent j = new Intent(MainMenuScreen.this, OptionsScreen.class);
                 startActivity(j);   //Crashes here
             }
         });
