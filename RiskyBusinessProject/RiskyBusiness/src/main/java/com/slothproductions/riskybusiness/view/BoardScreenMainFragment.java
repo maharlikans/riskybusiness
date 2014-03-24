@@ -193,7 +193,7 @@ public class BoardScreenMainFragment extends Fragment {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 Log.d(TAG, "Single Tap Detected");
-                mBoardObjectManager.onSingleTapConfirmed(e);
+                mBoardObjectManager.BuildItem(e);
                 return super.onSingleTapConfirmed(e);
             }
 
@@ -275,15 +275,16 @@ public class BoardScreenMainFragment extends Fragment {
             int x = iv.getLeft();
             int y = iv.getTop();
 
-            y += iv.getDrawable().getIntrinsicHeight()/2;
-
             ImageView back = new ImageView(mActivity);
             back.setId((int)System.currentTimeMillis());
             back.setImageResource(getResources().getIdentifier("textback", "drawable", mActivity.getPackageName()));
 
-            y -= back.getDrawable().getIntrinsicHeight()/2;
+            x+= iv.getWidth()/2;
+            y+= iv.getHeight()/2;
 
             placeImage(x,y,back);
+
+            //TODO: Figure out how to center the text view at an x,y location
 
             if (mBoardData.hexes.get(i).roll < 10) {
                 x += 15;

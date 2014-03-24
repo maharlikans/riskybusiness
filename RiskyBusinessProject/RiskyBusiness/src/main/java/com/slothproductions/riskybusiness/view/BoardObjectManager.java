@@ -71,7 +71,7 @@ public class BoardObjectManager {
         }
     }
 
-    public void onSingleTapConfirmed(MotionEvent event) {
+    public void BuildItem(MotionEvent event) {
         ImageView item = new ImageView(gameBoardActivity);
         item.setId((int)System.currentTimeMillis());
         switch (currentBuildItem) {
@@ -136,18 +136,14 @@ public class BoardObjectManager {
      * @return true if the object could be placed, false otherwise
      */
     public boolean placeSideObject(MotionEvent tapEvent, ImageView mSideObject) {
-        //get location of x and y taps, and adjust for padding
         int x,y;
+        //get location of x and y taps, and adjust for zoom/pan
+        Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
         if (boardLayout.isZoom()) {
-            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
             coordinate.mapZoomCoordinates(boardLayout);
-            x = (int)coordinate.getX();
-            y = (int)coordinate.getY();
         }
-        else {
-            x = (int)(tapEvent.getX()-128);
-            y = (int)(tapEvent.getY()-32);
-        }
+        x = (int)coordinate.getX();
+        y = (int)coordinate.getY();
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < boardBacklog.hexes.size(); i++) {
@@ -179,18 +175,14 @@ public class BoardObjectManager {
      * @return true if the object could be placed, false otherwise
      */
     public boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
-        //get location of x and y taps, and adjust for padding
         int x,y;
+        //get location of x and y taps, and adjust for zoom/pan
+        Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
         if (boardLayout.isZoom()) {
-            Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
             coordinate.mapZoomCoordinates(boardLayout);
-            x = (int)coordinate.getX();
-            y = (int)coordinate.getY();
         }
-        else {
-            x = (int)(tapEvent.getX()-128);
-            y = (int)(tapEvent.getY()-32);
-        }
+        x = (int)coordinate.getX();
+        y = (int)coordinate.getY();
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < boardBacklog.hexes.size(); i++) {
@@ -247,8 +239,8 @@ public class BoardObjectManager {
      */
     boolean addTopLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of top left vertex of tile
-        int x = mTile.getLeft()-63;
-        int y = mTile.getTop()-33;
+        int x = mTile.getLeft()+64;
+        int y = mTile.getTop();
 
         //range that is valid location
         int lowX = x-50;
@@ -266,8 +258,8 @@ public class BoardObjectManager {
 
     boolean addTopRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of Top Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()-31;
+        int x = mTile.getLeft()+196;
+        int y = mTile.getTop();
 
         //range that is valid location
         int lowX = x-50;
@@ -285,8 +277,8 @@ public class BoardObjectManager {
 
     boolean addMidRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of Middle Right vertex of tile
-        int x = mTile.getLeft()+130;
-        int y = mTile.getTop()+82;
+        int x = mTile.getLeft()+260;
+        int y = mTile.getTop()+112;
 
         //range that is valid location
         int lowX = x-50;
@@ -304,8 +296,8 @@ public class BoardObjectManager {
 
     boolean addBottomRightCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of Bottom Right vertex of tile
-        int x = mTile.getLeft()+65;
-        int y = mTile.getTop()+192;
+        int x = mTile.getLeft()+196;
+        int y = mTile.getTop()+224;
 
         //range that is valid location
         int lowX = x-50;
@@ -323,8 +315,8 @@ public class BoardObjectManager {
 
     boolean addBottomLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of Bottom Left vertex of tile
-        int x = mTile.getLeft()-62;
-        int y = mTile.getTop()+192;
+        int x = mTile.getLeft()+64;
+        int y = mTile.getTop()+224;
 
         //range that is valid location
         int lowX = x-50;
@@ -342,8 +334,8 @@ public class BoardObjectManager {
 
     boolean addMidLeftCorner(int tapX, int tapY, ImageView mTile, ImageView mCornerObject) {
         //gets the location of Middle Left vertex of tile
-        int x = mTile.getLeft()-125;
-        int y = mTile.getTop()+78;
+        int x = mTile.getLeft();
+        int y = mTile.getTop()+112;
 
         //range that is valid location
         int lowX = x-50;
@@ -361,8 +353,8 @@ public class BoardObjectManager {
 
     boolean addTopEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Top edge of a tile
-        int x = mTile.getLeft();
-        int y = mTile.getTop()-32;
+        int x = mTile.getLeft()+130;
+        int y = mTile.getTop();
 
         //range that is valid location
         int lowX = x-50;
@@ -380,8 +372,8 @@ public class BoardObjectManager {
 
     boolean addTopLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of top left edge of tile
-        int x = mTile.getLeft()-95;
-        int y = mTile.getTop()+22;
+        int x = mTile.getLeft()+32;
+        int y = mTile.getTop()+56;
 
         //range that is valid location
         int lowX = x-20;
@@ -400,8 +392,8 @@ public class BoardObjectManager {
 
     boolean addTopRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Top Right edge of tile
-        int x = mTile.getLeft()+98;
-        int y = mTile.getTop()+25;
+        int x = mTile.getLeft()+228;
+        int y = mTile.getTop()+56;
 
         //range that is valid location
         int lowX = x-20;
@@ -420,8 +412,8 @@ public class BoardObjectManager {
 
     boolean addBottomRightEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Bottom Right edge of tile
-        int x = mTile.getLeft()+98;
-        int y = mTile.getTop()+138;
+        int x = mTile.getLeft()+228;
+        int y = mTile.getTop()+168;
 
         //range that is valid location
         int lowX = x-20;
@@ -440,8 +432,8 @@ public class BoardObjectManager {
 
     boolean addBottomLeftEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of Bottom Left edge of tile
-        int x = mTile.getLeft()-95;
-        int y = mTile.getTop()+135;
+        int x = mTile.getLeft()+32;
+        int y = mTile.getTop()+168;
 
         //range that is valid location
         int lowX = x-20;
@@ -460,8 +452,8 @@ public class BoardObjectManager {
 
     boolean addBottomEdge(int tapX, int tapY, ImageView mTile, ImageView mSideObject) {
         //gets the location of the middle of the bottom edge of tile
-        int x = mTile.getLeft();
-        int y = mTile.getTop()+192;
+        int x = mTile.getLeft()+130;
+        int y = mTile.getTop()+224;
 
         //range that is valid location
         int lowX = x-50;

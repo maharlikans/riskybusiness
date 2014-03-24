@@ -31,18 +31,14 @@ public class Coordinate {
         int zoomLevel = (int)layout.getZoom();
 
         float centerX = layout.getPanX();
-        x = x-128; //adjust for padding
         x = x-centerX; //subtract center x
         x = x/zoomLevel; //adjust for zoom
         x = x + centerX; //re add center
-        x = x - 64; // adjust for padding/2
 
         float centerY = layout.getPanY();
-        y = y-32; //adjust for padding
         y = y-centerY; //subtract center x
         y = y/zoomLevel; //adjust for zoom
         y = y + centerY; //re add center
-        y = y - 16; // adjust for padding/2
     }
 
 }
