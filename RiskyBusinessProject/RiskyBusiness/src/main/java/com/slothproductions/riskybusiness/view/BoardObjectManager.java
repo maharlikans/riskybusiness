@@ -29,6 +29,7 @@ public class BoardObjectManager {
     private Board boardBacklog;             //Model board class
     private ZoomableLayout boardLayout;     //Board Layout
     private Activity gameBoardActivity;
+    private BoardScreenMainFragment managingFragment;
 
     //Arrays of each type of view element
     private ArrayList<ImageView> soldiers;
@@ -38,16 +39,20 @@ public class BoardObjectManager {
 
     private BoardObject currentBuildItem;   //Last selected board object to be placed
 
-    private Toast mLastToast;   //Keep track of last toast to cancel on new one
-
-    public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity) {
+    public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity, BoardScreenMainFragment manager) {
+        //initialize main variables
         boardBacklog = boardData;
         boardLayout = layout;
         gameBoardActivity = activity;
+        managingFragment = manager;
+
+        //Initialize lists
         soldiers = new ArrayList<ImageView>();
         settlements = new ArrayList<ImageView>();
         cities = new ArrayList<ImageView>();
         roads = new ArrayList<ImageView>();
+
+        //set current build item
         currentBuildItem = BoardObject.NONE;
     }
 
@@ -161,12 +166,7 @@ public class BoardObjectManager {
         }
 
         //object can't be placed, make toast
-        if (mLastToast!= null) {
-            mLastToast.cancel();
-        }
-        mLastToast = Toast.makeText(gameBoardActivity, "Invalid Object Placement (needs to be placed on the edge of a tile)",
-                Toast.LENGTH_SHORT);
-        mLastToast.show();
+        managingFragment.createToast("Invalid Object Placement (needs to be placed on the edge of a tile)", false);
 
         return false;
     }
@@ -209,12 +209,7 @@ public class BoardObjectManager {
         }
 
         //object can't be placed, make toast
-        if (mLastToast!= null) {
-            mLastToast.cancel();
-        }
-        mLastToast = Toast.makeText(gameBoardActivity, "Invalid Object Placement (needs to be placed on the corner of a tile)",
-                Toast.LENGTH_SHORT);
-        mLastToast.show();
+        managingFragment.createToast("Invalid Object Placement (needs to be placed on the corner of a tile)", false);
 
         return false;
     }

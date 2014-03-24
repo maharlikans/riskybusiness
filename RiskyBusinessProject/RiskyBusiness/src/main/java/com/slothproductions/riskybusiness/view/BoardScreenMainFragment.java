@@ -111,7 +111,7 @@ public class BoardScreenMainFragment extends Fragment {
         setDelayedInitializations();
 
         //Initializes the game board object manager
-        mBoardObjectManager = new BoardObjectManager(mBoardData, mHexParent, mActivity);
+        mBoardObjectManager = new BoardObjectManager(mBoardData, mHexParent, mActivity, this);
 
         return v;
     }
@@ -324,6 +324,29 @@ public class BoardScreenMainFragment extends Fragment {
         mHexParent.addView(text, lp);
     }
 
+    /**
+     * Simplified code for creating a toast
+     * @param text String value that you want the text to say
+     * @param isLong boolean variable for if you want the toast to be long or short
+     */
+    void createToast(String text, boolean isLong) {
+        cancelToast();
+        int length = Toast.LENGTH_SHORT;
+        if (isLong) {
+            length = Toast.LENGTH_LONG;
+        }
+        mLastToast = Toast.makeText(mActivity, text, length);
+        mLastToast.show();
+    }
+
+    boolean cancelToast() {
+        if (mLastToast!= null) {
+            mLastToast.cancel();
+            return true;
+        }
+        return false;
+    }
+
     public void showOptionsDialog() {
         AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(mActivity);
 
@@ -346,13 +369,7 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(mActivity, "Game Saved!",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
-
+                createToast("Game Saved!", false);
             }
         });
 
@@ -367,23 +384,15 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(mActivity, "Turn ended", Toast.LENGTH_SHORT);
-                mLastToast.show();
+                createToast("Turn Ended", false);
                 mBtnEndTurn.setText("Roll Dice");
 
             }
         });
+
         alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(mActivity, "Turn not ended", Toast.LENGTH_SHORT);
-                mLastToast.show();
-
+                createToast("Turn not ended", false);
             }
         });
 

@@ -18,7 +18,6 @@ public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
     private Fragment mTradeScreenFragment;
-    private ZoomableLayout mHexParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class BoardScreen extends FragmentActivity {
 
         FragmentManager fm = getSupportFragmentManager();
         mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
-        mHexParent = (ZoomableLayout) findViewById(R.id.hexParent);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -56,21 +54,6 @@ public class BoardScreen extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        BoardScreenMainFragment frag = (BoardScreenMainFragment)mBoardScreenFragment;
-        ImageView mCity = new ImageView(this);
-        mCity.setId((int)System.currentTimeMillis());
-        mCity.setImageResource(getResources().getIdentifier("city", "drawable", getPackageName()));
-
-        frag.placeCornerObject(event, mCity);
-
-        //mHexParent.zoom(event);
-
-        return super.onTouchEvent(event);
-    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
