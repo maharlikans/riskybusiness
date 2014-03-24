@@ -26,18 +26,19 @@ import java.util.ArrayList;
 public class BoardObjectManager {
     private static final String TAG = "Board Object Manager";
 
-    private Board boardBacklog; //Model board class
-    
-    private ZoomableLayout boardLayout;
+    private Board boardBacklog;             //Model board class
+    private ZoomableLayout boardLayout;     //Board Layout
+    private Activity gameBoardActivity;
+
+    //Arrays of each type of view element
     private ArrayList<ImageView> soldiers;
     private ArrayList<ImageView> settlements;
     private ArrayList<ImageView> cities;
     private ArrayList<ImageView> roads;
 
-    private BoardObject currentBuildItem;
-    private Activity gameBoardActivity;
+    private BoardObject currentBuildItem;   //Last selected board object to be placed
 
-    private Toast mLastToast;
+    private Toast mLastToast;   //Keep track of last toast to cancel on new one
 
     public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity) {
         boardBacklog = boardData;
