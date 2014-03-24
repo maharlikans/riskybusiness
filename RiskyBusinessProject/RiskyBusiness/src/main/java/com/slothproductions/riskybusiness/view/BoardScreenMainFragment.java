@@ -694,12 +694,8 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
+                Intent i = new Intent(getActivity().getApplicationContext(), OptionsScreen.class);
+                startActivity(i);
             }
         });
 

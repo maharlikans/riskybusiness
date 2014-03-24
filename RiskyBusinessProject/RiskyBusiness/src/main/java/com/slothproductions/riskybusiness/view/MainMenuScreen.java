@@ -6,12 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.View.R;
 
@@ -58,7 +54,7 @@ public class MainMenuScreen extends Activity {
             @Override
             public void onClick(View v) {
                 //Should proceed to Options Activity
-                Intent i = new Intent(MainMenuScreen.this, OptionScreen.class);
+                Intent i = new Intent(MainMenuScreen.this, OptionsScreen.class);
                 startActivity(i);
             }
         });
