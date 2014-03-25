@@ -56,7 +56,7 @@ public class BoardObjectManager {
         mCurrentBuildItem = BoardObject.NONE;
     }
 
-    public void setmCurrentBuildItem(MenuItem newBuildItem) {
+    public void setCurrentBuildItem(MenuItem newBuildItem) {
         if (newBuildItem.getItemId() == R.id.road) {
             mCurrentBuildItem = BoardObject.ROAD;
         }
