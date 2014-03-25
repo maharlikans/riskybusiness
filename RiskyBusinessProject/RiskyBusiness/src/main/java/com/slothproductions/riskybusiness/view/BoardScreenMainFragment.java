@@ -227,6 +227,8 @@ public class BoardScreenMainFragment extends Fragment {
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     addNumbersToBoard();
                     getScreenDimensions();
+                    mHexParent.setHeight(mHeight);
+                    mHexParent.setWidth(mWidth);
                 }});
         }
     }

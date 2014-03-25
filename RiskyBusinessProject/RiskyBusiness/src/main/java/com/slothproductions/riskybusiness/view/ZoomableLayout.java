@@ -24,9 +24,8 @@ public class ZoomableLayout extends RelativeLayout {
     private float mCenterY;
     private float mScaleFactor = 1.f;
 
-    DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-    int displayWidth = metrics.widthPixels;
-    int displayHeight = metrics.heightPixels;
+    int mWidth;
+    int mHeight;
 
     public ZoomableLayout(Context context) {
         super(context);
@@ -86,7 +85,7 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public boolean isInBoundsX() {
-        if (mCenterX >= 2560) {
+        if (mCenterX >= mWidth) {
             return false;
         }
         else if (mCenterX <= 0) {
@@ -96,7 +95,7 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public boolean isInBoundsY() {
-        if (mCenterY >= 1504) {
+        if (mCenterY >= mHeight) {
             return false;
         }
         else if (mCenterY <= 0) {
@@ -115,6 +114,14 @@ public class ZoomableLayout extends RelativeLayout {
 
     public float getZoom() {
         return mScaleFactor;
+    }
+
+    public void setHeight(int height) {
+        mHeight = height;
+    }
+
+    public void setWidth(int width) {
+        mWidth = width;
     }
 
     @Override

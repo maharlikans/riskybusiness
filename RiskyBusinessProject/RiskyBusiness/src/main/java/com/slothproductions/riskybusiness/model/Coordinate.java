@@ -2,9 +2,7 @@ package com.slothproductions.riskybusiness.model;
 
 import com.slothproductions.riskybusiness.view.ZoomableLayout;
 
-/**
- * Created by Joseph on 3/19/14.
- */
+
 public class Coordinate {
     private float x;
     private float y;

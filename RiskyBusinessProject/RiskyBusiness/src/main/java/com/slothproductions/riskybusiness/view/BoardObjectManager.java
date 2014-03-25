@@ -18,7 +18,7 @@ import com.slothproductions.riskybusiness.model.MilitaryUnit;
 import java.util.ArrayList;
 
 /**
- * The purpose of this class is to manage all the objects being placed on the board (ie, cities, settlements, soldiers, cities, etc..
+ * The purpose of this class is to manage all the objects being placed on the board (ie, Cities, Settlements, Soldiers, Cities, etc..
  * Note that this is NOT a model object. The only data/algorithms that this class holds is strictly views/layouts, and methods for placement, etc.
  * This class still calls methods from the model Board class in order for that class to handle backend data. This class is essentially designed to clean up
  * the code in BoardScreenMain Fragment
@@ -26,90 +26,90 @@ import java.util.ArrayList;
 public class BoardObjectManager {
     private static final String TAG = "Board Object Manager";
 
-    private Board boardBacklog;             //Model board class
-    private ZoomableLayout boardLayout;     //Board Layout
-    private Activity gameBoardActivity;
-    private BoardScreenMainFragment managingFragment;
+    private Board mBoardBacklog;             //Model board class
+    private ZoomableLayout mBoardLayout;     //Board Layout
+    private Activity mGameBoardActivity;
+    private BoardScreenMainFragment mManagingFragment;
 
     //Arrays of each type of view element
-    private ArrayList<ImageView> soldiers;
-    private ArrayList<ImageView> settlements;
-    private ArrayList<ImageView> cities;
-    private ArrayList<ImageView> roads;
+    private ArrayList<ImageView> mSoldiers;
+    private ArrayList<ImageView> mSettlements;
+    private ArrayList<ImageView> mCities;
+    private ArrayList<ImageView> mRoads;
 
-    private BoardObject currentBuildItem;   //Last selected board object to be placed
+    private BoardObject mCurrentBuildItem;   //Last selected board object to be placed
 
     public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity, BoardScreenMainFragment manager) {
         //initialize main variables
-        boardBacklog = boardData;
-        boardLayout = layout;
-        gameBoardActivity = activity;
-        managingFragment = manager;
+        mBoardBacklog = boardData;
+        mBoardLayout = layout;
+        mGameBoardActivity = activity;
+        mManagingFragment = manager;
 
         //Initialize lists
-        soldiers = new ArrayList<ImageView>();
-        settlements = new ArrayList<ImageView>();
-        cities = new ArrayList<ImageView>();
-        roads = new ArrayList<ImageView>();
+        mSoldiers = new ArrayList<ImageView>();
+        mSettlements = new ArrayList<ImageView>();
+        mCities = new ArrayList<ImageView>();
+        mRoads = new ArrayList<ImageView>();
 
         //set current build item
-        currentBuildItem = BoardObject.NONE;
+        mCurrentBuildItem = BoardObject.NONE;
     }
 
-    public void setCurrentBuildItem(MenuItem newBuildItem) {
+    public void setmCurrentBuildItem(MenuItem newBuildItem) {
         if (newBuildItem.getItemId() == R.id.road) {
-            currentBuildItem = BoardObject.ROAD;
+            mCurrentBuildItem = BoardObject.ROAD;
         }
         else if (newBuildItem.getItemId() == R.id.soldier) {
-            currentBuildItem = BoardObject.SOLDIER;
+            mCurrentBuildItem = BoardObject.SOLDIER;
         }
         else if (newBuildItem.getItemId() == R.id.settlement) {
-            currentBuildItem = BoardObject.SETTLEMENT;
+            mCurrentBuildItem = BoardObject.SETTLEMENT;
         }
         else {
-            currentBuildItem = BoardObject.CITY;
+            mCurrentBuildItem = BoardObject.CITY;
         }
     }
 
     public void BuildItem(MotionEvent event) {
-        ImageView item = new ImageView(gameBoardActivity);
+        ImageView item = new ImageView(mGameBoardActivity);
         item.setId((int)System.currentTimeMillis());
-        switch (currentBuildItem) {
+        switch (mCurrentBuildItem) {
             case NONE:
                 Log.d(TAG, "No Build Item Selected");
                 break;
             case ROAD:
                 Log.d(TAG, "Road Will be Placed at Tap Location");
-                item.setImageResource(gameBoardActivity.getResources().getIdentifier("road", "drawable", gameBoardActivity.getPackageName()));
+                item.setImageResource(mGameBoardActivity.getResources().getIdentifier("road", "drawable", mGameBoardActivity.getPackageName()));
                 if (placeSideObject(event, item)) {
-                    roads.add(item);
+                    mRoads.add(item);
                     normalizeLevels();
                 }
                 break;
             case SOLDIER:
                 Log.d(TAG, "Soldier will be Placed at Tap Location");
-                item.setImageResource(gameBoardActivity.getResources().getIdentifier("soldier", "drawable", gameBoardActivity.getPackageName()));
+                item.setImageResource(mGameBoardActivity.getResources().getIdentifier("soldier", "drawable", mGameBoardActivity.getPackageName()));
                 if (placeCornerObject(event, item)) {
-                    soldiers.add(item);
+                    mSoldiers.add(item);
                 }
                 break;
             case SETTLEMENT:
                 Log.d(TAG, "BuildingType will be Placed at Tap Location");
-                item.setImageResource(gameBoardActivity.getResources().getIdentifier("settlement", "drawable", gameBoardActivity.getPackageName()));
+                item.setImageResource(mGameBoardActivity.getResources().getIdentifier("settlement", "drawable", mGameBoardActivity.getPackageName()));
                 if (placeCornerObject(event, item)) {
-                    settlements.add(item);
+                    mSettlements.add(item);
                 }
                 break;
             case CITY:
                 Log.d(TAG, "City will be Placed at Tap Location");
-                item.setImageResource(gameBoardActivity.getResources().getIdentifier("city", "drawable", gameBoardActivity.getPackageName()));
+                item.setImageResource(mGameBoardActivity.getResources().getIdentifier("city", "drawable", mGameBoardActivity.getPackageName()));
                 if (placeCornerObject(event, item)) {
-                    cities.add(item);
+                    mCities.add(item);
                 }
                 break;
         }
 
-        currentBuildItem = BoardObject.NONE;
+        mCurrentBuildItem = BoardObject.NONE;
     }
 
     /**places given image centered at the specified x and y coordinates
@@ -125,7 +125,7 @@ public class BoardObjectManager {
         lp.leftMargin = x-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
-        boardLayout.addView(image, lp);
+        mBoardLayout.addView(image, lp);
     }
 
     /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
@@ -139,20 +139,20 @@ public class BoardObjectManager {
         int x,y;
         //get location of x and y taps, and adjust for zoom/pan
         Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-        if (boardLayout.isZoom()) {
-            coordinate.mapZoomCoordinates(boardLayout);
+        if (mBoardLayout.isZoom()) {
+            coordinate.mapZoomCoordinates(mBoardLayout);
         }
         x = (int)coordinate.getX();
         y = (int)coordinate.getY();
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < boardBacklog.hexes.size(); i++) {
-            Hex temp = boardBacklog.hexes.get(i);
+        for (int i =0; i < mBoardBacklog.hexes.size(); i++) {
+            Hex temp = mBoardBacklog.hexes.get(i);
             for (int j = 0; j < 6; j++) {
                 //check to see if vertex is available to be checked, then checks location compared to tap.
             }
             //grabbing the tile
-            ImageView mTile = (ImageView) boardLayout.getChildAt(i);
+            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i);
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftEdge(x, y, mTile, mSideObject) || addTopRightEdge(x, y, mTile, mSideObject) || addTopEdge(x, y, mTile, mSideObject)
@@ -162,7 +162,7 @@ public class BoardObjectManager {
         }
 
         //object can't be placed, make toast
-        managingFragment.createToast("Invalid Object Placement (needs to be placed on the edge of a tile)", false);
+        mManagingFragment.createToast("Invalid Object Placement (needs to be placed on the edge of a tile)", false);
 
         return false;
     }
@@ -178,20 +178,20 @@ public class BoardObjectManager {
         int x,y;
         //get location of x and y taps, and adjust for zoom/pan
         Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-        if (boardLayout.isZoom()) {
-            coordinate.mapZoomCoordinates(boardLayout);
+        if (mBoardLayout.isZoom()) {
+            coordinate.mapZoomCoordinates(mBoardLayout);
         }
         x = (int)coordinate.getX();
         y = (int)coordinate.getY();
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < boardBacklog.hexes.size(); i++) {
-            Hex temp = boardBacklog.hexes.get(i);
+        for (int i =0; i < mBoardBacklog.hexes.size(); i++) {
+            Hex temp = mBoardBacklog.hexes.get(i);
             for (int j = 0; j < 6; j++) {
                 //check to see if vertex is available to be checked, then checks location compared to tap.
             }
             //grabbing the tile
-            ImageView mTile = (ImageView) boardLayout.getChildAt(i);
+            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i);
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
@@ -201,7 +201,7 @@ public class BoardObjectManager {
         }
 
         //object can't be placed, make toast
-        managingFragment.createToast("Invalid Object Placement (needs to be placed on the corner of a tile)", false);
+        mManagingFragment.createToast("Invalid Object Placement (needs to be placed on the corner of a tile)", false);
 
         return false;
     }
@@ -210,9 +210,9 @@ public class BoardObjectManager {
      * normalizes the z-index levels of game board objects
      */
     public void normalizeLevels() {
-        bringToFront(settlements);
-        bringToFront(cities);
-        bringToFront(soldiers);
+        bringToFront(mSettlements);
+        bringToFront(mCities);
+        bringToFront(mSoldiers);
     }
 
     /**
