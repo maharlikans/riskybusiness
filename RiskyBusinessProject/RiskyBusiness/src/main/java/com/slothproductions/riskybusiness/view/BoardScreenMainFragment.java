@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -276,27 +277,25 @@ public class BoardScreenMainFragment extends Fragment {
             int x = iv.getLeft();
             int y = iv.getTop();
 
-            ImageView back = new ImageView(mActivity);
-            back.setId((int)System.currentTimeMillis());
-            back.setImageResource(getResources().getIdentifier("textback", "drawable", mActivity.getPackageName()));
+            ImageView textBackground = new ImageView(mActivity);
+            textBackground.setId((int)System.currentTimeMillis());
+            textBackground.setImageResource(getResources().getIdentifier("textback", "drawable", mActivity.getPackageName()));
 
             x+= iv.getWidth()/2;
             y+= iv.getHeight()/2;
 
-            placeImage(x,y,back);
-
-            //TODO: Figure out how to center the text view at an x,y location
-
-            if (mBoardData.hexes.get(i).roll < 10) {
-                x += 15;
-            }
+            placeImage(x,y,textBackground);
 
             tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
             tv.setTextSize(20);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
+            tv.setGravity(Gravity.CENTER);
 
-            placeText(x-26,y-30,tv);
+            LayoutParams lp = new LayoutParams(60,60);
+            lp.leftMargin = x-30;
+            lp.topMargin = y-30;
+            mHexParent.addView(tv, lp);
         }
     }
 
@@ -314,16 +313,6 @@ public class BoardScreenMainFragment extends Fragment {
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mHexParent.addView(image, lp);
-    }
-
-    void placeText(int x, int y, TextView text) {
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-
-        //center object on location with margins
-        lp.leftMargin = x;
-        lp.topMargin = y;
-
-        mHexParent.addView(text, lp);
     }
 
     /**
