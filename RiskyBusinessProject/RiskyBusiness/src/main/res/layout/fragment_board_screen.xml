@@ -8,8 +8,12 @@
     <com.slothproductions.riskybusiness.view.ZoomableLayout
         android:layout_width="1280dp"
         android:layout_height="752dp"
-        android:background="@drawable/background"
         android:id="@+id/hexParent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background"/>
 
         <ImageView
             android:layout_width="wrap_content"

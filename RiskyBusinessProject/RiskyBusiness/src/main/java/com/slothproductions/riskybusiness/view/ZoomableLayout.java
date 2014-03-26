@@ -17,9 +17,11 @@ public class ZoomableLayout extends RelativeLayout {
     private static String TAG = "Zoom Layout";
 
     //These two constants specify the minimum and maximum zoom
-    private static float MIN_ZOOM = .5f;
+    private static float STANDARD_ZOOM = 1f;
     private static float MAX_ZOOM = 2f;
-    private float STANDARD_ZOOM;
+    private float MIN_ZOOM;
+
+    boolean isZoomed = false;
 
     private float mCenterX;
     private float mCenterY;
@@ -50,11 +52,13 @@ public class ZoomableLayout extends RelativeLayout {
         Log.d(TAG, "Zoom Called");
         mCurrentCenterX = event.getX();
         mCurrentCenterY = event.getY();
-        if (mScaleFactor == MAX_ZOOM) {
+        if (isZoomed) {
             mScaleFactor = STANDARD_ZOOM;
+            isZoomed = false;
         }
         else {
             mScaleFactor = MAX_ZOOM;
+            isZoomed = true;
         }
         invalidate();
         return true;
@@ -80,12 +84,7 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public boolean isZoom() {
-        if (mScaleFactor == 2) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return isZoomed;
     }
 
     public boolean isInBoundsX() {
@@ -126,8 +125,7 @@ public class ZoomableLayout extends RelativeLayout {
         mCurrentCenterX = mCenterX = (float)(width/2.0);
         mCurrentCenterY = mCenterY = (float)(height/2.0);
         if (mWidth < 2560 || mHeight < 1504) {
-            mScaleFactor*= mWidth/2560.0;
-            STANDARD_ZOOM = mScaleFactor;
+            MIN_ZOOM = mWidth/(float)2560;
             invalidate();
         }
     }
