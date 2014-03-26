@@ -200,4 +200,10 @@ public class GameSetupScreen extends Activity {
         });
 
      }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        finish();
+    }
 }

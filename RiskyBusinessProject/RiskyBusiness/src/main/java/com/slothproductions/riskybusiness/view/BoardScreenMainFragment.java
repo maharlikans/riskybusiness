@@ -114,7 +114,7 @@ public class BoardScreenMainFragment extends Fragment {
                             break;
                         case SOLDIER:
                             Log.d(TAG, "Soldier will be Placed at Tap Location");
-                            item.setImageResource(getResources().getIdentifier("circle", "drawable", getActivity().getPackageName()));
+                            item.setImageResource(getResources().getIdentifier("soldier", "drawable", getActivity().getPackageName()));
                             placeCornerObject(e, item);
                             break;
                         case SETTLEMENT:
@@ -694,12 +694,8 @@ public class BoardScreenMainFragment extends Fragment {
 
         alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (mLastToast!= null) {
-                    mLastToast.cancel();
-                }
-                mLastToast = Toast.makeText(getActivity(), "Going to Game Setup page...",
-                        Toast.LENGTH_SHORT);
-                mLastToast.show();
+                Intent i = new Intent(getActivity().getApplicationContext(), OptionsScreen.class);
+                startActivity(i);
             }
         });
 
