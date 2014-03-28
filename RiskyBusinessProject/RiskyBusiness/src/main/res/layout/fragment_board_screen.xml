@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainLayout"
-    android:background="@drawable/background"
     tools:context="com.slothproductions.riskybusiness.view.BoardScreenMainFragment">
 
     <com.slothproductions.riskybusiness.view.ZoomableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_width="1280dp"
+        android:layout_height="752dp"
         android:id="@+id/hexParent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
             android:id="@+id/imageView2"
             android:src="@drawable/hexagon"
             android:layout_marginLeft="97dp"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="56dp"
             android:layout_alignTop="@+id/imageView"
             android:layout_alignLeft="@+id/imageView"
             android:layout_alignStart="@+id/imageView" />
@@ -100,16 +100,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView17"
             android:src="@drawable/hexagon"
-            android:layout_marginLeft="64dp"
-            android:layout_below="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView" />
+            android:layout_alignTop="@+id/imageView2"
+            android:layout_alignLeft="@+id/imageView2"
+            android:layout_alignStart="@+id/imageView2"
+            android:layout_marginLeft="97dp"
+            android:layout_marginTop="56dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView18"
             android:src="@drawable/hexagon"
-            android:layout_alignTop="@+id/imageView7"
+            android:layout_below="@+id/imageView17"
             android:layout_alignLeft="@+id/imageView17"
             android:layout_alignStart="@+id/imageView17" />
 
@@ -118,7 +120,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView19"
             android:src="@drawable/hexagon"
-            android:layout_above="@+id/imageView9"
+            android:layout_below="@+id/imageView18"
             android:layout_alignLeft="@+id/imageView18"
             android:layout_alignStart="@+id/imageView18" />
 
@@ -162,7 +164,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView15"
             android:src="@drawable/hexagon"
-            android:layout_alignTop="@+id/imageView7"
+            android:layout_below="@+id/imageView14"
             android:layout_alignLeft="@+id/imageView14"
             android:layout_alignStart="@+id/imageView14" />
 
@@ -171,34 +173,24 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView14"
             android:src="@drawable/hexagon"
-            android:layout_above="@+id/imageView7"
-            android:layout_toLeftOf="@+id/imageView2"
-            android:layout_marginRight="64dp" />
+            android:layout_alignTop="@+id/imageView10"
+            android:layout_toLeftOf="@+id/imageView10"
+            android:layout_alignEnd="@+id/imageView10"
+            android:layout_marginRight="97dp"
+            android:layout_marginTop="56dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView10"
             android:src="@drawable/hexagon"
-            android:layout_above="@+id/imageView5"
-            android:layout_toLeftOf="@+id/imageView5"
-            android:layout_marginRight="64dp" />
-
+            android:layout_alignTop="@+id/imageView"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_marginRight="97dp"
+            android:layout_marginTop="56dp"/>
 
     </com.slothproductions.riskybusiness.view.ZoomableLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:orientation="vertical"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:id="@+id/linearLayout">
-
-    </LinearLayout>
 
     <Button
         android:layout_width="172dp"

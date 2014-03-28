@@ -17,16 +17,21 @@ public class ZoomableLayout extends RelativeLayout {
     private static String TAG = "Zoom Layout";
 
     //These two constants specify the minimum and maximum zoom
-    private static float MIN_ZOOM = 1f;
+    private static float STANDARD_ZOOM = 1f;
     private static float MAX_ZOOM = 2f;
+    private float MIN_ZOOM;
+
+    boolean isZoomed = false;
 
     private float mCenterX;
     private float mCenterY;
+
+    private float mCurrentCenterX;
+    private float mCurrentCenterY;
     private float mScaleFactor = 1.f;
 
-    DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-    int displayWidth = metrics.widthPixels;
-    int displayHeight = metrics.heightPixels;
+    int mWidth;
+    int mHeight;
 
     public ZoomableLayout(Context context) {
         super(context);
@@ -45,76 +50,84 @@ public class ZoomableLayout extends RelativeLayout {
 
     public boolean Zoom(MotionEvent event) {
         Log.d(TAG, "Zoom Called");
-        mCenterX = event.getX();
-        mCenterY = event.getY();
-        if (mScaleFactor == MAX_ZOOM) {
-            mScaleFactor = MIN_ZOOM;
+        mCurrentCenterX = event.getX();
+        mCurrentCenterY = event.getY();
+        if (isZoomed) {
+            mScaleFactor = STANDARD_ZOOM;
+            isZoomed = false;
         }
         else {
             mScaleFactor = MAX_ZOOM;
+            isZoomed = true;
         }
         invalidate();
         return true;
     }
 
     public boolean Pan(MotionEvent start, float x, float y) {
-        mCenterX += x;
-        mCenterY += y;
+        mCurrentCenterX += x;
+        mCurrentCenterY += y;
         if (isInBoundsX() && isInBoundsY()) {
         }
         else if (isInBoundsX() && !isInBoundsY()) {
-            mCenterY -=y;
+            mCurrentCenterY -=y;
         }
         else if (!isInBoundsX() && isInBoundsY()) {
-            mCenterX-=x;
+            mCurrentCenterX-=x;
         }
         else {
-            mCenterX-=x;
-            mCenterY -=y;
+            mCurrentCenterX-=x;
+            mCurrentCenterY -=y;
         }
         invalidate();
         return false;
     }
 
     public boolean isZoom() {
-        if (mScaleFactor == 2) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return isZoomed;
     }
 
     public boolean isInBoundsX() {
-        if (mCenterX >= 2560) {
+        if (mCurrentCenterX >= mWidth) {
             return false;
         }
-        else if (mCenterX <= 0) {
+        else if (mCurrentCenterX <= 0) {
             return false;
         }
         return true;
     }
 
     public boolean isInBoundsY() {
-        if (mCenterY >= 1504) {
+        if (mCurrentCenterY >= mHeight) {
             return false;
         }
-        else if (mCenterY <= 0) {
+        else if (mCurrentCenterY <= 0) {
             return false;
         }
         return true;
     }
 
     public float getPanX() {
-        return mCenterX;
+        return mCurrentCenterX;
     }
 
     public float getPanY() {
-        return mCenterY;
+        return mCurrentCenterY;
     }
 
     public float getZoom() {
         return mScaleFactor;
+    }
+
+    public void setDimensions(int width, int height) {
+        mHeight = height;
+        mWidth = width;
+        mCurrentCenterX = mCenterX = (float)(width/2.0);
+        mCurrentCenterY = mCenterY = (float)(height/2.0);
+        if (mWidth < 2560 || mHeight < 1504) {
+            MIN_ZOOM = mWidth/(float)2560;
+            invalidate();
+        }
     }
 
     @Override
@@ -126,9 +139,22 @@ public class ZoomableLayout extends RelativeLayout {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.scale(mScaleFactor, mScaleFactor, mCenterX, mCenterY);
+        canvas.scale(mScaleFactor, mScaleFactor, mCurrentCenterX, mCurrentCenterY);
         canvas.save();
         super.dispatchDraw(canvas);
         canvas.restore();
     }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        super.onLayout(changed, l, t, r, b);
+    }
+
+    /*
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = (int)(widthMeasureSpec*mScaleFactor);
+        int height = (int)(heightMeasureSpec*mScaleFactor);
+        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+    }*/
 }
