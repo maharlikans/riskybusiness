@@ -26,16 +26,17 @@ public class Coordinate {
      * @param layout
      */
     public void mapZoomCoordinates(ZoomableLayout layout) {
-        int zoomLevel = (int)layout.getZoom();
+        int zoomLevelX = (int)layout.getZoomX();
+        int zoomLevelY = (int)layout.getZoomY();
 
         float centerX = layout.getPanX();
         x = x-centerX; //subtract center x
-        x = x/zoomLevel; //adjust for zoom
+        x = x/zoomLevelX; //adjust for zoom
         x = x + centerX; //re add center
 
         float centerY = layout.getPanY();
         y = y-centerY; //subtract center x
-        y = y/zoomLevel; //adjust for zoom
+        y = y/zoomLevelY; //adjust for zoom
         y = y + centerY; //re add center
     }
 

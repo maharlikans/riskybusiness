@@ -1,18 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.slothproductions.riskybusiness.view.StaticLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="1280dp"
+    android:layout_height="752dp"
+    android:layout_centerInParent="true"
     android:id="@+id/mainLayout"
+    android:background="@color/black_overlay"
     tools:context="com.slothproductions.riskybusiness.view.BoardScreenMainFragment">
 
     <com.slothproductions.riskybusiness.view.ZoomableLayout
         android:layout_width="1280dp"
         android:layout_height="752dp"
+        android:background="@color/blue_background"
         android:id="@+id/hexParent">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="1280dp"
+            android:layout_height="752dp"
             android:src="@drawable/background"/>
 
         <ImageView
@@ -28,8 +31,7 @@
             android:id="@+id/imageView6"
             android:src="@drawable/hexagon"
             android:layout_above="@+id/imageView7"
-            android:layout_alignLeft="@+id/imageView7"
-            android:layout_alignStart="@+id/imageView7" />
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -55,8 +57,7 @@
             android:id="@+id/imageView8"
             android:src="@drawable/hexagon"
             android:layout_below="@+id/imageView7"
-            android:layout_alignLeft="@+id/imageView7"
-            android:layout_alignStart="@+id/imageView7" />
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -82,7 +83,7 @@
             android:id="@+id/imageView"
             android:src="@drawable/hexagon"
             android:layout_above="@+id/imageView6"
-            android:layout_alignLeft="@+id/imageView6"/>
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -194,12 +195,13 @@
 
     <Button
         android:layout_width="172dp"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:text="End Turn"
         android:id="@+id/endTurnButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
     <Button
         android:layout_width="172dp"
@@ -208,7 +210,8 @@
         android:id="@+id/tradeButton"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
     <Button
         android:layout_width="172dp"
@@ -217,7 +220,8 @@
         android:id="@+id/buildButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
     <Button
         android:layout_width="172dp"
@@ -226,9 +230,10 @@
         android:id="@+id/optionsButton"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="gone"/>
 
 
-</RelativeLayout>
+</com.slothproductions.riskybusiness.view.StaticLayout>
 
 

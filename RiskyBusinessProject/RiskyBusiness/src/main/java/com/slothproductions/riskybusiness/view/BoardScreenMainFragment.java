@@ -44,6 +44,7 @@ public class BoardScreenMainFragment extends Fragment {
 
     //Layouts
     private ZoomableLayout mHexParent;  //ZoomableLayout that holds all of the physical board objects
+    private StaticLayout mMainView;
 
     //Buttons
     private Button mBtnOptions;
@@ -124,6 +125,7 @@ public class BoardScreenMainFragment extends Fragment {
         mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
 
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        mMainView = (StaticLayout)v.findViewById(R.id.mainLayout);
     }
 
     void createControllers() {
@@ -228,7 +230,6 @@ public class BoardScreenMainFragment extends Fragment {
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     addNumbersToBoard();
                     getScreenDimensions();
-                    mHexParent.setDimensions(mWidth, mHeight);
                 }});
         }
     }
