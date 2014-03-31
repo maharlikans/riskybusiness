@@ -139,8 +139,8 @@ public class ZoomableLayout extends RelativeLayout {
 
         mHeight = height;
         mWidth = width;
-        mCurrentCenterX = mCenterX = (float)(width/2.0);
-        mCurrentCenterY = mCenterY = (float)(height/2.0);
+        mCurrentCenterX = mCenterX = (float)(2560/2.0);
+        mCurrentCenterY = mCenterY = (float)(1504/2.0);
         if (mWidth < 2560 || mHeight < 1504) {
             mScaleFactorX = 2560 / (float) mWidth;
             mScaleFactorY = 1504 / (float) mHeight;
