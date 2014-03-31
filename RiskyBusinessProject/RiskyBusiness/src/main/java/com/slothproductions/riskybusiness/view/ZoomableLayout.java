@@ -71,6 +71,8 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public boolean Pan(MotionEvent start, float x, float y) {
+        x = 3*(x/mScaleFactorX);
+        y = 3*(y/mScaleFactorY);
         mCurrentCenterX += x;
         mCurrentCenterY += y;
         if (isInBoundsX() && isInBoundsY()) {
