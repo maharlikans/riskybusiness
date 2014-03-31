@@ -68,9 +68,19 @@ public class StaticLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        LayoutParams lp;
+        int startLeft;
+        int startTop;
+        int endRight;
+        int endBottom;
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            v.layout(l,t,r,b);
+            lp = v.getLayoutParams();
+            startLeft = l;
+            startTop = t;
+            endRight = startLeft + v.getMeasuredWidth();
+            endBottom = startTop + v.getMeasuredHeight();
+            v.layout(startLeft,startTop,endRight,endBottom);
         }
     }
 
