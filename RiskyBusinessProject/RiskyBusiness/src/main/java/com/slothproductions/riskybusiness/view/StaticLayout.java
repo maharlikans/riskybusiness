@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -12,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public class StaticLayout extends ViewGroup {
-    private static String TAG = "Background Layout";
+    private static final String TAG = "Background Layout";
 
     private float mCenterX;
     private float mCenterY;
@@ -39,10 +40,13 @@ public class StaticLayout extends ViewGroup {
     }
 
     public void setDimensions() {
+        DisplayMetrics display = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
+        wm.getDefaultDisplay().getMetrics(display);
+        int width = display.widthPixels;
+        int height = display.heightPixels;
+        Log.d(TAG, "Display Width: " + width);
+        Log.d(TAG, "Display Height: " + height);
 
         mHeight = height;
         mWidth = width;

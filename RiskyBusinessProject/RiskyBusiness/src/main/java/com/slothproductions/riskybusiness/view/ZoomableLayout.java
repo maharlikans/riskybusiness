@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.view.GestureDetector;
 
+import com.slothproductions.riskybusiness.model.Coordinate;
+
 import java.io.Console;
 import java.util.jar.Attributes;
 
@@ -54,8 +56,10 @@ public class ZoomableLayout extends RelativeLayout {
 
     public boolean Zoom(MotionEvent event) {
         Log.d(TAG, "Zoom Called");
-        mCurrentCenterX = event.getX();
-        mCurrentCenterY = event.getY();
+        Coordinate mapCoord = new Coordinate(event.getX(), event.getY());
+        mapCoord.mapZoomCoordinates(this);
+        mCurrentCenterX = mapCoord.getX();
+        mCurrentCenterY = mapCoord.getY();
         if (isZoomed) {
             mScaleFactorX /= 2.0;
             mScaleFactorY /= 2.0;
@@ -116,10 +120,12 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public float getPanX() {
+        Log.d(TAG, "Current X Center: " + mCurrentCenterX);
         return mCurrentCenterX;
     }
 
     public float getPanY() {
+        Log.d(TAG, "Current Y Center: " + mCurrentCenterY);
         return mCurrentCenterY;
     }
 
@@ -132,13 +138,12 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public void setDimensions() {
+        DisplayMetrics display = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        int width = display.getWidth();  // deprecated
-        int height = display.getHeight();
+        wm.getDefaultDisplay().getMetrics(display);
+        mWidth = display.widthPixels;
+        mHeight = display.heightPixels;
 
-        mHeight = height;
-        mWidth = width;
         mCurrentCenterX = mCenterX = (float)(2560/2.0);
         mCurrentCenterY = mCenterY = (float)(1504/2.0);
         if (mWidth < 2560 || mHeight < 1504) {
