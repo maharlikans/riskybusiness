@@ -98,6 +98,16 @@ public class Vertex implements java.io.Serializable {
         return false;
     }
 
+    // Used to check if settlement can be placed at a given vertex
+    final protected boolean isValid() {
+        boolean valid = true;
+        for (Hex h : hexagons)
+            for (Vertex v : h.vertices)
+                if (isAdjacent(v) && v.getBuilding() == null)
+                    valid = false;
+        return valid;
+    }
+
     final protected Building getBuilding() {
         return building;
     }
