@@ -31,10 +31,15 @@ public class Coordinate {
     public void mapZoomCoordinates(ZoomableLayout layout) {
         float zoomLevelX = layout.getZoomX();
         float zoomLevelY = layout.getZoomY();
+        float baseZoomX = layout.getBaseZoomX();
+        float baseZoomY = layout.getBaseZoomY();
+
+        Log.d(TAG, "Zoom Level X: " + zoomLevelX);
+        Log.d(TAG, "Zoom Level Y: " + zoomLevelY);
 
         //adjust x and y coordinates for physical tap on larger screen
-        x*=zoomLevelX;
-        y*=zoomLevelY;
+        x*=baseZoomX;
+        y*=baseZoomY;
 
         float centerX = layout.getPanX();
         x = x-centerX; //subtract center x

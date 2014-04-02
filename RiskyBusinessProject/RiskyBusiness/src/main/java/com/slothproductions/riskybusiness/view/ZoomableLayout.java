@@ -23,8 +23,8 @@ public class ZoomableLayout extends RelativeLayout {
     private static String TAG = "Zoom Layout";
 
     //These two constants specify the minimum and maximum zoom
-    private float ZOOM_X;
-    private float ZOOM_Y;
+    private float BASE_ZOOM_X;
+    private float BASE_ZOOM_Y;
 
     boolean isZoomed = false;
 
@@ -137,6 +137,14 @@ public class ZoomableLayout extends RelativeLayout {
         return mScaleFactorY;
     }
 
+    public float getBaseZoomX() {
+        return BASE_ZOOM_X;
+    }
+
+    public float getBaseZoomY() {
+        return BASE_ZOOM_Y;
+    }
+
     public void setDimensions() {
         DisplayMetrics display = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -147,8 +155,8 @@ public class ZoomableLayout extends RelativeLayout {
         mCurrentCenterX = mCenterX = (float)(2560/2.0);
         mCurrentCenterY = mCenterY = (float)(1504/2.0);
         if (mWidth < 2560 || mHeight < 1504) {
-            mScaleFactorX = 2560 / (float) mWidth;
-            mScaleFactorY = 1504 / (float) mHeight;
+            BASE_ZOOM_X = mScaleFactorX = 2560 / (float) mWidth;
+            BASE_ZOOM_Y = mScaleFactorY = 1504 / (float) mHeight;
         }
         invalidate();
     }
