@@ -17,8 +17,7 @@ import java.util.Queue;
  *
  */
 public class GameLoop {
-    Player mCurrentPlayer;
-    Queue<Player> mPlayerQueue;
+    Player[] mPlayers;
     BoardScreen mBoardScreen;
     GameState mCurrentGameState;
     ForwardBeginningGameState mForwardBeginningGameState;

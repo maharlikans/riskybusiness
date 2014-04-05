@@ -6,5 +6,5 @@ public enum Resource {
     ORE,
     GRAIN,
     WOOL,
-    LUMBER;
+    LUMBER
 }

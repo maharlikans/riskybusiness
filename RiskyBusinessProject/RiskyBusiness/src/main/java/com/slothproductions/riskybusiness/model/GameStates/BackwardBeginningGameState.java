@@ -11,11 +11,13 @@ import java.util.Stack;
 public class BackwardBeginningGameState implements GameState {
 
     Stack<Player> mPlayerStack;
+    Player mCurrentPlayer;
     GameLoop mGameLoop;
 
     public BackwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
         mPlayerStack = new Stack<Player>();
+        mCurrentPlayer = /*first player pop off the stack*/;
         // TODO: know some sort of ordering to the players
         // via a queue?
     }
