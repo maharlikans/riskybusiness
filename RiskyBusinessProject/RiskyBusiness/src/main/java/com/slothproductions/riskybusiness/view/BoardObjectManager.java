@@ -139,9 +139,7 @@ public class BoardObjectManager {
         int x,y;
         //get location of x and y taps, and adjust for zoom/pan
         Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-        if (mBoardLayout.isZoom()) {
-            coordinate.mapZoomCoordinates(mBoardLayout);
-        }
+        coordinate.mapZoomCoordinates(mBoardLayout);
         x = (int)coordinate.getX();
         y = (int)coordinate.getY();
 
@@ -178,9 +176,7 @@ public class BoardObjectManager {
         int x,y;
         //get location of x and y taps, and adjust for zoom/pan
         Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
-        if (mBoardLayout.isZoom()) {
-            coordinate.mapZoomCoordinates(mBoardLayout);
-        }
+        coordinate.mapZoomCoordinates(mBoardLayout);
         x = (int)coordinate.getX();
         y = (int)coordinate.getY();
 
@@ -191,7 +187,7 @@ public class BoardObjectManager {
                 //check to see if vertex is available to be checked, then checks location compared to tap.
             }
             //grabbing the tile
-            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i);
+            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i+1); // i+1 because background image is at i = 0;
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftCorner(x, y, mTile, mCornerObject) || addTopRightCorner(x, y, mTile, mCornerObject) || addMidRightCorner(x, y, mTile, mCornerObject)
