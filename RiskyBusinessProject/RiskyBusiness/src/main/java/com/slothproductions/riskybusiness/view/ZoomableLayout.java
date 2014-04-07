@@ -152,6 +152,9 @@ public class ZoomableLayout extends RelativeLayout {
         mWidth = display.widthPixels;
         mHeight = display.heightPixels;
 
+        BASE_ZOOM_X = 1;
+        BASE_ZOOM_Y = 1;
+
         mCurrentCenterX = mCenterX = (float)(2560/2.0);
         mCurrentCenterY = mCenterY = (float)(1504/2.0);
         if (mWidth < 2560 || mHeight < 1504) {
