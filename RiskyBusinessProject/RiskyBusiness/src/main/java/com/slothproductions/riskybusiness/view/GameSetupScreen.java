@@ -162,6 +162,7 @@ public class GameSetupScreen extends Activity {
         });
 
         // set the colors to be used for the players
+        // TODO change the colors
         defaultColors = new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.BLACK};
 
         // get start game button and set behavior

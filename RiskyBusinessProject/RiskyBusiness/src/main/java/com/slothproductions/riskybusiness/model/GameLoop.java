@@ -17,8 +17,9 @@ import java.util.Queue;
  *
  */
 public class GameLoop {
-    Player[] mPlayers;
-    BoardScreen mBoardScreen;
+    BoardScreen mBoardScreen; // access to the main activity... what will we do with this?
+
+    // all game state objects will be held in this class
     GameState mCurrentGameState;
     ForwardBeginningGameState mForwardBeginningGameState;
     BackwardBeginningGameState mBackwardBeginningGameState;
@@ -32,11 +33,8 @@ public class GameLoop {
         mBackwardBeginningGameState = new BackwardBeginningGameState(this);
         mNormalGameState = new NormalGameState(this);
         mEndGameState = new EndGameState(this);
-    }
 
-    public void changeState(GameState gameState) {
-        mCurrentGameState = gameState;
-        mCurrentGameState.init();
+        setCurrentGameState(mForwardBeginningGameState);
     }
 
     // ALL BELOW TODO
@@ -64,4 +62,30 @@ public class GameLoop {
         mCurrentGameState.endTurn(/*some arguments*/);
     }
 
+    // all getters and setters
+
+    public GameState getCurrentGameState() {
+        return mCurrentGameState;
+    }
+
+    public void setCurrentGameState(GameState currentGameState) {
+        mCurrentGameState = currentGameState;
+        mCurrentGameState.init();   // init call will set up UI correctly
+    }
+
+    public ForwardBeginningGameState getForwardBeginningGameState() {
+        return mForwardBeginningGameState;
+    }
+
+    public BackwardBeginningGameState getBackwardBeginningGameState() {
+        return mBackwardBeginningGameState;
+    }
+
+    public NormalGameState getNormalGameState() {
+        return mNormalGameState;
+    }
+
+    public EndGameState getEndGameState() {
+        return mEndGameState;
+    }
 }

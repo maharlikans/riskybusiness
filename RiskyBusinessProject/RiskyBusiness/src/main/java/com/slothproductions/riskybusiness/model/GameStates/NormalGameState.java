@@ -24,6 +24,7 @@ public class NormalGameState implements GameState {
     @Override
     public void init() {
         // TODO: show all the buttons that need to be shown, i.e. all of them
+        // waiting until joseph is finished with his part
     }
 
     @Override
@@ -34,6 +35,9 @@ public class NormalGameState implements GameState {
         // the method will update the view accordingly after the action is performed in
         // the model by some manipulation by either this class or Ricardo's class (most
         // likely will be Ricardo's class
+
+        // basic structure:
+        // take result of dice roll and pass it into a game action "collect resources"
     }
 
     @Override

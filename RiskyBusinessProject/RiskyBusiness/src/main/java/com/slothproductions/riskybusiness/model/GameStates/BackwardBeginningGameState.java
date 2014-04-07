@@ -26,6 +26,7 @@ public class BackwardBeginningGameState implements GameState {
     public void init() {
         // hide the necessary buttons here and perform setup
         // on the view elements
+        // TODO as Joseph fixes this part of things
     }
 
     @Override
