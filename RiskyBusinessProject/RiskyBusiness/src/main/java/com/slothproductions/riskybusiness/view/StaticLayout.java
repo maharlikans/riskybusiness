@@ -5,12 +5,9 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 
 public class StaticLayout extends ViewGroup {
     private static final String TAG = "Background Layout";
@@ -53,6 +50,7 @@ public class StaticLayout extends ViewGroup {
         mCenterX = (float) (width / 2.0);
         mCenterY = (float) (height / 2.0);
         if (mWidth < 2560 || mHeight < 1504) {
+            //Set scale factor to fit entire display on screen
             mScaleFactorX = mWidth / (float) 2560;
             mScaleFactorY = mHeight / (float) 1504;
         }
@@ -68,7 +66,6 @@ public class StaticLayout extends ViewGroup {
         canvas.save();
         canvas.restore();
     }
-
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

@@ -43,7 +43,6 @@
         <item>3</item>
         <item>4</item>
     </string-array>
-
     <string-array name="victory_points_array">
         <item>0</item>
         <item>1</item>
@@ -60,5 +59,7 @@
         <item>12</item>
         <item>13</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.View.R;
 
@@ -18,19 +19,31 @@ public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
     private Fragment mTradeScreenFragment;
+    private Fragment mBoardButtonsFragment;
+
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_screen);
 
-        FragmentManager fm = getSupportFragmentManager();
-        mBoardScreenFragment = fm.findFragmentById(R.id.hexParent);
+        mFragmentManager = getSupportFragmentManager();
+
+        mBoardScreenFragment = mFragmentManager.findFragmentById(R.id.hexParent);
+        mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
-            fm.beginTransaction()
+            mFragmentManager.beginTransaction()
                     .add(R.id.BoardContainer, mBoardScreenFragment)
+                    .commit();
+        }
+
+        if (mBoardButtonsFragment == null) {
+            mBoardButtonsFragment = new BoardButtonsFragment();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.BoardContainer, mBoardButtonsFragment)
                     .commit();
         }
     }
@@ -96,10 +109,9 @@ public class BoardScreen extends FragmentActivity {
     // public method specifically for the BoardScreenMainFragment to call
     // when the user presses the trade button on the view
     public void onTradeButtonPressed() {
-        FragmentManager fm = getSupportFragmentManager();
         mTradeScreenFragment = new TradeScreenFragment();
 
-        fm.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .add(R.id.BoardContainer, mTradeScreenFragment)
                 .commit();
     }
@@ -107,9 +119,12 @@ public class BoardScreen extends FragmentActivity {
     // public method implemented specifically for the TradeFragment to call
     // when the user presses the cancel trade button on the view
     public void onCancelTradeButtonPressed() {
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .remove(mTradeScreenFragment)
                 .commit();
+    }
+
+    public Fragment getScreenFragment() {
+        return mBoardScreenFragment;
     }
 }
