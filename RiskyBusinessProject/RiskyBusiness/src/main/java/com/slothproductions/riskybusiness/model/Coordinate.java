@@ -1,9 +1,12 @@
 package com.slothproductions.riskybusiness.model;
 
+import android.util.Log;
+
 import com.slothproductions.riskybusiness.view.ZoomableLayout;
 
 
 public class Coordinate {
+    private static final String TAG = "Coordinate";
     private float x;
     private float y;
 
@@ -26,16 +29,26 @@ public class Coordinate {
      * @param layout
      */
     public void mapZoomCoordinates(ZoomableLayout layout) {
-        int zoomLevel = (int)layout.getZoom();
+        float zoomLevelX = layout.getZoomX();
+        float zoomLevelY = layout.getZoomY();
+        float baseZoomX = layout.getBaseZoomX();
+        float baseZoomY = layout.getBaseZoomY();
+
+        Log.d(TAG, "Zoom Level X: " + zoomLevelX);
+        Log.d(TAG, "Zoom Level Y: " + zoomLevelY);
+
+        //adjust x and y coordinates for physical tap on larger screen
+        x*=baseZoomX;
+        y*=baseZoomY;
 
         float centerX = layout.getPanX();
         x = x-centerX; //subtract center x
-        x = x/zoomLevel; //adjust for zoom
+        x = x/zoomLevelX; //adjust for zoom
         x = x + centerX; //re add center
 
         float centerY = layout.getPanY();
-        y = y-centerY; //subtract center x
-        y = y/zoomLevel; //adjust for zoom
+        y = y-centerY; //subtract center y
+        y = y/zoomLevelY; //adjust for zoom
         y = y + centerY; //re add center
     }
 

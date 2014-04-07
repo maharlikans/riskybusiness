@@ -44,34 +44,17 @@ public class BoardScreenMainFragment extends Fragment {
 
     //Layouts
     private ZoomableLayout mHexParent;  //ZoomableLayout that holds all of the physical board objects
-
-    //Buttons
-    private Button mBtnOptions;
-    private Button mBtnEndTurn;
-    private Button mBtnBuild;
-    private Button mBtnTrade;
+    private StaticLayout mMainView;
 
     //Controllers
     private OnTouchListener GameBoardController;
-    private OnClickListener optionsController;
-    private OnClickListener endTurnController;
-    private OnClickListener buildController;
-    private OnClickListener tradeController;
-
-    //private ArrayList<Button> mButtons; may add this variable later in order to better manage buttons
-    //private ArrayList<OnClickListener> mControllers; may add this variable later in order to better manage controllers
-
-    //Last toast variable is kept track of in order to cancel last toast upon creating new one
-    private Toast mLastToast;
 
     //Screen Dimensions
     private int mHeight;
     private int mWidth;
 
-    private int dice1;
-    private int dice2;
-
-    private DiceRoll viceDice = new DiceRoll();
+    //Last toast variable is kept track of in order to cancel last toast upon creating new one
+    private Toast mLastToast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,17 +76,12 @@ public class BoardScreenMainFragment extends Fragment {
         mActivity = getActivity();
         mBoardScreen = (BoardScreen)mActivity;
 
-        //maps the buttons and layouts in the view to the class variables
-        initializeViewElements(v);
+        //map the layouts in the view to the class variables
+        mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
+        mMainView = (StaticLayout)v.findViewById(R.id.mainLayout);
 
         //creates the controller to manage the board actions (pan/zoom, object placement, etc)
         setGameBoardController();
-
-        //Creates all of the simpleOnClickListeners for the buttons
-        createControllers();
-
-        //Adds the listeners to the appropriate buttons
-        initializeControllers();
 
         //Adds the resource Icons to the board
         addResourcesToBoard();
@@ -115,71 +93,6 @@ public class BoardScreenMainFragment extends Fragment {
         mBoardObjectManager = new BoardObjectManager(mBoardData, mHexParent, mActivity, this);
 
         return v;
-    }
-
-    void initializeViewElements(View v) {
-        mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
-        mBtnBuild = (Button)v.findViewById(R.id.buildButton);
-        mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
-
-        mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
-    }
-
-    void createControllers() {
-        optionsController = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showOptionsDialog();
-            }
-        };
-
-        tradeController = new OnClickListener(){
-            @Override
-            public void onClick(View v){
-                mBoardScreen.onTradeButtonPressed();
-            }
-        };
-
-        endTurnController = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBtnEndTurn.getText().equals("End Turn")) {
-                    showEndTurnDialog();
-                } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
-                    showRollDialog();
-                }
-            }
-        };
-
-        buildController = new OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(mActivity, mBtnBuild);
-
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        mBoardObjectManager.setCurrentBuildItem(item);
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        };
-    }
-
-    void initializeControllers() {
-        mHexParent.setOnTouchListener(GameBoardController);
-        mBtnOptions.setOnClickListener(optionsController);
-        mBtnEndTurn.setOnClickListener(endTurnController);
-        mBtnBuild.setOnClickListener(buildController);
-        mBtnTrade.setOnClickListener(tradeController);
     }
 
     void setGameBoardController() {
@@ -195,6 +108,7 @@ public class BoardScreenMainFragment extends Fragment {
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 Log.d(TAG, "Single Tap Detected");
                 mBoardObjectManager.BuildItem(e);
+                Log.d(TAG, "Item Built");
                 return super.onSingleTapConfirmed(e);
             }
 
@@ -215,6 +129,8 @@ public class BoardScreenMainFragment extends Fragment {
                 return false;
             }
         };
+
+        mHexParent.setOnTouchListener(GameBoardController);
     }
 
     void setDelayedInitializations() {
@@ -228,7 +144,6 @@ public class BoardScreenMainFragment extends Fragment {
                     mHexParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     addNumbersToBoard();
                     getScreenDimensions();
-                    mHexParent.setDimensions(mWidth, mHeight);
                 }});
         }
     }
@@ -338,156 +253,15 @@ public class BoardScreenMainFragment extends Fragment {
         return false;
     }
 
-    public void showOptionsDialog() {
-        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(mActivity);
-
-        alertOptionsDialog.setTitle("Options");
-        alertOptionsDialog.setCancelable(false);
-
-        alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), OptionsScreen.class);
-                startActivity(i);
-            }
-        });
-
-        alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), GameRules.class);
-                startActivity(i);
-            }
-        });
-
-        alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                createToast("Game Saved!", false);
-            }
-        });
-
-        alertOptionsDialog.show();
-    }
-
-    public void showEndTurnDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mActivity);
-
-        alertDialog.setTitle("End Turn?");
-        alertDialog.setMessage("Do you want to end your turn?");
-
-        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                createToast("Turn Ended", false);
-                mBtnEndTurn.setText("Roll Dice");
-
-            }
-        });
-
-        alertDialog.setNegativeButton("No",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which){
-                createToast("Turn not ended", false);
-            }
-        });
-
-        alertDialog.show();
-    }
-
-    public void showRollDialog() {
-        viceDice.roll();
-        dice1 = viceDice.getFirstDice();
-        dice2 = viceDice.getSecondDice();
-
-        ImageView outputdice1 = new ImageView(mActivity);
-        outputdice1.setId((int)System.currentTimeMillis());
-
-
-
-        LayoutParams lpDice1 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-
-       switch(dice1){
-           case 1:
-               outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);
-               break;
-           case 2:
-               outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);
-           case 3:
-               outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);        //Crashes here?
-               break;
-           case 4:
-               outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);
-               break;
-           case 5:
-               outputdice1.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);
-               break;
-           case 6:
-               outputdice1.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
-               mHexParent.removeView(outputdice1);
-               mHexParent.addView(outputdice1, lpDice1);
-               break;
-       }
-
-        ImageView outputdice2 = new ImageView(mActivity);
-        outputdice2.setId((int)System.currentTimeMillis()+1);
-
-        LayoutParams lpDice2 = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-        lpDice2.addRule(RelativeLayout.RIGHT_OF, outputdice1.getId());
-        lpDice2.addRule(RelativeLayout.ALIGN_BOTTOM, outputdice1.getId());
-
-
-        switch (dice2) {
-          case 1:
-              outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-          case 2:
-              outputdice2.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-          case 3:
-              outputdice2.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-          case 4:
-              outputdice2.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-          case 5:
-              outputdice2.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-          case 6:
-              outputdice2.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
-              mHexParent.removeView(outputdice2);
-              mHexParent.addView(outputdice2, lpDice2);
-              break;
-
-      }
-
-        mBtnEndTurn.setText("End Turn");
-
-
-    }
-
     public void getScreenDimensions() {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         mHeight = displaymetrics.heightPixels;
         mWidth = displaymetrics.widthPixels;
+    }
+
+    BoardObjectManager getBoardObjectManager() {
+        return mBoardObjectManager;
     }
 }
 
