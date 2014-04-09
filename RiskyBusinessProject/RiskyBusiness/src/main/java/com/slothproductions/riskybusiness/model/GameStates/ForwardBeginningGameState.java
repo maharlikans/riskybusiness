@@ -62,6 +62,7 @@ public class ForwardBeginningGameState implements GameState{
         // check if all the players have gone (i.e. the Queue is empty)
         // if so,
         //     transition to the next state and pass it the stack from this state
+        //     using setPlayerStack
         // if not,
         //     mCurrentPlayer = /*pop from the player queue*/;
         //     display their resources on the game board

@@ -64,4 +64,8 @@ public class BackwardBeginningGameState implements GameState {
         //     mCurrentPlayer = /*pop from the player stack*/;
         //     display their resources on the game board
     }
+
+    public void setPlayerStack(Stack<Player> playerStack) {
+        mPlayerStack = playerStack;
+    }
 }
