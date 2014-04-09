@@ -31,8 +31,8 @@ public class ZoomableLayout extends RelativeLayout {
     private float mCenterX;
     private float mCenterY;
 
-    private float mCurrentCenterX;
-    private float mCurrentCenterY;
+    private float mCurrentCenterX = -1;
+    private float mCurrentCenterY = -1;
     private float mScaleFactorX = 1.f;
     private float mScaleFactorY = 1.f;
 
@@ -75,6 +75,7 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public boolean Pan(MotionEvent start, float x, float y) {
+        Log.d(TAG, "Panning");
         x = 3*(x/mScaleFactorX);
         y = 3*(y/mScaleFactorY);
         mCurrentCenterX += x;
@@ -146,6 +147,7 @@ public class ZoomableLayout extends RelativeLayout {
     }
 
     public void setDimensions() {
+        Log.d(TAG, "Setting Dimensions");
         DisplayMetrics display = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(display);
@@ -155,8 +157,10 @@ public class ZoomableLayout extends RelativeLayout {
         BASE_ZOOM_X = 1;
         BASE_ZOOM_Y = 1;
 
-        mCurrentCenterX = mCenterX = (float)(2560/2.0);
-        mCurrentCenterY = mCenterY = (float)(1504/2.0);
+        if (mCurrentCenterX == -1 || mCurrentCenterY == -1) {
+            mCurrentCenterX = mCenterX = (float)(2560/2.0);
+            mCurrentCenterY = mCenterY = (float)(1504/2.0);
+        }
         if (mWidth < 2560 || mHeight < 1504) {
             BASE_ZOOM_X = mScaleFactorX = 2560 / (float) mWidth;
             BASE_ZOOM_Y = mScaleFactorY = 1504 / (float) mHeight;
@@ -172,6 +176,7 @@ public class ZoomableLayout extends RelativeLayout {
 
     @Override
     public void onDraw(Canvas canvas) {
+        Log.d(TAG, "Drawing");
         super.onDraw(canvas);
         canvas.scale(mScaleFactorX, mScaleFactorY, mCurrentCenterX, mCurrentCenterY);
         canvas.save();
@@ -180,15 +185,9 @@ public class ZoomableLayout extends RelativeLayout {
         canvas.restore();
     }
 
-    /*
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
-    }
-    */
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "Measuring");
         setDimensions();
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
