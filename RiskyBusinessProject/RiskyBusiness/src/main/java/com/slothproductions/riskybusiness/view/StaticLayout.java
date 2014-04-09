@@ -18,6 +18,8 @@ public class StaticLayout extends ViewGroup {
     private float mScaleFactorX = 1.f;
     private float mScaleFactorY = 1.f;
 
+    private boolean defaultDimensionsSet;
+
     int mWidth;
     int mHeight;
 
@@ -37,24 +39,32 @@ public class StaticLayout extends ViewGroup {
     }
 
     public void setDimensions() {
+        //make sure this method is not called more than once
+        if (defaultDimensionsSet) {
+            return;
+        }
+        defaultDimensionsSet = true;
+
+        //Set the display width and height
         DisplayMetrics display = new DisplayMetrics();
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(display);
         int width = display.widthPixels;
         int height = display.heightPixels;
-        Log.d(TAG, "Display Width: " + width);
-        Log.d(TAG, "Display Height: " + height);
-
         mHeight = height;
         mWidth = width;
-        mCenterX = (float) (width / 2.0);
-        mCenterY = (float) (height / 2.0);
+        Log.d(TAG, "Display Width: " + mWidth);
+        Log.d(TAG, "Display Height: " + mHeight);
+
+        //set the center based on the display width and height
+        mCenterX = (float) (mWidth / 2.0);
+        mCenterY = (float) (mHeight / 2.0);
+
+        //Set scale factor to fit entire display on screen
         if (mWidth < 2560 || mHeight < 1504) {
-            //Set scale factor to fit entire display on screen
             mScaleFactorX = mWidth / (float) 2560;
             mScaleFactorY = mHeight / (float) 1504;
         }
-        invalidate();
     }
 
     @Override
@@ -69,14 +79,10 @@ public class StaticLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        LayoutParams lp;
-        int startLeft;
-        int startTop;
-        int endRight;
-        int endBottom;
+        int startLeft, startTop, endRight, endBottom;
         for (int i = 0; i < getChildCount(); i++) {
             View v = getChildAt(i);
-            lp = v.getLayoutParams();
+            LayoutParams lp = v.getLayoutParams();
             startLeft = l;
             startTop = t;
             endRight = startLeft + v.getMeasuredWidth();
@@ -87,16 +93,13 @@ public class StaticLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setDimensions();
+        if (!defaultDimensionsSet) {
+            setDimensions();
+        }
+
+        //measure all the child views
         super.measureChildren(widthMeasureSpec, heightMeasureSpec);
+        //measure self
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
-    /*
-    @Override
-    protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec) {
-        for (int i = 0; i < getChildCount(); i++) {
-            super.measureChild(getChildAt(i), widthMeasureSpec, heightMeasureSpec);
-        }
-    }*/
-
 }
