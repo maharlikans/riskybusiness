@@ -49,8 +49,6 @@ public class BoardObjectManager {
     private ArrayList<ImageView> mCities;
     private ArrayList<ImageView> mRoads;
 
-    private BoardObject mCurrentBuildItem;   //Last selected board object to be placed
-
     public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity, BoardScreenMainFragment manager) {
         //initialize main variables
         mBoardBacklog = boardData;
@@ -65,23 +63,35 @@ public class BoardObjectManager {
         mCities = new ArrayList<ImageView>();
         mRoads = new ArrayList<ImageView>();
 
-        //set current build item
-        mCurrentBuildItem = BoardObject.NONE;
     }
 
-    public void setCurrentBuildItem(MenuItem newBuildItem) {
-        if (newBuildItem.getItemId() == R.id.road) {
-            mCurrentBuildItem = BoardObject.ROAD;
+    public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
+        if (action.getItemId() == R.id.road) {
+            //build a road on an edge??
         }
-        else if (newBuildItem.getItemId() == R.id.soldier) {
-            mCurrentBuildItem = BoardObject.SOLDIER;
+        else if (action.getItemId() == R.id.soldier) {
+            buildItem("soldier", coordinate);
         }
-        else if (newBuildItem.getItemId() == R.id.settlement) {
-            mCurrentBuildItem = BoardObject.SETTLEMENT;
+        else if (action.getItemId() == R.id.settlement) {
+            buildItem("settlement", coordinate);
+        }
+        else if (action.getItemId() == R.id.city) {
+            //remove settlement at coordinate
+            buildItem("city", coordinate);
         }
         else {
-            mCurrentBuildItem = BoardObject.CITY;
+            //move soldier
         }
+    }
+
+    public void buildItem(String identifier, Coordinate coordinate) {
+        //add Item to the appropriate vertex
+
+        //create the visible image and place it on the screen
+        ImageView item = new ImageView(mGameBoardActivity);
+        item.setId((int)System.currentTimeMillis());
+        item.setImageResource(mGameBoardActivity.getResources().getIdentifier(identifier, "drawable", mGameBoardActivity.getPackageName()));
+        placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
     }
 
     public void BuildItem(MotionEvent event) {
@@ -111,25 +121,7 @@ public class BoardObjectManager {
     }
 
     public void displayActionsMenu(Coordinate coordinate) {
-        //Create the inflater for the linear layout
-        /*LayoutInflater inflater = (LayoutInflater)mGameBoardActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.popup_menu, null);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.leftMargin = x;
-        lp.topMargin = y;
-        layout.setLayoutParams(lp);
-
-        View v = inflater.inflate(R.layout.popup_menu, null);
-        PopupWindow window = new PopupWindow(mGameBoardActivity);
-        window.setContentView(v);
-        window.setHeight(v.getHeight());
-        window.setWidth(v.getWidth());
-        window.showAtLocation(mBoardLayout, Gravity.NO_GRAVITY, x, y);
-
-        //mBoardLayout.addView(layout);*/
-
         mBoardButtonsFragment.showPopUp(coordinate);
-
     }
 
 

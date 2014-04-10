@@ -41,13 +41,11 @@ public class BoardButtonsFragment extends Fragment {
     //Buttons
     private Button mBtnOptions;
     private Button mBtnEndTurn;
-    private Button mBtnBuild;
     private Button mBtnTrade;
 
     //Controllers
     private View.OnClickListener optionsController;
     private View.OnClickListener endTurnController;
-    private View.OnClickListener buildController;
     private View.OnClickListener tradeController;
 
     //Last toast variable is kept track of in order to cancel last toast upon creating new one
@@ -84,7 +82,6 @@ public class BoardButtonsFragment extends Fragment {
 
     void initializeViewElements(View v) {
         mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
-        mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
         mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
 
@@ -117,20 +114,12 @@ public class BoardButtonsFragment extends Fragment {
                 }
             }
         };
-
-        buildController = new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-
-            }
-        };
     }
 
     void initializeControllers() {
         mBtnOptions.setOnClickListener(optionsController);
         mBtnEndTurn.setOnClickListener(endTurnController);
         mBtnTrade.setOnClickListener(tradeController);
-        mBtnBuild.setOnClickListener(buildController);
     }
 
     public void showOptionsDialog() {
@@ -278,7 +267,7 @@ public class BoardButtonsFragment extends Fragment {
 
     }
 
-    public void showPopUp(Coordinate c) {
+    public void showPopUp(final Coordinate c) {
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
         anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
@@ -296,6 +285,7 @@ public class BoardButtonsFragment extends Fragment {
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                mBoardObjectManager.callActionFromMenuSelection(item, c);
                 return true;
             }
         });
