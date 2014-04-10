@@ -36,6 +36,13 @@
     <string name="start_game">Start Game</string>
     <string name="title_activity_gamerules_screen">Game Rules</string>
 
+    <string-array name="player_names">
+        <item>@string/player_1</item>
+        <item>@string/player_2</item>
+        <item>@string/player_3</item>
+        <item>@string/player_4</item>
+    </string-array>
+
     <string-array name="num_players_array">
         <item>1</item>
         <item>2</item>
