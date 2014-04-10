@@ -14,12 +14,12 @@ import android.view.View;
 
 import com.View.R;
 
-
 public class BoardScreen extends FragmentActivity {
 
     private Fragment mBoardScreenFragment;
     private Fragment mTradeScreenFragment;
     private Fragment mBoardButtonsFragment;
+    private Fragment mPlayerInfoFragment;
 
     private FragmentManager mFragmentManager;
 
@@ -32,6 +32,7 @@ public class BoardScreen extends FragmentActivity {
 
         mBoardScreenFragment = mFragmentManager.findFragmentById(R.id.hexParent);
         mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
+        mPlayerInfoFragment = mFragmentManager.findFragmentById(R.id.PlayerInfo);
 
         if (mBoardScreenFragment == null) {
             mBoardScreenFragment = new BoardScreenMainFragment();
@@ -44,6 +45,13 @@ public class BoardScreen extends FragmentActivity {
             mBoardButtonsFragment = new BoardButtonsFragment();
             mFragmentManager.beginTransaction()
                     .add(R.id.BoardContainer, mBoardButtonsFragment)
+                    .commit();
+        }
+
+        if (mPlayerInfoFragment == null) {
+            mPlayerInfoFragment = new PlayerInfoFragment();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.BoardContainer, mPlayerInfoFragment)
                     .commit();
         }
     }
