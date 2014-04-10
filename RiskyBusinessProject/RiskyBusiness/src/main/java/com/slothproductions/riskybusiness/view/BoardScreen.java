@@ -131,6 +131,10 @@ public class BoardScreen extends FragmentActivity {
         return mBoardScreenFragment;
     }
 
+    public Fragment getButtonsFragment() {
+        return mBoardButtonsFragment;
+    }
+
     public Board getBoard() {
         return mBoardData;
     }

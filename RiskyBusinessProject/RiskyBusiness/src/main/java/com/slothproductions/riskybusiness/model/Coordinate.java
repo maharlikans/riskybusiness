@@ -9,10 +9,12 @@ public class Coordinate {
     private static final String TAG = "Coordinate";
     private float x;
     private float y;
+    private float unMappedX;
+    private float unMappedY;
 
     public Coordinate (float x, float y) {
-        this.x = x;
-        this.y = y;
+        this.x = unMappedX = x;
+        this.y = unMappedY = y;
     }
 
     public float getX() {
@@ -21,6 +23,14 @@ public class Coordinate {
 
     public float getY() {
         return y;
+    }
+
+    public float getUnMappedX() {
+        return unMappedX;
+    }
+
+    public float getUnMappedY() {
+        return unMappedY;
     }
 
     /**Maps the coordinates from the location tapped on the screen to the given layout

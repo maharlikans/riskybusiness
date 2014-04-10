@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 
 public class BoardButtonsFragment extends Fragment {
@@ -120,21 +121,7 @@ public class BoardButtonsFragment extends Fragment {
         buildController = new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(mActivity, mBtnBuild);
 
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        mBoardObjectManager.setCurrentBuildItem(item);
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
             }
         };
     }
@@ -289,6 +276,31 @@ public class BoardButtonsFragment extends Fragment {
         mBtnEndTurn.setText("End Turn");
 
 
+    }
+
+    public void showPopUp(Coordinate c) {
+        ImageView anchor = new ImageView(mActivity);
+        anchor.setId((int)System.currentTimeMillis());
+        anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
+        anchor.setX(c.getUnMappedX());
+        anchor.setY(c.getUnMappedY());
+
+        mButtonsParent.addView(anchor);
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(mActivity, anchor);
+
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
     }
 
     void createToast(String text, boolean isLong) {
