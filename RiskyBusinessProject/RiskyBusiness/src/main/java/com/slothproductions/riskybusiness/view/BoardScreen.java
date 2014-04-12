@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,7 +35,12 @@ public class BoardScreen extends FragmentActivity {
         mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
 
         if (mBoardScreenFragment == null) {
+
+            // TODO fetch the arguments from the BoardScreenMainFragment
+            Bundle args = fetchAndPlaceArguments();
+
             mBoardScreenFragment = new BoardScreenMainFragment();
+            mBoardScreenFragment.setArguments(args);
             mFragmentManager.beginTransaction()
                     .add(R.id.BoardContainer, mBoardScreenFragment)
                     .commit();
@@ -126,5 +132,27 @@ public class BoardScreen extends FragmentActivity {
 
     public Fragment getScreenFragment() {
         return mBoardScreenFragment;
+    }
+
+    // this function is used to fetch the arguemnts from the intent
+    // which started this activity, which is from the GameSetupScreen
+    public Bundle fetchAndPlaceArguments() {
+        Intent intent = getIntent();
+        Bundle bundle = new Bundle();
+        bundle.putInt(GameSetupScreen.NUM_PLAYERS_CHOSEN,
+                intent.getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0));
+        bundle.putStringArray(GameSetupScreen.PLAYER_TYPES,
+                intent.getStringArrayExtra(GameSetupScreen.PLAYER_TYPES));
+        bundle.putInt(GameSetupScreen.NUM_VICTORY_POINTS,
+                intent.getIntExtra(GameSetupScreen.NUM_VICTORY_POINTS, 0));
+        bundle.putBoolean(GameSetupScreen.VARIABLE_BOARD,
+                intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false));
+        bundle.putBoolean(GameSetupScreen.VARIABLE_BOARD,
+                intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false));
+        bundle.putBoolean(GameSetupScreen.ATTACKS,
+                intent.getBooleanExtra(GameSetupScreen.ATTACKS, false));
+        bundle.putIntArray(GameSetupScreen.COLORS,
+                intent.getIntArrayExtra(GameSetupScreen.COLORS));
+        return bundle;
     }
 }

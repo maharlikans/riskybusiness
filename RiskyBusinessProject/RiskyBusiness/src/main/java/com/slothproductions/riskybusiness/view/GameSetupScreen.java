@@ -22,18 +22,41 @@ import com.View.R;
  * Created by Kyle Maharlika on 3/19/14.
  *
  * Now you might ask "So Kyle, how did you plan on passing the data to the Board activity?"
- * Well, here's a list of the variable names you need to get from the Intent I pass. 
+ * Well, here's a list of the variable names you need to get from the Intent I pass.
+ *
  * First you need to get the intent, then fetch the following (all arrays are indexed by 1, not 0):
  *     numPlayersChosen - integer containing the number of players chosen
- *     playerType - a String array containing the type of player for each player
+ *     playerType       - a String array containing the type of player for each player
  *     numVictoryPoints - integer containing the number of victory points chosen
- *     variableBoard - boolean value indicating whether or not the player wants variable board generation or not
- *     attacksOn - boolean value indicating whether or not the player wants attacks on or off
- *                 I make sure that if the player choose 0 points, that attacksOn must be true
+ *     variableBoard    - boolean value indicating whether or not the player wants variable board
+ *                        generation or not
+ *     attacksOn        - boolean value indicating whether or not the player wants attacks on or off
+ *                        I make sure that if the player choose 0 points, that attacksOn must be true
  *     defaultColors - passes the integer values of the default colors for each player
- *     
+ *
+ *     fetch each using each of these String references
+ *         GameSetupScreen.NUM_PLAYERS_CHOSEN
+ *         GameSetupScreen.PLAYER_TYPES
+ *         GameSetupScreen.NUM_VICTORY_POINTS
+ *         GameSetupScreen.VARIABLE_BOARD
+ *         GameSetupScreen.ATTACKS
+ *         GameSetupScreen.COLORS
+ *
  */
 public class GameSetupScreen extends Activity {
+    // Strings used to fetch from the intent
+    public static final String
+            NUM_PLAYERS_CHOSEN = "com.slothproductions.riskybusiness.numPlayersChosen";
+    public static final String
+            PLAYER_TYPES = "com.slothproductions.riskybusiness.playerTypes";
+    public static final String
+            NUM_VICTORY_POINTS = "com.slothproductions.riskybusiness.numVictoryPoints";
+    public static final String
+            VARIABLE_BOARD = "com.slothproductions.riskybusiness.variableBoard";
+    public static final String
+            ATTACKS = "com.slothproductions.riskybusiness.attacksOn";
+    public static final String
+            COLORS = "com.slothproductions.riskybusiness.defaultColors";
 
     // View objects
     Spinner mNumPlayersSpinner;
@@ -180,21 +203,21 @@ public class GameSetupScreen extends Activity {
                     /*if (selectedButton == null)
                         Log.d("OnClickButton" + i, "this shit is null");*/
                     playerType[i] = (String)selectedButton.getText();
-                    Log.d("OnClick", playerType[i]);
+//                    Log.d("OnClick", playerType[i]);
                 }
 
-                Log.d("OnClick", "Num victory points is: " + numVictoryPoints);
-                Log.d("OnClick", "Board generation is variable: " + variableBoard);
-                Log.d("OnClick", "Attacks are on: " + attacksOn);
+//                Log.d("OnClick", "Num victory points is: " + numVictoryPoints);
+//                Log.d("OnClick", "Board generation is variable: " + variableBoard);
+//                Log.d("OnClick", "Attacks are on: " + attacksOn);
 
                 // pass all the required data to the next activity and call the activity
                 Intent intent = new Intent(GameSetupScreen.this,BoardScreen.class);
-                intent.putExtra("numPlayersChosen", numPlayersChosen);
-                intent.putExtra("decisions", playerType);
-                intent.putExtra("numVictoryPoints", numVictoryPoints);
-                intent.putExtra("variableBoard", variableBoard);
-                intent.putExtra("attacksOn", attacksOn);
-                intent.putExtra("defaultColors", defaultColors);
+                intent.putExtra(NUM_PLAYERS_CHOSEN, numPlayersChosen);
+                intent.putExtra(PLAYER_TYPES, playerType);
+                intent.putExtra(NUM_VICTORY_POINTS, numVictoryPoints);
+                intent.putExtra(VARIABLE_BOARD, variableBoard);
+                intent.putExtra(ATTACKS, attacksOn);
+                intent.putExtra(COLORS, defaultColors);
                 startActivity(intent);
             }
         });
