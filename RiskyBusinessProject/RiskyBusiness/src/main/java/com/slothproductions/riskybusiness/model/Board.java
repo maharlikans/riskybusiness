@@ -362,13 +362,16 @@ public class Board implements java.io.Serializable {
                 boolean invalid = false;
                 switch(requiredPair.getValue()) {
                     case PLAYER:
-                        if (!(provided instanceof Player) || provided == player) invalid = true;
+                        if (!(provided instanceof Player) || provided == player) invalid = true; /* Change to ImmutablePlayer later, when available */
                         break;
                     case RESOURCE_TYPE:
                         if (!(provided instanceof Resource)) invalid = true;
                         break;
                     case RESOURCE_QUANTITY:
                         if (!(provided instanceof Integer) || (Integer)provided < 1) invalid = true;
+                        break;
+                    case MILITARY_QUANTITY:
+                        if (!(provided instanceof Integer) || (Integer)provided < 0) invalid = true;
                         break;
                     case EDGE:
                         if (!(provided instanceof Edge.ImmutableEdge)) invalid = true;
@@ -382,8 +385,13 @@ public class Board implements java.io.Serializable {
                 }
             }
         }
+        
+        
 
         /* TODO: Effect the game action */
+        /* 1. Check for player resources, if not sufficient throw an exception
+         * 2. Switch on action
+         * */
 
         return null;
     }

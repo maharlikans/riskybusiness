@@ -11,6 +11,16 @@ import java.util.Map;
  * Created by riv on 16.03.14.
  */
 
+/*
+ * Sample call to Player::effect:
+ * (PUBLIC_TRADE, new HashMap<String, Object>{{
+ * 		put("sell_resource_type", Resource.GOLD);
+ * 		put("sell_amount", new Integer(5));
+ * 		put("buy_resource_type", Resource.WOOL);
+ *  	put("buy_amount", new Integer(7));
+ * }})
+ */
+
 public enum GameAction {
     BUILD_ROAD(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.BRICK, 1);
@@ -74,6 +84,7 @@ public enum GameAction {
         PLAYER,
         RESOURCE_TYPE,
         RESOURCE_QUANTITY,
+        MILITARY_QUANTITY,
         EDGE,
         VERTEX;
     }
