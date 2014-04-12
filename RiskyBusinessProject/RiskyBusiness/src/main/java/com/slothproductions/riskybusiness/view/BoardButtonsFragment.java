@@ -23,6 +23,7 @@ import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
+import com.slothproductions.riskybusiness.model.Vertex;
 
 public class BoardButtonsFragment extends Fragment {
 
@@ -174,6 +175,7 @@ public class BoardButtonsFragment extends Fragment {
         alertDialog.show();
     }
 
+    //TODO: Move the dice to the location of the player that is currently going.
     public void showRollDialog() {
         viceDice.roll();
         dice1 = viceDice.getFirstDice();
@@ -267,7 +269,9 @@ public class BoardButtonsFragment extends Fragment {
 
     }
 
-    public void showPopUp(final Coordinate c) {
+    public void showPopUp(final Coordinate c, Vertex v) {
+        //TODO: add support for roads, fix everything to work with the board data.
+        //an anchor for the popupmenu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
         anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
@@ -279,7 +283,10 @@ public class BoardButtonsFragment extends Fragment {
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(mActivity, anchor);
 
-        //Inflating the Popup using xml file
+        //Here we need to check what actions are available on the vertex before inflating the menu.
+        //this is also determined by which player is currently playing
+        //if an action is available, itw ill be shown, otherwise it wont be shown.
+        //if no actions are available, a toast will display saying there are no actions available at that vertex.
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
         //registering popup with OnMenuItemClickListener

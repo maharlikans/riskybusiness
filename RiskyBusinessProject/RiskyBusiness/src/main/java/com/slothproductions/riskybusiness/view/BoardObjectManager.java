@@ -25,8 +25,12 @@ import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Hex;
 import com.slothproductions.riskybusiness.model.MilitaryUnit;
+import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
+
+//TODO: update all the methods to work with the new way of placing objects
+//This includes adding functionality to work with roads, and adjusting the method signatures as appropriate.
 
 /**
  * The purpose of this class is to manage all the objects being placed on the board (ie, Cities, Settlements, Soldiers, Cities, etc..
@@ -94,14 +98,18 @@ public class BoardObjectManager {
         placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
     }
 
-    public void BuildItem(MotionEvent event) {
-        //just so i dont have to chnage method signatures yet
-        ImageView item = new ImageView(mGameBoardActivity);
-        item.setId((int)System.currentTimeMillis());
+    //TODO: Rename method to something more appropriate
+    //Creates the appropriate menu for the screen based on the tap event
+    public void findMenu(MotionEvent event) {
 
         //scan through hex corners to see if tap location matches a corner
-        placeCornerObject(event, item);
-
+        Coordinate c = new Coordinate(event.getX(), event.getY());
+        Vertex v = null;
+        if (checkCornerLocations(c,v)) {
+            //if this is true, then the coordinate is reassigned to the exact vertex location, and v is assigned to the vertex the object is being placed
+            //we are now calling the show popup menu in board buttons fragment
+            mBoardButtonsFragment.showPopUp(c, v);
+        }
     }
 
     /**places given image centered at the specified x and y coordinates
@@ -118,10 +126,6 @@ public class BoardObjectManager {
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
-    }
-
-    public void displayActionsMenu(Coordinate coordinate) {
-        mBoardButtonsFragment.showPopUp(coordinate);
     }
 
 
@@ -163,39 +167,52 @@ public class BoardObjectManager {
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
-     * also checks to see if a location is available for an item to be placed.
-     *
-     * @param tapEvent the event for the tap, retrieved from the onTouchEvent method
-     * @param mCornerObject the Object that will be placed at the corner
-     * @return true if the object could be placed, false otherwise
+     * if it is, then it return the vertex where the location is a match, the coordinate of the vertex, and true;
      */
-    public boolean placeCornerObject(MotionEvent tapEvent, ImageView mCornerObject) {
-        int x,y;
-        //get location of x and y taps, and adjust for zoom/pan
-        Coordinate coordinate = new Coordinate(tapEvent.getX(),tapEvent.getY());
+    public boolean checkCornerLocations(Coordinate coordinate, Vertex v) {
+        //adjust the given coordinate for zoom/pan
         coordinate.mapZoomCoordinates(mBoardLayout);
-        x = (int)coordinate.getX();
-        y = (int)coordinate.getY();
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
         for (int i =0; i < mBoardBacklog.hexes.size(); i++) {
             Hex temp = mBoardBacklog.hexes.get(i);
-            for (int j = 0; j < 6; j++) {
-                //check to see if vertex is available to be checked, then checks location compared to tap.
-            }
+
             //grabbing the tile
             ImageView mTile = (ImageView) mBoardLayout.getChildAt(i+1); // i+1 because background image is at i = 0;
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(coordinate, mTile, mCornerObject) || addTopRightCorner(coordinate, mTile, mCornerObject) || addMidRightCorner(coordinate, mTile, mCornerObject)
-                    || addBottomRightCorner(coordinate, mTile, mCornerObject) || addBottomLeftCorner(coordinate, mTile, mCornerObject) || addMidLeftCorner(coordinate, mTile, mCornerObject)) {
+            if (addTopLeftCorner(coordinate, mTile)) {
+                //assign vertex v to index 0 of the hex temp's list
+                return true;
+            }
+            if (addTopRightCorner(coordinate, mTile)) {
+                //assign vertex v to index 1 of the hex temp's list
+                return true;
+            }
+            if (addTopRightCorner(coordinate, mTile)) {
+                //assign vertex v to index 2 of the hex temp's list
+                return true;
+            }
+            if (addMidRightCorner(coordinate, mTile)) {
+                //assign vertex v to index 3 of the hex temp's list
+                return true;
+            }
+            if (addBottomRightCorner(coordinate, mTile)) {
+                //assign vertex v to index 4 of the hex temp's list
+                return true;
+            }
+            if (addBottomLeftCorner(coordinate, mTile)) {
+                //assign vertex v to index 5 of the hex temp's list
+                return true;
+            }
+            if (addMidLeftCorner(coordinate, mTile)) {
+                //assign vertex v to index 6 of the hex temp's list
                 return true;
             }
         }
 
         //object can't be placed, make toast
-        mManagingFragment.createToast("Invalid Object Placement (needs to be placed on the corner of a tile)", false);
-
+        mManagingFragment.createToast("Select the corner or edge of a tile for available actions", false);
         return false;
     }
 
@@ -226,10 +243,9 @@ public class BoardObjectManager {
      *
      * @param coordinate the coordinate that holds the tap locations, and mapped values
      * @param mTile the tile that the image will be placed at the corner of
-     * @param mCornerObject The object that will be placed at the corner
      * @return true if the object could be placed, false otherwise
      */
-    boolean addTopLeftCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addTopLeftCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -245,13 +261,14 @@ public class BoardObjectManager {
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
     }
 
-    boolean addTopRightCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addTopRightCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -265,15 +282,16 @@ public class BoardObjectManager {
         int lowY = y-50;
         int highY = y+50;
 
-        //compare tap x,y locations against valid x and y range for corner
+        //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
     }
 
-    boolean addMidRightCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addMidRightCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -287,15 +305,16 @@ public class BoardObjectManager {
         int lowY = y-50;
         int highY = y+50;
 
-        //compare tap x,y locations against valid x and y range for corner
+        //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
     }
 
-    boolean addBottomRightCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addBottomRightCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -309,15 +328,16 @@ public class BoardObjectManager {
         int lowY = y-50;
         int highY = y+50;
 
-        //compare tap x,y locations against valid x and y range for corner
+        //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
     }
 
-    boolean addBottomLeftCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addBottomLeftCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -331,15 +351,16 @@ public class BoardObjectManager {
         int lowY = y-50;
         int highY = y+50;
 
-        //compare tap x,y locations against valid x and y range for corner
+        //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
     }
 
-    boolean addMidLeftCorner(Coordinate coordinate, ImageView mTile, ImageView mCornerObject) {
+    boolean addMidLeftCorner(Coordinate coordinate, ImageView mTile) {
         int tapX = (int)coordinate.getX();
         int tapY = (int)coordinate.getY();
 
@@ -353,9 +374,10 @@ public class BoardObjectManager {
         int lowY = y-50;
         int highY = y+50;
 
-        //compare tap x,y locations against valid x and y range for corner
+        //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            displayActionsMenu(coordinate);
+            coordinate.setMappedX(x);
+            coordinate.setMappedY(y);
             return true;
         }
         return false;
