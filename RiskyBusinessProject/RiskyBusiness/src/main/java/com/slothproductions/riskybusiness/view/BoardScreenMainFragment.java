@@ -60,6 +60,19 @@ public class BoardScreenMainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO pass this data into the board initialization when the Board class
+        // is modified properly
+        Bundle bundle = getArguments();
+        int numPlayersChosen = bundle.getInt(GameSetupScreen.NUM_PLAYERS_CHOSEN);
+        String[] playerTypes = bundle.getStringArray(GameSetupScreen.PLAYER_TYPES);
+        int numVictoryPoints = bundle.getInt(GameSetupScreen.NUM_VICTORY_POINTS);
+        boolean variableBoard = bundle.getBoolean(GameSetupScreen.VARIABLE_BOARD);
+        boolean attacksOn = bundle.getBoolean(GameSetupScreen.ATTACKS);
+        int[] colors = bundle.getIntArray(GameSetupScreen.COLORS);
+
+        // ****************TEST******************
+        Log.d("TAG", "number of players"+numPlayersChosen);
+
         //Initializing non view elements
         mBoardData = new Board(new String[]{"Player1", "Player2", "Player3", "Player4"});
 
