@@ -85,7 +85,7 @@ public class BoardButtonsFragment extends Fragment {
     void initializeViewElements(View v) {
         mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
+        mBtnOptions = (Button)v.findViewById(R.id.settingsButton);
 
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
         mBoardObjectManager = ((BoardScreenMainFragment)mBoardScreen.getScreenFragment()).getBoardObjectManager();
