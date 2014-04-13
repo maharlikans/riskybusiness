@@ -20,58 +20,6 @@ import javax.crypto.NoSuchPaddingException;
 
 public class Board implements java.io.Serializable {
     private static final long serialVersionUID = -915315565L;
-    protected class PlayerAccounting implements java.io.Serializable {
-        private static final long serialVersionUID = -677559079L;
-
-        protected class ImmutablePlayerAccounting implements java.io.Serializable {
-            private static final long serialVersionUID = 173077997L;
-            public int resource(Resource r) {
-                return resources.get(r);
-            }
-
-            public int getPoints() {
-                return points;
-            }
-
-            public Board getBoard() {
-                return Board.this;
-            }
-
-            public ArrayList<Edge.ImmutableEdge> getEdges() {
-                return immutableEdges;
-            }
-
-            public ArrayList<Vertex.ImmutableVertex> getVertices() {
-                return immutableVertices;
-            }
-
-            public ArrayList<MilitaryUnit.ImmutableMilitaryUnit> getMilitaryUnit() {
-                return immutableMilitaryUnits;
-            }
-        }
-
-        protected PlayerAccounting() {
-            immutable = new ImmutablePlayerAccounting();
-            points = 0;
-            resources = new EnumMap<Resource, Integer>(Resource.class);
-            immutableEdges = new ArrayList<Edge.ImmutableEdge>();
-            immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
-            immutableMilitaryUnits = new ArrayList<MilitaryUnit.ImmutableMilitaryUnit>();
-            edges = new ArrayList<Edge>();
-            vertices = new ArrayList<Vertex>();
-            militaryUnits = new ArrayList<MilitaryUnit>();
-        }
-
-        public ImmutablePlayerAccounting immutable;
-        private int points;
-        private Map<Resource, Integer> resources;
-        private ArrayList<Edge.ImmutableEdge> immutableEdges;
-        private ArrayList<Vertex.ImmutableVertex> immutableVertices;
-        private ArrayList<MilitaryUnit.ImmutableMilitaryUnit> immutableMilitaryUnits;
-        private ArrayList<Edge> edges;
-        private ArrayList<Vertex> vertices;
-        private ArrayList<MilitaryUnit> militaryUnits;
-    }	
 
     private final String TAG = "BOARDDATA";
 
@@ -85,8 +33,6 @@ public class Board implements java.io.Serializable {
     protected List<Player> players;
     protected List<ArrayList<Hex>> diceRolls;
 
-    private HashMap<Player, PlayerAccounting> playerAccounting;
-
     private int ringUpperIndex(int ring) {
         return ring * (ring + 1) * 3;
     }
@@ -98,7 +44,6 @@ public class Board implements java.io.Serializable {
         militaryUnits = new ArrayList<MilitaryUnit>();
         players = new ArrayList<Player>();
         hexes = new ArrayList<Hex>();
-        playerAccounting = new HashMap<Player, PlayerAccounting>();
 
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
@@ -226,10 +171,7 @@ public class Board implements java.io.Serializable {
 
         Log.d(TAG, "Generating Players");
         for(String name: playerNames) {
-            PlayerAccounting pa = new PlayerAccounting();
-            Player p = new Player(name, pa.immutable);
-            players.add(p);
-            playerAccounting.put(p, pa);
+            players.add(new Player(this, name));
         }
         Log.d(TAG, "Finished Generating Players");
     }
