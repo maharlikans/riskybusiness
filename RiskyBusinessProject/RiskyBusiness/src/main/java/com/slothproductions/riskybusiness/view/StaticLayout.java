@@ -85,6 +85,8 @@ public class StaticLayout extends ViewGroup {
             LayoutParams lp = v.getLayoutParams();
             startLeft = l;
             startTop = t;
+            Log.d(TAG, "Measured Width: " + v.getMeasuredWidth());
+            Log.d(TAG, "Measured Height: " + v.getMeasuredHeight());
             endRight = startLeft + v.getMeasuredWidth();
             endBottom = startTop + v.getMeasuredHeight();
             v.layout(startLeft,startTop,endRight,endBottom);
