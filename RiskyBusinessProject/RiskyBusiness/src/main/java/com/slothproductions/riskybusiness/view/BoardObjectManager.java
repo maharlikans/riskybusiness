@@ -72,6 +72,7 @@ public class BoardObjectManager {
 
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
         if (action.getItemId() == R.id.road) {
+            //call build road from game loop
             buildItem(0, "road", coordinate);
         }
         else if (action.getItemId() == R.id.soldier) {
@@ -96,6 +97,7 @@ public class BoardObjectManager {
         ImageView item = new ImageView(mGameBoardActivity);
         item.setId((int)System.currentTimeMillis());
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
+        item.setRotation(coordinate.getRotation());
         placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
         switch(identifier) {
             case 0:
@@ -447,7 +449,7 @@ public class BoardObjectManager {
 
         //compare tap x,y locations against valid x and y range for top left edge
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            //Rotation -60
+            coordinate.setRotation(-60);
             coordinate.setMappedX(x);
             coordinate.setMappedY(y);
             return true;
@@ -471,7 +473,7 @@ public class BoardObjectManager {
 
         //compare tap x,y locations against valid x and y range for edge
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            //Rotation 60
+            coordinate.setRotation(60);
             coordinate.setMappedX(x);
             coordinate.setMappedY(y);
             return true;
@@ -495,7 +497,7 @@ public class BoardObjectManager {
 
         //compare tap x,y locations against valid x and y range for edge
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            //Rotation -60
+            coordinate.setRotation(-60);
             coordinate.setMappedX(x);
             coordinate.setMappedY(y);
             return true;
@@ -519,7 +521,7 @@ public class BoardObjectManager {
 
         //compare tap x,y locations against valid x and y range for edge
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
-            //Rotation 60
+            coordinate.setRotation(60);
             coordinate.setMappedX(x);
             coordinate.setMappedY(y);
             return true;

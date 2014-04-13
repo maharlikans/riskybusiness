@@ -20,6 +20,8 @@ public class Coordinate {
     private float mCenterX;
     private float mCenterY;
 
+    private int rotation;
+
     public Coordinate (float x, float y) {
         this.x = unMappedX = x;
         this.y = unMappedY = y;
@@ -49,6 +51,14 @@ public class Coordinate {
     public void setMappedY(float y) {
         this.y = y;
         unMapCoordinates();
+    }
+
+    public void setRotation(int r) {
+        rotation = r;
+    }
+
+    public int getRotation() {
+        return rotation;
     }
 
     /**Maps the coordinates from the location tapped on the screen to the given layout
