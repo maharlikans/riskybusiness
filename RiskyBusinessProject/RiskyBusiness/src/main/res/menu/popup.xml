@@ -3,16 +3,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
         android:id="@+id/road"
-        android:title="Road"/>
+        android:title="Build Road"/>
+
+    <group android:id="@+id/corneritems">
+    <item
+        android:id="@+id/settlement"
+        android:title="Build Settlement"/>
 
     <item
         android:id="@+id/soldier"
-        android:title="Soldier"/>
+        android:title="Train Soldier"/>
 
     <item
-        android:id="@+id/settlement"
-        android:title="Settlement"/>
-    <item
         android:id="@+id/city"
-        android:title="City"/>
+        android:title="Upgrade to City"/>
+
+    <item
+        android:id="@+id/move"
+        android:title="Move Military"/>
+    </group>
+
 </menu>
