@@ -26,6 +26,9 @@ public class SettingsScreen extends Activity {
 
         // get options button and set behavior
         options = (Button)findViewById(R.id.optionsButton);
+        htp = (Button)findViewById(R.id.htpButton);
+        save = (Button)findViewById(R.id.saveButton);
+        rtg = (Button)findViewById(R.id.rtgButton);
 
         options.setOnClickListener(new View.OnClickListener() {
             @Override
