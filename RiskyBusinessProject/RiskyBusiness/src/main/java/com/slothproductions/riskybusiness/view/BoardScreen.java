@@ -13,13 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.View.R;
-
+import com.slothproductions.riskybusiness.model.Board;
 
 public class BoardScreen extends FragmentActivity {
+
+    private Board mBoardData;
 
     private Fragment mBoardScreenFragment;
     private Fragment mTradeScreenFragment;
     private Fragment mBoardButtonsFragment;
+    private Fragment mPlayerInfoFragment;
 
     private FragmentManager mFragmentManager;
 
@@ -28,24 +31,19 @@ public class BoardScreen extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_screen);
 
+        String[] Players = new String [getIntent().getIntExtra("numplayerschosen", 0)];
+        String[] defaultPlayers = getResources().getStringArray(R.array.player_names);
+        for (int i = 0; i < Players.length; i++) {
+                Players[i] = defaultPlayers[i];
+        }
+
+        mBoardData = new Board(Players);
+
         mFragmentManager = getSupportFragmentManager();
 
-        mBoardScreenFragment = mFragmentManager.findFragmentById(R.id.hexParent);
-        mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
+        initializeDefaultFragments();
 
-        if (mBoardScreenFragment == null) {
-            mBoardScreenFragment = new BoardScreenMainFragment();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.BoardContainer, mBoardScreenFragment)
-                    .commit();
-        }
 
-        if (mBoardButtonsFragment == null) {
-            mBoardButtonsFragment = new BoardButtonsFragment();
-            mFragmentManager.beginTransaction()
-                    .add(R.id.BoardContainer, mBoardButtonsFragment)
-                    .commit();
-        }
     }
 
     @Override
@@ -62,17 +60,22 @@ public class BoardScreen extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    if (id == R.id.action_settings) {
+        return true;
     }
+    return super.onOptionsItemSelected(item);
+}
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d("KEYPRESSED", "Back Button was pressed");
-            showExitDialog();
+            if (mTradeScreenFragment==null) {
+                showExitDialog();
+            }
+            else {
+                onCancelTradeButtonPressed();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -110,7 +113,6 @@ public class BoardScreen extends FragmentActivity {
     // when the user presses the trade button on the view
     public void onTradeButtonPressed() {
         mTradeScreenFragment = new TradeScreenFragment();
-
         mFragmentManager.beginTransaction()
                 .add(R.id.BoardContainer, mTradeScreenFragment)
                 .commit();
@@ -122,9 +124,45 @@ public class BoardScreen extends FragmentActivity {
         mFragmentManager.beginTransaction()
                 .remove(mTradeScreenFragment)
                 .commit();
+        mTradeScreenFragment = null;
     }
 
     public Fragment getScreenFragment() {
         return mBoardScreenFragment;
+    }
+
+    public Fragment getButtonsFragment() {
+        return mBoardButtonsFragment;
+    }
+
+    public Board getBoard() {
+        return mBoardData;
+    }
+
+    protected void initializeDefaultFragments() {
+        mBoardScreenFragment = mFragmentManager.findFragmentById(R.id.hexParent);
+        mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
+        mPlayerInfoFragment = mFragmentManager.findFragmentById(R.id.PlayerInfo);
+
+        if (mBoardScreenFragment == null) {
+            mBoardScreenFragment = new BoardScreenMainFragment();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.BoardContainer, mBoardScreenFragment)
+                    .commit();
+        }
+
+        if (mBoardButtonsFragment == null) {
+            mBoardButtonsFragment = new BoardButtonsFragment();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.BoardContainer, mBoardButtonsFragment)
+                    .commit();
+        }
+
+        if (mPlayerInfoFragment == null) {
+            mPlayerInfoFragment = new PlayerInfoFragment();
+            mFragmentManager.beginTransaction()
+                    .add(R.id.BoardContainer, mPlayerInfoFragment)
+                    .commit();
+        }
     }
 }
