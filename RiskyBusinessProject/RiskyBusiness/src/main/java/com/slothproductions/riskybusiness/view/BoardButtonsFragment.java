@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class BoardButtonsFragment extends Fragment {
     private ZoomableLayout mHexParent; //This is only used for the Board Object Manager
 
     //Buttons
-    private Button mBtnOptions;
+    private Button mBtnSettings;
     private Button mBtnEndTurn;
     private Button mBtnBuild;
     private Button mBtnTrade;
@@ -45,7 +46,6 @@ public class BoardButtonsFragment extends Fragment {
     //Controllers
     private View.OnClickListener settingsController;
     private View.OnClickListener endTurnController;
-    private View.OnClickListener buildController;
     private View.OnClickListener tradeController;
 
     //Last toast variable is kept track of in order to cancel last toast upon creating new one
@@ -84,7 +84,7 @@ public class BoardButtonsFragment extends Fragment {
         mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-
+        mBtnSettings = (Button)v.findViewById(R.id.optionsButton);
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
         mBoardObjectManager = ((BoardScreenMainFragment)mBoardScreen.getScreenFragment()).getBoardObjectManager();
     }
@@ -118,10 +118,30 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     void initializeControllers() {
-        mBtnOptions.setOnClickListener(settingsController);
+        mBtnSettings.setOnClickListener(settingsController);
         mBtnEndTurn.setOnClickListener(endTurnController);
         mBtnTrade.setOnClickListener(tradeController);
-        mBtnBuild.setOnClickListener(buildController);
+    }
+
+    //new stuff for settings btn
+    @Override
+    public boolean onCreateSettingsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.settings_screen, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_options) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showEndTurnDialog() {
