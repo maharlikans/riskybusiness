@@ -36,13 +36,13 @@ public enum GameAction {
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    UPGRADE_SETTLEMENT_TO_CITY(new EnumMap<Resource, Integer>(Resource.class){{
+    BUILD_CITY(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 2);
         put(Resource.GRAIN, 2);
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    ESTABLISH_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
+    BUILD_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 1);
         put(Resource.WOOL, 1);
         put(Resource.GRAIN, 1);
