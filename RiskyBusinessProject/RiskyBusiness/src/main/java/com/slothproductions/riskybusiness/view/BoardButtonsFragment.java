@@ -23,6 +23,7 @@ import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
+import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 public class BoardButtonsFragment extends Fragment {
@@ -269,6 +270,7 @@ public class BoardButtonsFragment extends Fragment {
 
     }
 
+    //Popup for use with corner objects
     public void showPopUp(final Coordinate c, Vertex v) {
         //TODO: add support for roads, fix everything to work with the board data.
         //an anchor for the popupmenu to be placed on.
@@ -288,6 +290,40 @@ public class BoardButtonsFragment extends Fragment {
         //if an action is available, itw ill be shown, otherwise it wont be shown.
         //if no actions are available, a toast will display saying there are no actions available at that vertex.
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+        popup.getMenu().removeItem(R.id.road);
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mBoardObjectManager.callActionFromMenuSelection(item, c);
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
+    }
+
+    //Popup for use with roads
+    public void showPopUp(final Coordinate c, Edge e) {
+        //TODO: fix everything to work with the board data.
+        //an anchor for the popupmenu to be placed on.
+        ImageView anchor = new ImageView(mActivity);
+        anchor.setId((int)System.currentTimeMillis());
+        anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
+        anchor.setX(c.getUnMappedX());
+        anchor.setY(c.getUnMappedY());
+
+        mButtonsParent.addView(anchor);
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(mActivity, anchor);
+
+        //Here we need to check what actions are available on the vertex before inflating the menu.
+        //this is also determined by which player is currently playing
+        //if an action is available, itw ill be shown, otherwise it wont be shown.
+        //if no actions are available, a toast will display saying there are no actions available at that vertex.
+        popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+        popup.getMenu().removeGroup(R.id.corneritems);
 
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
