@@ -72,31 +72,45 @@ public class BoardObjectManager {
 
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
         if (action.getItemId() == R.id.road) {
-            buildItem("road", coordinate);
+            buildItem(0, "road", coordinate);
         }
         else if (action.getItemId() == R.id.soldier) {
-            buildItem("soldier", coordinate);
+            buildItem(1, "soldier", coordinate);
         }
         else if (action.getItemId() == R.id.settlement) {
-            buildItem("settlement", coordinate);
+            buildItem(2, "settlement", coordinate);
         }
         else if (action.getItemId() == R.id.city) {
             //remove settlement at coordinate
-            buildItem("city", coordinate);
+            buildItem(3, "city", coordinate);
         }
         else {
             //move soldier
         }
     }
 
-    public void buildItem(String identifier, Coordinate coordinate) {
+    public void buildItem(int identifier, String name, Coordinate coordinate) {
         //add Item to the appropriate vertex/edge
 
         //create the visible image and place it on the screen
         ImageView item = new ImageView(mGameBoardActivity);
         item.setId((int)System.currentTimeMillis());
-        item.setImageResource(mGameBoardActivity.getResources().getIdentifier(identifier, "drawable", mGameBoardActivity.getPackageName()));
+        item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
+        switch(identifier) {
+            case 0:
+                mRoads.add(item);
+                break;
+            case 1:
+                mSoldiers.add(item);
+                break;
+            case 2:
+                mSettlements.add(item);
+                break;
+            case 3:
+                mCities.add(item);
+                break;
+        }
     }
 
     //Creates the appropriate menu for the screen based on the tap event
@@ -131,6 +145,7 @@ public class BoardObjectManager {
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
+        normalizeLevels();
     }
 
 
