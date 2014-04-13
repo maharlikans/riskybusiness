@@ -2,12 +2,11 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -44,7 +43,7 @@ public class BoardButtonsFragment extends Fragment {
     private Button mBtnTrade;
 
     //Controllers
-    private View.OnClickListener optionsController;
+    private View.OnClickListener settingsController;
     private View.OnClickListener endTurnController;
     private View.OnClickListener buildController;
     private View.OnClickListener tradeController;
@@ -85,17 +84,17 @@ public class BoardButtonsFragment extends Fragment {
         mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
         mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
 
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
         mBoardObjectManager = ((BoardScreenMainFragment)mBoardScreen.getScreenFragment()).getBoardObjectManager();
     }
 
     void createControllers() {
-        optionsController = new View.OnClickListener() {
+        settingsController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showOptionsDialog();
+                Intent i = new Intent(mActivity.getApplicationContext(), SettingsScreen.class);
+                startActivity(i);
             }
         };
 
@@ -116,63 +115,13 @@ public class BoardButtonsFragment extends Fragment {
                 }
             }
         };
-
-        buildController = new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(mActivity, mBtnBuild);
-
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        mBoardObjectManager.setCurrentBuildItem(item);
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        };
     }
 
     void initializeControllers() {
-        mBtnOptions.setOnClickListener(optionsController);
+        mBtnOptions.setOnClickListener(settingsController);
         mBtnEndTurn.setOnClickListener(endTurnController);
         mBtnTrade.setOnClickListener(tradeController);
         mBtnBuild.setOnClickListener(buildController);
-    }
-
-    public void showOptionsDialog() {
-        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(mActivity);
-
-        alertOptionsDialog.setTitle("Options");
-        alertOptionsDialog.setCancelable(false);
-
-        alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), OptionsScreen.class);
-                startActivity(i);
-            }
-        });
-
-        alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), GameRules.class);
-                startActivity(i);
-            }
-        });
-
-        alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                createToast("Game Saved!", false);
-            }
-        });
-
-        alertOptionsDialog.show();
     }
 
     public void showEndTurnDialog() {
@@ -204,7 +153,7 @@ public class BoardButtonsFragment extends Fragment {
         dice2 = viceDice.getSecondDice();
 
         ImageView outputdice1 = new ImageView(mActivity);
-        outputdice1.setId((int)System.currentTimeMillis());
+        outputdice1.setId((int) System.currentTimeMillis());
 
 
 
