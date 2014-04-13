@@ -40,7 +40,6 @@ public class BoardButtonsFragment extends Fragment {
     //Buttons
     private Button mBtnSettings;
     private Button mBtnEndTurn;
-    private Button mBtnBuild;
     private Button mBtnTrade;
 
     //Controllers
@@ -82,7 +81,6 @@ public class BoardButtonsFragment extends Fragment {
 
     void initializeViewElements(View v) {
         mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
-        mBtnBuild = (Button)v.findViewById(R.id.buildButton);
         mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
         mBtnSettings = (Button)v.findViewById(R.id.optionsButton);
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
@@ -124,7 +122,7 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     //new stuff for settings btn
-    @Override
+
     public boolean onCreateSettingsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
