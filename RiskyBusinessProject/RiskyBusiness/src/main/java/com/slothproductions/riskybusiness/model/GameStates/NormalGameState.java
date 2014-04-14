@@ -28,6 +28,11 @@ public class NormalGameState implements GameState {
     }
 
     @Override
+    public void startTurn() {
+        // immediately roll dice
+    }
+
+    @Override
     public void rollDice() {
         // takes the result of the dice roll and results in collection
         // of resources on the main board. This method will consult the models,
@@ -41,9 +46,23 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void build() {
-        // TODO: change the arguments and change this to call the effect change
-        // on a player class
+    public void buildRoad() {
+        // TODO package the BUILD_ROAD GameAction and effect it
+    }
+
+    @Override
+    public void buildSettlement() {
+        // TODO package the BUILD_SETTLEMENT GameAction and effect it
+    }
+
+    @Override
+    public void buildCity() {
+        // TODO package the BUILD_CITY GameAction and effect it
+    }
+
+    @Override
+    public void buildMilitaryUnit() {
+        // TODO package the BUILD_MILITARY_UNIT and effect it
     }
 
     @Override

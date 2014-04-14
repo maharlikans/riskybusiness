@@ -30,13 +30,36 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
+    public void startTurn() {
+        // force buildSettlement
+        // force collectResources
+        // force endTurn
+    }
+
+    @Override
     public void rollDice() {
         // DOES NOTHING, potentially throw exception
     }
 
     @Override
-    public void build() {
-        // TODO not sure yet
+    public void buildRoad() {
+        // TODO package the BUILD_ROAD GameAction here
+    }
+
+    @Override
+    public void buildSettlement() {
+        // TODO package the BUILD_SETTLEMENT GameAction here
+        // COLLECT RESOURCES HERE
+    }
+
+    @Override
+    public void buildCity() {
+        // do nothing
+    }
+
+    @Override
+    public void buildMilitaryUnit() {
+        // do nothing
     }
 
     @Override
@@ -63,6 +86,7 @@ public class BackwardBeginningGameState implements GameState {
         // if not,
         //     mCurrentPlayer = /*pop from the player stack*/;
         //     display their resources on the game board
+        //     force turn to begin
     }
 
     public void setPlayerStack(Stack<Player> playerStack) {

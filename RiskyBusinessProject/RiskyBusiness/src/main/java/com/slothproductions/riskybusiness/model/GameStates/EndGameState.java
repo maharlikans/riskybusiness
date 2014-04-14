@@ -19,13 +19,33 @@ public class EndGameState implements GameState {
     }
 
     @Override
+    public void startTurn() {
+        // DO NOTHING
+    }
+
+    @Override
     public void rollDice() {
         // DO NOTHING
     }
 
     @Override
-    public void build() {
-        // DO NOTHING
+    public void buildRoad() {
+        // do nothing
+    }
+
+    @Override
+    public void buildSettlement() {
+        // do nothing
+    }
+
+    @Override
+    public void buildCity() {
+        // do nothing
+    }
+
+    @Override
+    public void buildMilitaryUnit() {
+        // do nothing
     }
 
     @Override

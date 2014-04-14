@@ -17,7 +17,7 @@ import java.util.Queue;
  *
  */
 public class GameLoop {
-    BoardScreen mBoardScreen; // access to the main activity... what will we do with this?
+    BoardScreen mBoardScreen;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;

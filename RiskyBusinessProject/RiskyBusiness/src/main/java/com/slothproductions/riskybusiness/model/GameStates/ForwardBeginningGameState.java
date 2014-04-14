@@ -20,6 +20,9 @@ public class ForwardBeginningGameState implements GameState{
 
         // TODO: know some sort of ordering to the players
         // via a queue?
+
+        // force this player to start the turn
+        startTurn();
     }
 
     @Override
@@ -30,15 +33,36 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
+    public void startTurn() {
+        // TODO force buildSettlement
+        // force buildRoad
+        // force endTurn
+    }
+
+    @Override
     public void rollDice() {
         // DOES NOTHING
         // TODO: potentially throw exception
     }
 
     @Override
-    public void build() {
-        // TODO: change the arguments and change this to call the effect change
-        // on a player class
+    public void buildRoad() {
+        // TODO package the BUILD_ROAD GameAction here
+    }
+
+    @Override
+    public void buildSettlement() {
+        // TODO package the BUILD_SETTLEMENT GameAction here
+    }
+
+    @Override
+    public void buildCity() {
+        // DO NOTHING
+    }
+
+    @Override
+    public void buildMilitaryUnit() {
+        // DO NOTHING
     }
 
     @Override
@@ -66,5 +90,6 @@ public class ForwardBeginningGameState implements GameState{
         // if not,
         //     mCurrentPlayer = /*pop from the player queue*/;
         //     display their resources on the game board
+        //     force turn to begin
     }
 }

@@ -8,8 +8,12 @@ public interface GameState {
     // TODO: make the parameters reflect what the GameState actually needs
     // to successfully update the models
     void init();
+    void startTurn();
     void rollDice();
-    void build();
+    void buildRoad();
+    void buildSettlement();
+    void buildCity();
+    void buildMilitaryUnit();
     void trade();
     void moveSoldier();
     void attackWithSoldier();
