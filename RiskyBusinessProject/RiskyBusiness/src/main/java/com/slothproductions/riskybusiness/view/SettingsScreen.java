@@ -17,7 +17,7 @@ public class SettingsScreen extends Activity {
     private Toast mLastToast;
 
     // View objects
-    Button options, htp, save, rtg;
+    Button options, htp, save;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,6 @@ public class SettingsScreen extends Activity {
         options = (Button)findViewById(R.id.optionsButton);
         htp = (Button)findViewById(R.id.htpButton);
         save = (Button)findViewById(R.id.saveButton);
-        rtg = (Button)findViewById(R.id.rtgButton);
 
         options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,12 +54,7 @@ public class SettingsScreen extends Activity {
             }
         });
 
-        rtg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
     }
 
     void createToast(String text, boolean isLong) {
