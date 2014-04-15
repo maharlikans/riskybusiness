@@ -279,8 +279,12 @@ public class BoardButtonsFragment extends Fragment {
 
         //Here we need to check what actions are available on the vertex before inflating the menu.
         //this is also determined by which player is currently playing
-        //if an action is available, itw ill be shown, otherwise it wont be shown.
-        //if no actions are available, a toast will display saying there are no actions available at that vertex.
+        //remove all items from the menu
+        //get available actions from vertex.
+        //iterate through list of available actions
+        //switch on the available actions
+        //add each available action to the menu by id
+        //if no actions are available, create toast saying no actions available for that vertex
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeItem(R.id.road);
 

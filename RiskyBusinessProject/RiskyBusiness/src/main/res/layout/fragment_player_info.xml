@@ -111,8 +111,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_wood"
-            android:textSize="18sp"/>
+            android:text="0"
+            android:textSize="18sp"
+            android:id="@+id/num_wood"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -124,8 +125,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_brick"
-            android:textSize="18sp"/>
+            android:text="0"
+            android:textSize="18sp"
+            android:id="@+id/num_brick"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -137,8 +139,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_wool"
-            android:textSize="18sp"/>
+            android:text="0"
+            android:textSize="18sp"
+            android:id="@+id/num_wool"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -151,8 +154,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_ore"
-            android:textSize="18sp"/>
+            android:text="0"
+            android:textSize="18sp"
+            android:id="@+id/num_ore"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -164,8 +168,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_grain"
-            android:textSize="18sp"/>
+            android:text="0"
+            android:textSize="18sp"
+            android:id="@+id/num_grain"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -177,8 +182,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/num_gold"
+            android:text="0"
             android:textSize="18sp"
+            android:id="@+id/num_gold"
             android:paddingRight="8dp"/>
 
 
