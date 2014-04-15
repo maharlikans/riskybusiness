@@ -9,6 +9,7 @@ import com.slothproductions.riskybusiness.view.BoardScreen;
 import com.slothproductions.riskybusiness.view.BoardScreenMainFragment;
 
 
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -32,6 +33,9 @@ public class GameLoop {
 
     public GameLoop(BoardScreen boardScreen) {
         mBoardScreen = boardScreen;
+
+        // Board will continue to be initialized in the BoardScreenMainFragment
+        // not the best, but whatever dude
         mBoard = ((BoardScreenMainFragment)boardScreen.getScreenFragment()).getBoardData();
 
         mForwardBeginningGameState = new ForwardBeginningGameState(this);
@@ -39,17 +43,21 @@ public class GameLoop {
         mNormalGameState = new NormalGameState(this);
         mEndGameState = new EndGameState(this);
 
-        // take the player list and populate the queue with it
+        // populate the player queue correctly
+        List<Player> playersList = mBoard.getPlayers();
+        for (Player p : playersList) {
+            mPlayerQueue.offer(p);
+        }
 
-
-        // take the board object and initialize it
-
+        // only reason I use this instead of just changing the game state is because the game state
+        // must not only be changed, init() must also be called on the game state, which is built
+        // into the setCurrentGameState function.
         setCurrentGameState(mForwardBeginningGameState);
     }
 
     // ALL BELOW TODO
     public void rollDice(/* some arguments*/) {
-        mCurrentGameState.rollDice(/*some arguments*/);
+        mCurrentGameState.startTurn(/*some arguments*/);
     }
 
     public void buildRoad(/* some arguments*/) {
@@ -73,7 +81,7 @@ public class GameLoop {
     }
 
     public void moveSoldier(/*some arguments*/) {
-        mCurrentGameState.moveSoldier(/*some arguments*/);
+        mCurrentGameState.moveSoldier(,/*some arguments*/);
     }
 
     public void attackWithSoldier(/*some arguments*/) {

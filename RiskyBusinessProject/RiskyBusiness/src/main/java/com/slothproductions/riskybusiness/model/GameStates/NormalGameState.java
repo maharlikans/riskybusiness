@@ -1,11 +1,12 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
+import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 /**
  * Created by Kyle Maharlika on 4/4/2014.
@@ -28,12 +29,12 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void startTurn() {
+    public void startTurn(int rollResult) {
         // immediately roll dice
     }
 
     @Override
-    public void rollDice() {
+    public void startTurn() {
         // takes the result of the dice roll and results in collection
         // of resources on the main board. This method will consult the models,
         // and then find out which people need to collect resources. Then
@@ -46,38 +47,38 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void buildRoad() {
+    public void buildRoad(Edge edge) {
         // TODO package the BUILD_ROAD GameAction and effect it
     }
 
     @Override
-    public void buildSettlement() {
+    public void buildSettlement(Vertex vertex) {
         // TODO package the BUILD_SETTLEMENT GameAction and effect it
     }
 
     @Override
-    public void buildCity() {
+    public void buildCity(Vertex vertex) {
         // TODO package the BUILD_CITY GameAction and effect it
     }
 
     @Override
-    public void buildMilitaryUnit() {
+    public void buildMilitaryUnit(Vertex vertex) {
         // TODO package the BUILD_MILITARY_UNIT and effect it
     }
 
     @Override
-    public void trade() {
+    public void trade(Player other) {
         // TODO: change the arguments and change this to call the effect change
         // on a player class
     }
 
     @Override
-    public void moveSoldier() {
+    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
         // TODO: change the arguments and change this to call the effect change
     }
 
     @Override
-    public void attackWithSoldier() {
+    public void attackWithSoldier(Vertex vertex) {
         // TODO: change the arguments and change this to call the effect change
     }
 

@@ -1,7 +1,9 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
+import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.Stack;
 
@@ -31,50 +33,50 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void startTurn() {
+    public void startTurn(int rollResult) {
         // force buildSettlement
         // force collectResources
         // force endTurn
     }
 
     @Override
-    public void rollDice() {
+    public void startTurn() {
         // DOES NOTHING, potentially throw exception
     }
 
     @Override
-    public void buildRoad() {
+    public void buildRoad(Edge edge) {
         // TODO package the BUILD_ROAD GameAction here
     }
 
     @Override
-    public void buildSettlement() {
+    public void buildSettlement(Vertex vertex) {
         // TODO package the BUILD_SETTLEMENT GameAction here
         // COLLECT RESOURCES HERE
     }
 
     @Override
-    public void buildCity() {
+    public void buildCity(Vertex vertex) {
         // do nothing
     }
 
     @Override
-    public void buildMilitaryUnit() {
+    public void buildMilitaryUnit(Vertex vertex) {
         // do nothing
     }
 
     @Override
-    public void trade() {
+    public void trade(Player other) {
         // TODO not sure yet
     }
 
     @Override
-    public void moveSoldier() {
+    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
         // TODO not sure yet
     }
 
     @Override
-    public void attackWithSoldier() {
+    public void attackWithSoldier(Vertex vertex) {
         // TODO not sure yet
     }
 
