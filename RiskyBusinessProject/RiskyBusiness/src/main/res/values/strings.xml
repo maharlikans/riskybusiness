@@ -41,6 +41,8 @@
     <string name="num_grain">0</string>
     <string name="num_gold">0</string>
     <string name="num_brick">0</string>
+    <string name="vp">VP: </string>
+    <string name="num_resources">R: </string>
 
 
     <string-array name="player_names">
