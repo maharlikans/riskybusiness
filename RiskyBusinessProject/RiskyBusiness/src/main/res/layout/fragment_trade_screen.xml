@@ -279,13 +279,13 @@
         android:orientation="horizontal"
         android:layout_margin="50dp">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/request_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/requesttradebutton"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/confirm_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -298,7 +298,7 @@
             android:text="@string/counter_trade"
             android:visibility="gone"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/cancel_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
