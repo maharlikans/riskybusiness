@@ -14,8 +14,8 @@
         android:id="@+id/hexParent">
 
         <ImageView
-            android:layout_width="1280dp"
-            android:layout_height="752dp"
+            android:layout_width="2560px"
+            android:layout_height="1504px"
             android:src="@drawable/background"/>
 
         <ImageView
