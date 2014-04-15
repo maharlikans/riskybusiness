@@ -107,7 +107,7 @@ public class BoardButtonsFragment extends Fragment {
             }
         };
 
-        endTurnController = new View.OnClickListener() {
+        /*endTurnController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                if (mBtnEndTurn.getText().equals("End Turn")) {
@@ -116,7 +116,7 @@ public class BoardButtonsFragment extends Fragment {
                   showRollDialog();
 //                }
             }
-        };
+        };*/
     }
 
     void initializeControllers() {
@@ -156,7 +156,6 @@ public class BoardButtonsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 createToast("Turn Ended", false);
 //                mBtnEndTurn.setText("Roll Dice");
-
             }
         });
 
@@ -258,7 +257,8 @@ public class BoardButtonsFragment extends Fragment {
 
         }
 
-//        mBtnEndTurn.setText("End Turn");
+       // mBtnEndTurn.setText("End Turn");
+
     }
 
     //Popup for use with corner objects
