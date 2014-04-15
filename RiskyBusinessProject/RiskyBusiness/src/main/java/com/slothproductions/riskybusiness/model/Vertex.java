@@ -87,15 +87,47 @@ public class Vertex implements java.io.Serializable {
     }
 
     final protected boolean isAdjacent(Vertex v) {
-        int s = hexagons.size();
-        if (s >= 2 && v.hexagons.size() >= 2) {
-            for (int i=0, c=0; i<s;i++) {
-                if (v.hexagons.contains(hexagons.get(i)) && ++c==2) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return true;
+//        int s = hexagons.size();
+//        if (s > v.hexagons.size())
+//            return v.isAdjacent(this);
+//        if (s == 1) {
+//            if (v.hexagons.size() == 1)
+//                return hexagons.get(0) == v.hexagons.get(0);
+//            else if (v.hexagons.size() == 3)
+//                return false;
+//            else {
+//                ArrayList<Vertex> oneHex = new ArrayList<Vertex>();
+//                ArrayList<Vertex> twoHex = new ArrayList<Vertex>();
+//                for (Vertex vertex : hexagons.get(0).vertices)
+//                    if (vertex.hexagons.size() == 1 && vertex != this)
+//                        oneHex.add(vertex);
+//                    else if (vertex.hexagons.size() == 2)
+//                        twoHex.add(vertex);
+//                Vertex upper, lower;
+//                if (twoHex.get(0).index > twoHex.get(1).index) {
+//                    upper = twoHex.get(0);
+//                    lower = twoHex.get(1);
+//                } else {
+//                    upper = twoHex.get(1);
+//                    lower = twoHex.get(0);
+//                }
+//                if (oneHex.size() == 0)
+//                    return twoHex.contains(v);
+//                else
+//                    if (oneHex.get(0).index > index)
+//                        return v == lower;
+//                    else
+//                        return v == upper;
+//            }
+//        } else {
+//            for (int i = 0, c = 0; i < s; i++) {
+//                if (v.hexagons.contains(hexagons.get(i)) && ++c == 2) {
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
     }
 
     // Used to check if settlement can be placed at a given vertex

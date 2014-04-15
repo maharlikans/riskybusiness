@@ -38,6 +38,7 @@ public class Board implements java.io.Serializable {
     }
 
     public Board (String [] playerNames) {
+        Log.d(TAG, "Generating board");
         prng = new SecureRandom();
         vertices = new ArrayList<Vertex>();
         edges = new ArrayList<Edge>();
@@ -50,6 +51,10 @@ public class Board implements java.io.Serializable {
         int radius = 3;
 
         Resource[] resources = generateResources(radius);
+        int goldIndex = 0;
+        for (int counter = 0; counter < resources.length; counter++)
+            if (resources[counter] == Resource.GOLD)
+                goldIndex = counter;
 
         // Initializing values for the innermost ring with a single hex. This
         // is done manually as there is no pattern for this one.
@@ -87,7 +92,7 @@ public class Board implements java.io.Serializable {
         int elements = hexes.size();
 
         Log.d(TAG, "Generating Rolls");
-        int[] rolls = generateRolls();
+        int[] rolls = generateRolls(goldIndex);
         Log.d(TAG, "Finished Generating Rolls");
         for (int counter = 0; counter < elements; counter++)
             hexes.get(counter).setRoll(rolls[counter]);
@@ -134,6 +139,12 @@ public class Board implements java.io.Serializable {
             }
         }
         Log.d(TAG, "Finished Generating Vertices");
+        for (Vertex v : vertices) {
+            Log.d(TAG, "Vertex " + v.index);
+            for (Hex h : v.hexagons)
+                if (h != null)
+                    Log.d(TAG, "Adjacent to hex " + h.index);
+        }
 
         Log.d(TAG, "Generating Edges");
         for (int i1 = 0; i1 < vertices.size(); i1++) {
@@ -149,6 +160,11 @@ public class Board implements java.io.Serializable {
                     edges.add(new Edge(edges.size(), shared.get(0), shared.get(1), v1, v2));
                 }
             }
+        }
+        for (Edge e : edges) {
+            Log.d(TAG, "Edge " + e.index + " is adjacent to hexes " + e.hexagons.get(0).index + ", "
+                    + e.hexagons.get(1).index + " and vertices " + e.vertices.get(0).index + ", "
+                    + e.vertices.get(1).index);
         }
 
         Log.d(TAG, "Finished Generating Edges");
@@ -220,58 +236,60 @@ public class Board implements java.io.Serializable {
         return resources;
     }
 
-    private int[] generateRolls() {
-        int[] rollsArray = {
-                8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
-        };
+    private int[] generateRolls(int goldIndex) {
+//        int[] rollsArray = {
+//                8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
+//        };
+//
+//        ArrayList<Integer> rolls = new ArrayList<Integer>();
+//        for (int i : rollsArray)
+//            rolls.add(i);
+//        Collections.shuffle(rolls);
+//        rolls.add(0, 7);
+//
+//        for (int i = 0; i <19; i ++) {
+//            if (hexes.get(i).type == Resource.GOLD){
+//                int temp = rolls.get(i);
+//                rolls.set(0, temp);
+//                rolls.set(i, 7);
+//                Log.d(TAG, "Gold Roll Value Added");
+//            }
+//        }
+//
+//        int[] rollsArr = new int[19];
+//
+//        //move shuffled rolls arraylist to a rollsArr[] int for returning
+//        for (int i = 0; i < 19; i++) {
+//            rollsArr[i] = rolls.get(i);
+//        }
+//
+//        return rollsArr;
 
-        ArrayList<Integer> rolls = new ArrayList<Integer>();
-        for (int i : rollsArray)
-            rolls.add(i);
-        Collections.shuffle(rolls);
-        rolls.add(0, 7);
-
-        for (int i = 0; i <19; i ++) {
-            if (hexes.get(i).type == Resource.GOLD){
-                int temp = rolls.get(i);
-                rolls.set(0, temp);
-                rolls.set(i, 7);
-                Log.d(TAG, "Gold Roll Value Added");
-            }
-        }
-
-        int[] rollsArr = new int[19];
-
-        //move shuffled rolls arraylist to a rollsArr[] int for returning
-        for (int i = 0; i < 19; i++) {
-            rollsArr[i] = rolls.get(i);
-        }
-
-        return rollsArr;
-
-        /* the code that doesnt work
         int[] rollsArray = {
                 2, 3, 3, 4, 4, 5, 5, 9, 9, 10, 10, 11, 11, 12
         };
 
         int elements = hexes.size();
+        Log.d(TAG, "Generating " + elements + " die rolls.");
 
         HashSet<Integer> invalid = new HashSet<Integer>();
+        invalid.add(goldIndex);
         ArrayList<Integer> sixOrEight = new ArrayList<Integer>();
         for (int counter = 0; counter < 4; counter++) {
             int index = prng.nextInt(elements);
             while (invalid.contains(index)) {
                 index = prng.nextInt(elements);
             }
-            invalid.add(index);
+            sixOrEight.add(index);
             for (Hex h : hexes.get(index).adjacent)
                 invalid.add(h.index);
+            invalid.add(index);
         }
 
-        int goldIndex = 0;
-        for (Hex h : hexes)
-            if (h.type == Resource.GOLD)
-                goldIndex = h.index;
+        Log.d(TAG, "Locations of six or 8:");
+        for (int i : sixOrEight)
+            Log.d(TAG, "Hex " + i + " is a 6 or 8");
+        Log.d(TAG, "Gold is located at hex " + goldIndex);
 
 
         int ret[] = new int[elements];
@@ -289,7 +307,6 @@ public class Board implements java.io.Serializable {
         }
 
         return ret;
-        */
     }
 
     protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
