@@ -6,23 +6,23 @@
     android:layout_height="match_parent"
     android:id="@+id/BoardButtons">
 
-    <ImageButton
-        android:layout_width="150dp"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/settingsbutton"
         android:id="@+id/settingsButton"
         android:layout_alignParentRight="true"/>
 
-    <ImageButton
-        android:layout_width="150dp"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/tradebutton"
         android:id="@+id/tradeButton"
         android:layout_alignParentRight="true"
         android:layout_below="@id/settingsButton"/>
 
-   <ImageButton
-       android:layout_width="150dp"
+   <ImageView
+       android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:src="@drawable/endturnbutton"
        android:id="@+id/endTurnButton"
