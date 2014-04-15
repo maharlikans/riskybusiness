@@ -21,7 +21,8 @@
     <string name="confirm_trade">Confirm Trade</string>
     <string name="counter_trade">Counter Trade</string>
     <string name="cancel_trade">Cancel Trade</string>
-    <string name="sound">Sound</string>
+    <string name="music_volume">Music Volume</string>
+    <string name="sound_effects_volume">Sound Effects Volume</string>
     <string name="human">Human</string>
     <string name="computer">Computer</string>
     <string name="title_game_setup_screen">Game Setup</string>
