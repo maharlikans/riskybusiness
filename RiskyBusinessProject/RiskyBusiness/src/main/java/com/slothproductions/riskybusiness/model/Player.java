@@ -67,4 +67,22 @@ final public class Player implements java.io.Serializable {
         /* TODO: Encapsulate any necessary exceptions */
         return board.effect(this, action, arguments);
     }
+
+    protected void addResources(ArrayList<Resource> gains) {
+        for (Resource r : gains)
+            resources.put(r, resources.get(r) + 1);
+    }
+
+    public ArrayList<GameAction> getActions(Vertex v) {
+        ArrayList<GameAction> actions = new ArrayList<GameAction>();
+        if (v.building.type == BuildingType.EMPTY) {
+            boolean canBuild = true;
+            for (Vertex vertex : v.adjacent)
+                if (vertex.building.type != BuildingType.EMPTY)
+                    canBuild = false;
+            if (canBuild)
+                actions.add(GameAction.BUILD_SETTLEMENT);
+        }
+        return actions;
+    }
 }

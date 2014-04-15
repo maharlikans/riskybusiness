@@ -17,15 +17,18 @@ public class Building implements java.io.Serializable {
     }
 
     final protected BuildingType type;
-    final protected Hex hex;
     private int health;
     final public ImmutableBuilding immutable;
 
 
-    public Building(Hex h, BuildingType t) {
+    public Building(BuildingType t) {
         type = t;
-        hex = h;
-        health = 5;
+        if (t == BuildingType.CITY)
+            health = 10;
+        else if (t == BuildingType.SETTLEMENT)
+            health = 5;
+        else
+            health = 0;
         immutable = new ImmutableBuilding();
     }
 
