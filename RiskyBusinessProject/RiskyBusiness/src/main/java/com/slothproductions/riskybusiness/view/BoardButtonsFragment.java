@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -41,9 +42,9 @@ public class BoardButtonsFragment extends Fragment {
     private ZoomableLayout mHexParent; //This is only used for the Board Object Manager
 
     //Buttons
-    private Button mBtnSettings;
-    private Button mBtnEndTurn;
-    private Button mBtnTrade;
+    private ImageButton mBtnSettings;
+    private ImageButton mBtnEndTurn;
+    private ImageButton mBtnTrade;
 
     //Controllers
     private View.OnClickListener settingsController;
@@ -83,9 +84,9 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     void initializeViewElements(View v) {
-        mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
-        mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnSettings = (Button)v.findViewById(R.id.settingsButton);
+        mBtnTrade = (ImageButton)v.findViewById(R.id.tradeButton);
+        mBtnEndTurn = (ImageButton)v.findViewById(R.id.endTurnButton);
+        mBtnSettings = (ImageButton)v.findViewById(R.id.settingsButton);
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
         mBoardObjectManager = ((BoardScreenMainFragment)mBoardScreen.getScreenFragment()).getBoardObjectManager();
     }
@@ -106,7 +107,7 @@ public class BoardButtonsFragment extends Fragment {
             }
         };
 
-        endTurnController = new View.OnClickListener() {
+        /*endTurnController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBtnEndTurn.getText().equals("End Turn")) {
@@ -115,7 +116,7 @@ public class BoardButtonsFragment extends Fragment {
                     showRollDialog();
                 }
             }
-        };
+        };*/
     }
 
     void initializeControllers() {
@@ -154,7 +155,7 @@ public class BoardButtonsFragment extends Fragment {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 createToast("Turn Ended", false);
-                mBtnEndTurn.setText("Roll Dice");
+              //  mBtnEndTurn.setText("Roll Dice");
 
             }
         });
@@ -257,7 +258,7 @@ public class BoardButtonsFragment extends Fragment {
 
         }
 
-        mBtnEndTurn.setText("End Turn");
+       // mBtnEndTurn.setText("End Turn");
 
 
     }
