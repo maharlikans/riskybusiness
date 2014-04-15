@@ -2,15 +2,16 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
@@ -26,10 +27,26 @@ public class BoardScreen extends FragmentActivity {
 
     private FragmentManager mFragmentManager;
 
+
+    int[] music = {R.raw.song1, R.raw.song2, R.raw.song3, R.raw.song4, R.raw.song5};
+    int nextSong;
+    OnCompletionListener mListener = new OnCompletionListener(){
+        @Override
+        public void onCompletion(MediaPlayer song) {
+            song.release();
+            startNextSong();
+
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board_screen);
+
+        nextSong = 0;
+        startNextSong();
 
         String[] Players = new String [getIntent().getIntExtra("numplayerschosen", 0)];
         String[] defaultPlayers = getResources().getStringArray(R.array.player_names);
@@ -45,6 +62,16 @@ public class BoardScreen extends FragmentActivity {
 
 
     }
+
+    void startNextSong(){
+        if(nextSong > 4) nextSong = 0;
+        if(nextSong < music.length){
+            MediaPlayer song = MediaPlayer.create(BoardScreen.this, music[nextSong++]);
+            song.setOnCompletionListener(mListener);
+            song.start();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
