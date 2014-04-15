@@ -10,6 +10,6 @@ Angela Niu<br>
 Joseph Pecoraro<br>
 Jon Claus<br>
 Ricardo Ivan Vieitez Parra<br>
-Jecob Lehman<br>
+Jacob Lehman<br>
 
 Game Rules, as well as Software Specifications, and Software Design can be found in this repository.
