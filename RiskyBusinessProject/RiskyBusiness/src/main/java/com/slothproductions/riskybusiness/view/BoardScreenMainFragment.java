@@ -276,5 +276,9 @@ public class BoardScreenMainFragment extends Fragment {
     BoardObjectManager getBoardObjectManager() {
         return mBoardObjectManager;
     }
+
+    public Board getBoardData() {
+        return mBoardData;
+    }
 }
 

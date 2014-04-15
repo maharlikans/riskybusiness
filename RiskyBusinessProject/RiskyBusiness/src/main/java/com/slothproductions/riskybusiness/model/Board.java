@@ -18,6 +18,7 @@ import java.util.*;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+// TODO can you provide a getPlayers method so I can have access to the list of players? Thanks!
 public class Board implements java.io.Serializable {
     private static final long serialVersionUID = -915315565L;
     protected class PlayerAccounting implements java.io.Serializable {
@@ -447,5 +448,10 @@ public class Board implements java.io.Serializable {
             /* TODO: Do something */
         }
         return null;
+    }
+
+    // TODO temporary get method
+    public List<Player> getPlayers() {
+        return players;
     }
 }

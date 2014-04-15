@@ -74,13 +74,11 @@ public class NormalGameState implements GameState {
     @Override
     public void moveSoldier() {
         // TODO: change the arguments and change this to call the effect change
-        // on a player class
     }
 
     @Override
     public void attackWithSoldier() {
         // TODO: change the arguments and change this to call the effect change
-        // on a player class
     }
 
     @Override

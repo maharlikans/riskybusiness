@@ -15,7 +15,7 @@ public class ForwardBeginningGameState implements GameState{
 
     public ForwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
-        mCurrentPlayer = /*pop first player in the queue*/;
+        mCurrentPlayer = mGameLoop.getPlayerQueue().poll();
         mPlayerStack = new Stack<Player>();
 
         // TODO: know some sort of ordering to the players

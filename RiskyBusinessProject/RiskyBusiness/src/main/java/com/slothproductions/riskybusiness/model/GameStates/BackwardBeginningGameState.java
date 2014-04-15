@@ -17,9 +17,10 @@ public class BackwardBeginningGameState implements GameState {
     public BackwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
         mPlayerStack = new Stack<Player>();
-        mCurrentPlayer = /*first player pop off the stack*/;
+        mCurrentPlayer = mPlayerStack.pop();
         // TODO: know some sort of ordering to the players
         // via a queue?
+        startTurn();
     }
 
     @Override

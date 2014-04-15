@@ -6,6 +6,7 @@ import com.slothproductions.riskybusiness.model.GameStates.ForwardBeginningGameS
 import com.slothproductions.riskybusiness.model.GameStates.GameState;
 import com.slothproductions.riskybusiness.model.GameStates.NormalGameState;
 import com.slothproductions.riskybusiness.view.BoardScreen;
+import com.slothproductions.riskybusiness.view.BoardScreenMainFragment;
 
 
 import java.util.Queue;
@@ -18,6 +19,9 @@ import java.util.Queue;
  */
 public class GameLoop {
     BoardScreen mBoardScreen;
+    Board mBoard;
+
+    Queue<Player> mPlayerQueue;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
@@ -28,11 +32,17 @@ public class GameLoop {
 
     public GameLoop(BoardScreen boardScreen) {
         mBoardScreen = boardScreen;
+        mBoard = ((BoardScreenMainFragment)boardScreen.getScreenFragment()).getBoardData();
 
         mForwardBeginningGameState = new ForwardBeginningGameState(this);
         mBackwardBeginningGameState = new BackwardBeginningGameState(this);
         mNormalGameState = new NormalGameState(this);
         mEndGameState = new EndGameState(this);
+
+        // take the player list and populate the queue with it
+
+
+        // take the board object and initialize it
 
         setCurrentGameState(mForwardBeginningGameState);
     }
@@ -42,8 +52,20 @@ public class GameLoop {
         mCurrentGameState.rollDice(/*some arguments*/);
     }
 
-    public void build(/*some arguments*/) {
-        mCurrentGameState.build(/*some arguments*/);
+    public void buildRoad(/* some arguments*/) {
+        mCurrentGameState.buildRoad(/* some arguments */);
+    }
+
+    public void buildSettlement(/* some arguments*/) {
+        mCurrentGameState.buildSettlement(/* some arguments*/);
+    }
+
+    public void buildCity(/* some arguments*/) {
+        mCurrentGameState.buildCity(/* some arguments*/);
+    }
+
+    public void buildMilitaryUnit(/* some arguments*/) {
+        mCurrentGameState.buildMilitaryUnit(/* some arguments*/);
     }
 
     public void trade(/*some arguments*/) {
@@ -68,9 +90,11 @@ public class GameLoop {
         return mCurrentGameState;
     }
 
+    // on setting the current game state, must also call init because the state must hide and
+    // show specific buttons on the screen depending on what they'd like to do
     public void setCurrentGameState(GameState currentGameState) {
         mCurrentGameState = currentGameState;
-        mCurrentGameState.init();   // init call will set up UI correctly
+        mCurrentGameState.init();
     }
 
     public ForwardBeginningGameState getForwardBeginningGameState() {
@@ -87,5 +111,13 @@ public class GameLoop {
 
     public EndGameState getEndGameState() {
         return mEndGameState;
+    }
+
+    public Queue<Player> getPlayerQueue() {
+        return mPlayerQueue;
+    }
+
+    public BoardScreen getBoardScreen() {
+        return mBoardScreen;
     }
 }
