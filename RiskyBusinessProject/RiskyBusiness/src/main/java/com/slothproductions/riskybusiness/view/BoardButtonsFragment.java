@@ -178,20 +178,17 @@ public class BoardButtonsFragment extends Fragment {
 
     //TODO: Move the dice to the location of the player that is currently going.
     public void showRollDialog() {
+
         viceDice.roll();
-        dice1 = viceDice.getFirstDice();
-        dice2 = viceDice.getSecondDice();
 
         ImageView outputdice1 = new ImageView(mActivity);
         outputdice1.setId((int)System.currentTimeMillis());
 
-
-
         RelativeLayout.LayoutParams lpDice1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        lpDice1.addRule(RelativeLayout.RIGHT_OF, R.id.player_1_info);
 
-        switch(dice1){
+
+        switch(viceDice.getFirstDice()){
             case 1:
                 outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
                 mButtonsParent.removeView(outputdice1);
@@ -201,10 +198,11 @@ public class BoardButtonsFragment extends Fragment {
                 outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
                 mButtonsParent.removeView(outputdice1);
                 mButtonsParent.addView(outputdice1, lpDice1);
+                break;
             case 3:
                 outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
                 mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);        //Crashes here?
+                mButtonsParent.addView(outputdice1, lpDice1);
                 break;
             case 4:
                 outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
@@ -227,11 +225,11 @@ public class BoardButtonsFragment extends Fragment {
         outputdice2.setId((int)System.currentTimeMillis()+1);
 
         RelativeLayout.LayoutParams lpDice2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lpDice2.addRule(RelativeLayout.RIGHT_OF, outputdice1.getId());
-        lpDice2.addRule(RelativeLayout.ALIGN_BOTTOM, outputdice1.getId());
+        lpDice2.addRule(RelativeLayout.BELOW, outputdice1.getId());
+        lpDice2.addRule(RelativeLayout.RIGHT_OF, R.id.player_1_info);
 
 
-        switch (dice2) {
+        switch (viceDice.getSecondDice()) {
             case 1:
                 outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
                 mButtonsParent.removeView(outputdice2);
