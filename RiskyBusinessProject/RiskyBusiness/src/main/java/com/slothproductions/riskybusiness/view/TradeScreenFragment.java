@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.view;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.View.R;
 
@@ -23,7 +25,7 @@ public class TradeScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_trade_screen, parent, false);
-        Button cancelButton = (Button)v.findViewById(R.id.cancel_trade_button);
+        ImageView cancelButton = (ImageView)v.findViewById(R.id.cancel_trade_button);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

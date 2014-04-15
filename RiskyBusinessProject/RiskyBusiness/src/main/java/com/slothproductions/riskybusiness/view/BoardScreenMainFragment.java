@@ -75,7 +75,6 @@ public class BoardScreenMainFragment extends Fragment {
 
         //Initializing non view elements
         mBoardData = new Board(new String[]{"Player1", "Player2", "Player3", "Player4"});
-
         Log.d("TAG", "onCreate completed");
     }
 
@@ -88,6 +87,8 @@ public class BoardScreenMainFragment extends Fragment {
         //initialize variables based on the activity of superclass
         mActivity = getActivity();
         mBoardScreen = (BoardScreen)mActivity;
+
+        mBoardData = mBoardScreen.getBoard();
 
         //map the layouts in the view to the class variables
         mHexParent = (ZoomableLayout)v.findViewById(R.id.hexParent);
@@ -120,14 +121,13 @@ public class BoardScreenMainFragment extends Fragment {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 Log.d(TAG, "Single Tap Detected");
-                mBoardObjectManager.BuildItem(e);
+                mBoardObjectManager.findMenu(e);
                 Log.d(TAG, "Item Built");
                 return super.onSingleTapConfirmed(e);
             }
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float x, float y) {
-                Log.d(TAG, "Scroll Detected");
                 mHexParent.Pan(e1, x, y);
                 return super.onScroll(e1, e2, x, y);
             }

@@ -43,15 +43,16 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res1"
+            android:src="@drawable/bricktradeicon"
+            android:id="@+id/bricktradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+           />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -83,15 +84,16 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res2"
+            android:src="@drawable/goldtradeicon"
+            android:id="@+id/goldtradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+         />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -123,15 +125,15 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res3"
+            android:src="@drawable/oretradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+           />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -163,15 +165,15 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res4"
+            android:src="@drawable/sheeptradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+            />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -203,15 +205,15 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res5"
+            android:src="@drawable/wheattradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+           />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -243,15 +245,15 @@
             android:text="@string/plus"
             android:textSize="@dimen/trade_text_size"/>
 
-        <TextView
+        <ImageView
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/res6"
+            android:src="@drawable/woodtradeicon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="50dp"
             android:minWidth="100dp"
-            android:textSize="@dimen/trade_text_size"/>
+            />
 
         <TextView
             android:layout_marginLeft="24dp"
@@ -277,17 +279,17 @@
         android:orientation="horizontal"
         android:layout_margin="50dp">
 
-        <Button
+        <ImageView
             android:id="@+id/request_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/request_trade"/>
+            android:src="@drawable/requesttradebutton"/>
 
-        <Button
+        <ImageView
             android:id="@+id/confirm_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/confirm_trade"/>
+            android:src="@drawable/confirmtradebutton"/>
 
         <Button
             android:id="@+id/counter_trade_button"
@@ -296,11 +298,11 @@
             android:text="@string/counter_trade"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/cancel_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cancel_trade"/>
+            android:src="@drawable/canceltradebutton"/>
 
     </LinearLayout>
 

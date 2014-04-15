@@ -1,44 +1,32 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.slothproductions.riskybusiness.view.BoardButtonsFragment"
     android:id="@+id/BoardButtons">
 
-    <Button
-        android:layout_width="150dp"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="End Turn"
-        android:id="@+id/endTurnButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:src="@drawable/settingsbutton"
+        android:id="@+id/settingsButton"
+        android:layout_alignParentRight="true"/>
 
-    <Button
-        android:layout_width="150dp"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trade"
+        android:src="@drawable/tradebutton"
         android:id="@+id/tradeButton"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_below="@id/settingsButton"/>
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Options"
-        android:id="@+id/optionsButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Build"
-        android:id="@+id/buildButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@drawable/endturnbutton"
+       android:id="@+id/endTurnButton"
+       android:layout_alignParentRight="true"
+       android:layout_below="@id/tradeButton"/>
 
 </RelativeLayout>

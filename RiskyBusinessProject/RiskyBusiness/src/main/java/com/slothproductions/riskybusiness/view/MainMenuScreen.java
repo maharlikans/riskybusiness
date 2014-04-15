@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
+import android.media.MediaPlayer;
 import com.View.R;
 
 public class MainMenuScreen extends Activity {
@@ -18,13 +18,15 @@ public class MainMenuScreen extends Activity {
     private ImageView mLoadSaved;
     private ImageView mOptions;
     private ImageView mStartNew;
+    MediaPlayer song;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
 
-
+        song = MediaPlayer.create(MainMenuScreen.this, R.raw.mainmenusong);
+        song.start();
         //Deals with the Start Button
         mStartNew = (ImageView)findViewById(R.id.start_new);
         mStartNew.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +34,7 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to main menu activity
                 Intent i = new Intent(MainMenuScreen.this, GameSetupScreen.class);
+                song.release(); //stops song
                 startActivity(i);
             }
         });
@@ -44,6 +47,7 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Game Rules activity
                 Intent i = new Intent(MainMenuScreen.this, GameRules.class);
+                song.release();
                 startActivity(i);
             }
         });
@@ -55,6 +59,7 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Options Activity
                 Intent i = new Intent(MainMenuScreen.this, OptionsScreen.class);
+                song.release();
                 startActivity(i);
             }
         });

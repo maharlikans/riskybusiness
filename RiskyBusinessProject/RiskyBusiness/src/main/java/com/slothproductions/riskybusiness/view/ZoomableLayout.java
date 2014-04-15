@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.nfc.Tag;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -100,7 +101,6 @@ public class ZoomableLayout extends RelativeLayout {
      * @return true if the image could be panned, false if both the x and y bounds have been reached, and the image cannot be panned;
      */
     public boolean Pan(MotionEvent start, float x, float y) {
-        Log.d(TAG, "Panning");
         //this is to account for a difference in scale factor, so the pan is always the same speed
         x = 3*(x/mScaleFactorX);
         y = 3*(y/mScaleFactorY);
@@ -221,7 +221,6 @@ public class ZoomableLayout extends RelativeLayout {
 
     @Override
     public void onDraw(Canvas canvas) {
-        Log.d(TAG, "Drawing");
         super.onDraw(canvas);
         canvas.scale(mScaleFactorX, mScaleFactorY, mCurrentCenterX, mCurrentCenterY);
         canvas.save();
@@ -232,7 +231,6 @@ public class ZoomableLayout extends RelativeLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(TAG, "Measuring");
         if (!defaultDimensionsSet) {
             setDimensions();
         }

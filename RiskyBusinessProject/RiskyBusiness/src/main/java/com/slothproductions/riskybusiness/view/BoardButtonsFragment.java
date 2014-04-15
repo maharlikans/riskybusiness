@@ -2,18 +2,19 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -21,7 +22,10 @@ import android.widget.Toast;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
+import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.Vertex;
 
 public class BoardButtonsFragment extends Fragment {
 
@@ -38,15 +42,13 @@ public class BoardButtonsFragment extends Fragment {
     private ZoomableLayout mHexParent; //This is only used for the Board Object Manager
 
     //Buttons
-    private Button mBtnOptions;
-    private Button mBtnEndTurn;
-    private Button mBtnBuild;
-    private Button mBtnTrade;
+    private ImageView mBtnSettings;
+    private ImageView mBtnEndTurn;
+    private ImageView mBtnTrade;
 
     //Controllers
-    private View.OnClickListener optionsController;
+    private View.OnClickListener settingsController;
     private View.OnClickListener endTurnController;
-    private View.OnClickListener buildController;
     private View.OnClickListener tradeController;
 
     //Last toast variable is kept track of in order to cancel last toast upon creating new one
@@ -82,20 +84,19 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     void initializeViewElements(View v) {
-        mBtnTrade = (Button)v.findViewById(R.id.tradeButton);
-        mBtnBuild = (Button)v.findViewById(R.id.buildButton);
-        mBtnEndTurn = (Button)v.findViewById(R.id.endTurnButton);
-        mBtnOptions = (Button)v.findViewById(R.id.optionsButton);
-
+        mBtnTrade = (ImageView)v.findViewById(R.id.tradeButton);
+        mBtnEndTurn = (ImageView)v.findViewById(R.id.endTurnButton);
+        mBtnSettings = (ImageView)v.findViewById(R.id.settingsButton);
         mButtonsParent = (RelativeLayout)v.findViewById(R.id.BoardButtons);
         mBoardObjectManager = ((BoardScreenMainFragment)mBoardScreen.getScreenFragment()).getBoardObjectManager();
     }
 
     void createControllers() {
-        optionsController = new View.OnClickListener() {
+        settingsController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showOptionsDialog();
+                Intent i = new Intent(mActivity.getApplicationContext(), SettingsScreen.class);
+                startActivity(i);
             }
         };
 
@@ -106,73 +107,43 @@ public class BoardButtonsFragment extends Fragment {
             }
         };
 
-        endTurnController = new View.OnClickListener() {
+        /*endTurnController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBtnEndTurn.getText().equals("End Turn")) {
-                    showEndTurnDialog();
-                } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
-                    showRollDialog();
-                }
+//                if (mBtnEndTurn.getText().equals("End Turn")) {
+                  showEndTurnDialog();
+//                } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
+                  showRollDialog();
+//                }
             }
-        };
-
-        buildController = new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(mActivity, mBtnBuild);
-
-                //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        mBoardObjectManager.setCurrentBuildItem(item);
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        };
+        };*/
     }
 
     void initializeControllers() {
-        mBtnOptions.setOnClickListener(optionsController);
+        mBtnSettings.setOnClickListener(settingsController);
         mBtnEndTurn.setOnClickListener(endTurnController);
         mBtnTrade.setOnClickListener(tradeController);
-        mBtnBuild.setOnClickListener(buildController);
     }
 
-    public void showOptionsDialog() {
-        AlertDialog.Builder alertOptionsDialog = new AlertDialog.Builder(mActivity);
+    //new stuff for settings btn
 
-        alertOptionsDialog.setTitle("Options");
-        alertOptionsDialog.setCancelable(false);
+    public boolean onCreateSettingsMenu(Menu menu) {
 
-        alertOptionsDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), OptionsScreen.class);
-                startActivity(i);
-            }
-        });
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getActivity().getMenuInflater().inflate(R.menu.settings_screen, menu);
+        return true;
+    }
 
-        alertOptionsDialog.setNeutralButton("How to Play", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent i = new Intent(mActivity.getApplicationContext(), GameRules.class);
-                startActivity(i);
-            }
-        });
-
-        alertOptionsDialog.setNegativeButton("Save and Return to Game", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                createToast("Game Saved!", false);
-            }
-        });
-
-        alertOptionsDialog.show();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_options) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showEndTurnDialog() {
@@ -184,8 +155,7 @@ public class BoardButtonsFragment extends Fragment {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 createToast("Turn Ended", false);
-                mBtnEndTurn.setText("Roll Dice");
-
+//                mBtnEndTurn.setText("Roll Dice");
             }
         });
 
@@ -198,13 +168,14 @@ public class BoardButtonsFragment extends Fragment {
         alertDialog.show();
     }
 
+    //TODO: Move the dice to the location of the player that is currently going.
     public void showRollDialog() {
         viceDice.roll();
         dice1 = viceDice.getFirstDice();
         dice2 = viceDice.getSecondDice();
 
         ImageView outputdice1 = new ImageView(mActivity);
-        outputdice1.setId((int)System.currentTimeMillis());
+        outputdice1.setId((int) System.currentTimeMillis());
 
 
 
@@ -286,9 +257,78 @@ public class BoardButtonsFragment extends Fragment {
 
         }
 
-        mBtnEndTurn.setText("End Turn");
+       // mBtnEndTurn.setText("End Turn");
 
+    }
 
+    //Popup for use with corner objects
+    public void showPopUp(final Coordinate c, Vertex v) {
+        //TODO: add support for roads, fix everything to work with the board data.
+        //an anchor for the popupmenu to be placed on.
+        ImageView anchor = new ImageView(mActivity);
+        anchor.setId((int)System.currentTimeMillis());
+        anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
+        anchor.setX(c.getUnMappedX());
+        anchor.setY(c.getUnMappedY());
+
+        mButtonsParent.addView(anchor);
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(mActivity, anchor);
+
+        //Here we need to check what actions are available on the vertex before inflating the menu.
+        //this is also determined by which player is currently playing
+        //remove all items from the menu
+        //get available actions from vertex.
+        //iterate through list of available actions
+        //switch on the available actions
+        //add each available action to the menu by id
+        //if no actions are available, create toast saying no actions available for that vertex
+        popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+        popup.getMenu().removeItem(R.id.road);
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mBoardObjectManager.callActionFromMenuSelection(item, c);
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
+    }
+
+    //Popup for use with roads
+    public void showPopUp(final Coordinate c, Edge e) {
+        //TODO: fix everything to work with the board data.
+        //an anchor for the popupmenu to be placed on.
+        ImageView anchor = new ImageView(mActivity);
+        anchor.setId((int)System.currentTimeMillis());
+        anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
+        anchor.setX(c.getUnMappedX());
+        anchor.setY(c.getUnMappedY());
+
+        mButtonsParent.addView(anchor);
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(mActivity, anchor);
+
+        //Here we need to check what actions are available on the vertex before inflating the menu.
+        //this is also determined by which player is currently playing
+        //if an action is available, itw ill be shown, otherwise it wont be shown.
+        //if no actions are available, a toast will display saying there are no actions available at that vertex.
+        popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+        popup.getMenu().removeGroup(R.id.corneritems);
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mBoardObjectManager.callActionFromMenuSelection(item, c);
+                return true;
+            }
+        });
+
+        popup.show();//showing popup menu
     }
 
     void createToast(String text, boolean isLong) {
