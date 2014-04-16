@@ -67,7 +67,6 @@ public class MainMenuScreen extends Activity {
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                song.release();
                 finish();
             }
         });
@@ -86,6 +85,23 @@ public class MainMenuScreen extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menu) {
         return super.onOptionsItemSelected(menu);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        song.release();
+    }
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        //start song back again.
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
 }
