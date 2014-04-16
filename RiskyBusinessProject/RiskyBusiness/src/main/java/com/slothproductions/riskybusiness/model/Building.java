@@ -19,10 +19,15 @@ public class Building implements java.io.Serializable {
     final protected BuildingType type;
     private int health;
     final public ImmutableBuilding immutable;
+    protected int numSoldiersBuilt;
+    protected Player owner;
+    Vertex vertex;
 
 
-    public Building(BuildingType t) {
+    public Building(BuildingType t, Vertex v, Player p) {
         type = t;
+        vertex = v;
+        owner = p;
         if (t == BuildingType.CITY)
             health = 10;
         else if (t == BuildingType.SETTLEMENT)
@@ -30,6 +35,7 @@ public class Building implements java.io.Serializable {
         else
             health = 0;
         immutable = new ImmutableBuilding();
+        numSoldiersBuilt = 0;
     }
 
     public int getHealth() {
@@ -43,4 +49,6 @@ public class Building implements java.io.Serializable {
     final BuildingType getType() {
         return type;
     }
+
+    public void reset() { numSoldiersBuilt = 0;}
 }

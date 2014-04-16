@@ -26,16 +26,16 @@ public class MilitaryUnit implements java.io.Serializable {
     }
 
     final private Player player;
-    private int health;
+    protected int health;
     private Vertex location;
 
     // The amount of soldiers in the 3 states. Should sum to health.
-    private int haveNotMoved;
-    private int haveBonusMoved;
-    private int haveMoved;
+    protected int haveNotMoved;
+    protected int haveBonusMoved;
+    protected int haveMoved;
 
-    public MilitaryUnit(Vertex v) {
-        player = v.owner;
+    public MilitaryUnit(Player p, Vertex v) {
+        player = p;
         location = v;
         health = 1;
         haveNotMoved = 1;
@@ -49,5 +49,11 @@ public class MilitaryUnit implements java.io.Serializable {
 
     public int getHealth() {
         return health;
+    }
+
+    public void reset() {
+        haveNotMoved = health;
+        haveMoved = 0;
+        haveBonusMoved = 0;
     }
 }

@@ -141,8 +141,7 @@ public class Board implements java.io.Serializable {
         }
         for (Vertex v1 : vertices)
             for (Vertex v2 : vertices)
-                if (v1.isAdjacent(v2)) {
-                    Log.d(TAG, v1.index + " is adjacent to " + v2.index);
+                if (v1.index < v2.index && v1.isAdjacent(v2)) {
                     v1.addAdjacent(v2);
                     v2.addAdjacent(v1);
                 }
@@ -152,7 +151,7 @@ public class Board implements java.io.Serializable {
             for (Hex h : v.hexagons)
                 Log.d(TAG, "Adjacent to hex " + h.index);
             for (Vertex vertex : v.adjacent)
-                Log.d(TAG, "Adjacent to vertex " + v.index);
+                Log.d(TAG, "Adjacent to vertex " + vertex.index);
         }
 
         Log.d(TAG, "Generating Edges");
@@ -305,6 +304,16 @@ public class Board implements java.io.Serializable {
         return ret;
     }
 
+    public void beginTurn(int roll) {
+        for (Player p : players) {
+            for (MilitaryUnit mu : p.getMilitaryUnit())
+                mu.reset();
+            for (Building b : p.getBuildings())
+                b.reset();
+        }
+        getResources(roll);
+    }
+
     public void getResources(int roll) {
         ArrayList<Hex> rolled = diceRolls.get(roll);
         HashMap<Player, ArrayList<Resource>> gained = new HashMap<Player, ArrayList<Resource>>();
@@ -312,13 +321,13 @@ public class Board implements java.io.Serializable {
             gained.put(p, new ArrayList<Resource>());
         for (Hex h : rolled) {
             for (Vertex v : h.vertices) {
-                if (v.owner == null)
+                if (v.building.owner == null)
                     continue;
                 if (v.building.type == BuildingType.CITY) {
-                    gained.get(v.owner).add(h.type);
-                    gained.get(v.owner).add(h.type);
+                    gained.get(v.building.owner).add(h.type);
+                    gained.get(v.building.owner).add(h.type);
                 } else if (v.building.type == BuildingType.SETTLEMENT) {
-                    gained.get(v.owner).add(h.type);
+                    gained.get(v.building.owner).add(h.type);
                 }
             }
         }
@@ -368,6 +377,47 @@ public class Board implements java.io.Serializable {
         /* 1. Check for player resources, if not sufficient throw an exception
          * 2. Switch on action
          * */
+
+        if (!player.hasResources(action.resourcesNeeded))
+            throw new InvalidParameterException();
+        player.takeResources(action.resourcesNeeded);
+
+        switch(action) {
+            case BUILD_SETTLEMENT:
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.SETTLEMENT, target, player);
+                break;
+            case BUILD_CITY:
+                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.CITY, target, player);
+                break;
+            case BUILD_ROAD:
+                Edge e = edges.get(((Edge.ImmutableEdge) arguments.get("edge")).getIndex());
+                e.owner = player;
+                e.road = true;
+                break;
+            case BUILD_MILITARY_UNIT:
+                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                if (target.military != null) {
+                    target.military.haveNotMoved++;
+                    target.military.health++;
+                } else {
+                    target.military = new MilitaryUnit(player, target);
+                }
+                break;
+            case BANK_TRADE:
+                Integer amount = (Integer) arguments.get("sell_amount");
+                Resource sell = (Resource) arguments.get("sell_resource_type");
+                Resource buy = (Resource) arguments.get("buy_resource_type");
+                EnumMap<Resource, Integer> bought = new EnumMap<Resource, Integer>(Resource.class);
+                EnumMap<Resource, Integer> sold = new EnumMap<Resource, Integer>(Resource.class);
+                sold.put(sell, amount);
+                bought.put(buy, amount / player.trades.get(sell));
+                player.takeResources(sold);
+                player.addResources(bought);
+                break;
+
+        }
 
         return null;
     }

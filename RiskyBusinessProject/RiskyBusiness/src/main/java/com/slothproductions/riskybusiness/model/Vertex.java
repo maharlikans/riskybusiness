@@ -12,7 +12,6 @@ public class Vertex implements java.io.Serializable {
     protected List<Vertex> adjacent;
     protected List<Edge> edges;
     final protected int index;
-    protected Player owner;
     protected Building building;
     protected MilitaryUnit military;
     private boolean locked;
@@ -21,10 +20,6 @@ public class Vertex implements java.io.Serializable {
         private static final long serialVersionUID = 758148154L;
         public int getIndex() {
             return index;
-        }
-
-        public Player getOwner() {
-            return owner;
         }
 
         public Building.ImmutableBuilding getSettlement() {
@@ -53,8 +48,7 @@ public class Vertex implements java.io.Serializable {
         index = i;
         ArrayList<Hex> tmp = new ArrayList<Hex>();
         tmp.add(h1);
-        owner = null;
-        building = new Building(BuildingType.EMPTY);
+        building = new Building(BuildingType.EMPTY, this, null);
         military = null;
         immutable = new ImmutableVertex();
         h1.addVertex(this);
@@ -164,10 +158,6 @@ public class Vertex implements java.io.Serializable {
 
     final protected Building getBuilding() {
         return building;
-    }
-
-    final protected void setOwner(Player p) {
-        owner = p;
     }
 
     final protected void setBuilding(Building b) {

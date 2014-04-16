@@ -51,7 +51,7 @@ public enum GameAction {
     }}),
     MOVE_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("vertex_from", ArgumentType.VERTEX);
-        put("edge_across", ArgumentType.EDGE);
+        put("vertex_to", ArgumentType.VERTEX);
     }}),
     ATTACK(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);

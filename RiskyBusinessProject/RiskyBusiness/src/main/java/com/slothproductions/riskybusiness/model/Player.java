@@ -17,8 +17,9 @@ final public class Player implements java.io.Serializable {
     private ArrayList<Vertex.ImmutableVertex> immutableVertices;
     private ArrayList<MilitaryUnit.ImmutableMilitaryUnit> immutableMilitaryUnits;
     private ArrayList<Edge> edges;
-    private ArrayList<Vertex> vertices;
     private ArrayList<MilitaryUnit> militaryUnits;
+    private ArrayList<Building> buildings;
+    protected Map<Resource, Integer> trades;
     final Board board;
     final String name;
 
@@ -59,8 +60,14 @@ final public class Player implements java.io.Serializable {
         immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
         immutableMilitaryUnits = new ArrayList<MilitaryUnit.ImmutableMilitaryUnit>();
         edges = new ArrayList<Edge>();
-        vertices = new ArrayList<Vertex>();
+        buildings = new ArrayList<Building>();
         militaryUnits = new ArrayList<MilitaryUnit>();
+        trades = new EnumMap<Resource, Integer>(Resource.class);
+        for (Resource r : Resource.values())
+            if (r == Resource.GOLD)
+                trades.put(r, 2);
+            else
+                trades.put(r, 4);
     }
 
     public GameAction.ActionWrapper effect(GameAction action, Map<String, Object> arguments) {
@@ -73,16 +80,108 @@ final public class Player implements java.io.Serializable {
             resources.put(r, resources.get(r) + 1);
     }
 
+    protected void addResources(Map<Resource, Integer> gained) {
+        for (Resource r : gained.keySet()) {
+            resources.put(r, resources.get(r) + gained.get(r));
+        }
+    }
+
+    protected boolean hasResources(Map<Resource, Integer> needed) {
+        for (Resource r : needed.keySet()) {
+            if (needed.get(r) > resources.get(r))
+                return false;
+        }
+        return true;
+    }
+
+    protected void takeResources(Map<Resource, Integer> needed) {
+        for (Resource r : needed.keySet()) {
+            resources.put(r, resources.get(r) - needed.get(r));
+        }
+    }
+
+    public boolean canBuildInitial(Vertex v, int i) {
+        boolean canBuild = false;
+        if (v.building.type == BuildingType.EMPTY) {
+            canBuild = true;
+            for (Vertex vertex : v.adjacent)
+                if (vertex.building.type != BuildingType.EMPTY)
+                    canBuild = false;
+        }
+        return canBuild;
+    }
+
+    public boolean canBuildInitial(Edge e, int i) {
+        boolean canBuild = false;
+        if (!e.road) {
+            for (Vertex v : e.vertices)
+                if (v.building == buildings.get(i - 1))
+                    canBuild = true;
+        }
+        return canBuild;
+    }
+
+    public void buildInitial(Vertex v, int i) {
+        v.building = new Building(BuildingType.SETTLEMENT, v, this);
+        if (i == 2) {
+            ArrayList<Resource> resources = new ArrayList<Resource>();
+            for (Hex h : v.hexagons)
+                resources.add(h.type);
+            addResources(resources);
+        }
+    }
+
+    public void buildInitial(Edge e, int i) {
+        e.road = true;
+        e.owner = this;
+    }
+
     public ArrayList<GameAction> getActions(Vertex v) {
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
+
         if (v.building.type == BuildingType.EMPTY) {
             boolean canBuild = true;
             for (Vertex vertex : v.adjacent)
                 if (vertex.building.type != BuildingType.EMPTY)
                     canBuild = false;
-            if (canBuild)
-                actions.add(GameAction.BUILD_SETTLEMENT);
+            if (canBuild) {
+                boolean hasRoad = false;
+                for (Edge e : v.edges)
+                    if (e.getOwner() == this)
+                        hasRoad = true;
+                if (hasRoad)
+                    actions.add(GameAction.BUILD_SETTLEMENT);
+            }
+        }
+
+        if (v.building.type == BuildingType.SETTLEMENT) {
+            actions.add(GameAction.BUILD_CITY);
+        }
+
+//        if (v.military != null && v.military.haveBonusMoved + v.military.haveNotMoved > 0)
+//            actions.add(GameAction.MOVE_MILITARY_UNIT);
+
+        if (v.military != null && v.military.haveNotMoved > 0) {
+            boolean canAttack = false;
+        }
+
+        for (GameAction action : actions) {
+            if (!hasResources(action.resourcesNeeded)) {
+                actions.remove(action);
+            }
         }
         return actions;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
+
+    public ArrayList<MilitaryUnit> getMilitaryUnit() {
+        return militaryUnits;
     }
 }
