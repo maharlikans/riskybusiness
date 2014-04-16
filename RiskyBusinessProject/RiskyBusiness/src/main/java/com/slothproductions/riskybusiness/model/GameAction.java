@@ -69,6 +69,9 @@ public enum GameAction {
         put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
         put("buy_amount", ArgumentType.RESOURCE_TYPE);
     }}),
+    FULFILL_PRIVATE_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
+        put("trade", ArgumentType.TRADE);
+    }}),
     BANK_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
         put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
@@ -86,7 +89,8 @@ public enum GameAction {
         RESOURCE_QUANTITY,
         MILITARY_QUANTITY,
         EDGE,
-        VERTEX;
+        VERTEX,
+        TRADE;
     }
 
     /* Used for returning the result of an action */
@@ -95,7 +99,7 @@ public enum GameAction {
             BUILDING,
             MILITARY_UNIT,
             ROAD,
-            RESOURCE;
+            TRADE;
         }
 
         final public AssetType type;
