@@ -283,12 +283,14 @@
             android:id="@+id/request_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/requesttradebutton"/>
 
         <ImageView
             android:id="@+id/confirm_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/confirmtradebutton"/>
 
         <Button
@@ -302,6 +304,7 @@
             android:id="@+id/cancel_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/canceltradebutton"/>
 
     </LinearLayout>

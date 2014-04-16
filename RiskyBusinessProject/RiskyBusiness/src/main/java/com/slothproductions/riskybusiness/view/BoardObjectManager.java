@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -98,7 +99,7 @@ public class BoardObjectManager {
         item.setId((int)System.currentTimeMillis());
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         item.setRotation(coordinate.getRotation());
-        placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
+        placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
         switch(identifier) {
             case 0:
                 mRoads.add(item);
