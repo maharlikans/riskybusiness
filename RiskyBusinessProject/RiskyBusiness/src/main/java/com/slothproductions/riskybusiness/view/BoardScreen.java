@@ -30,6 +30,7 @@ public class BoardScreen extends FragmentActivity {
 
     int[] music = {R.raw.song1, R.raw.song2, R.raw.song3, R.raw.song4, R.raw.song5};
     int nextSong;
+    MediaPlayer song;
     OnCompletionListener mListener = new OnCompletionListener(){
         @Override
         public void onCompletion(MediaPlayer song) {
@@ -66,7 +67,7 @@ public class BoardScreen extends FragmentActivity {
     void startNextSong(){
         if(nextSong > 4) nextSong = 0;
         if(nextSong < music.length){
-            MediaPlayer song = MediaPlayer.create(BoardScreen.this, music[nextSong++]);
+            song = MediaPlayer.create(BoardScreen.this, music[nextSong++]);
             song.setOnCompletionListener(mListener);
             song.start();
         }
@@ -116,6 +117,7 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                song.release();
                 finish();
             }
         });
