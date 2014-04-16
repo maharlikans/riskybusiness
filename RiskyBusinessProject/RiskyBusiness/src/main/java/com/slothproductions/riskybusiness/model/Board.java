@@ -404,6 +404,7 @@ public class Board implements java.io.Serializable {
                 } else {
                     target.military = new MilitaryUnit(player, target);
                 }
+                target.building.numSoldiersBuilt++;
                 break;
             case BANK_TRADE:
                 Integer amount = (Integer) arguments.get("sell_amount");
@@ -416,7 +417,6 @@ public class Board implements java.io.Serializable {
                 player.takeResources(sold);
                 player.addResources(bought);
                 break;
-
         }
 
         return null;

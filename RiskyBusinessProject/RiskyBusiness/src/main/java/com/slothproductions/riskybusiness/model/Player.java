@@ -158,11 +158,39 @@ final public class Player implements java.io.Serializable {
             actions.add(GameAction.BUILD_CITY);
         }
 
+        if (v.building.owner == this) {
+            if (v.building.type == BuildingType.CITY && v.building.numSoldiersBuilt < 2)
+                actions.add(GameAction.BUILD_MILITARY_UNIT);
+            else if (v.building.type == BuildingType.SETTLEMENT && v.building.numSoldiersBuilt < 1)
+                actions.add(GameAction.BUILD_MILITARY_UNIT);
+        }
+
 //        if (v.military != null && v.military.haveBonusMoved + v.military.haveNotMoved > 0)
 //            actions.add(GameAction.MOVE_MILITARY_UNIT);
 
         if (v.military != null && v.military.haveNotMoved > 0) {
             boolean canAttack = false;
+        }
+
+        for (GameAction action : actions) {
+            if (!hasResources(action.resourcesNeeded)) {
+                actions.remove(action);
+            }
+        }
+        return actions;
+    }
+
+    public ArrayList<GameAction> getActions(Edge e) {
+        ArrayList<GameAction> actions = new ArrayList<GameAction>();
+
+        if (!e.road) {
+            boolean canBuild = false;
+            for (Vertex v : e.getVertices()) {
+                if (v.building.owner == this)
+                    canBuild = true;
+            }
+            if (canBuild)
+                actions.add(GameAction.BUILD_ROAD);
         }
 
         for (GameAction action : actions) {
