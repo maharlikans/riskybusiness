@@ -364,6 +364,9 @@ public class Board implements java.io.Serializable {
                     case VERTEX:
                         if (!(provided instanceof Vertex.ImmutableVertex)) invalid = true;
                         break;
+                    case TRADE:
+                        if (!(provided instanceof Trade)) invalid = true;
+                        break;
                 }
                 if (invalid) {
                     throw new InvalidParameterException();
@@ -384,18 +387,21 @@ public class Board implements java.io.Serializable {
 
         switch(action) {
             case BUILD_SETTLEMENT:
+                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
                 Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.SETTLEMENT, target, player);
-                break;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             case BUILD_CITY:
+                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
                 target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.CITY, target, player);
-                break;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             case BUILD_ROAD:
+                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
                 Edge e = edges.get(((Edge.ImmutableEdge) arguments.get("edge")).getIndex());
                 e.owner = player;
                 e.road = true;
-                break;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.ROAD, e.immutable);
             case BUILD_MILITARY_UNIT:
                 target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 if (target.military != null) {
@@ -417,6 +423,30 @@ public class Board implements java.io.Serializable {
                 player.takeResources(sold);
                 player.addResources(bought);
                 break;
+            case PRIVATE_TRADE:
+                if (player.hasResources((Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("sell_amount"))) {
+                    Trade t = new Trade(player, (Player) arguments.get("partner"), (Integer) arguments.get("sell_amount"), (Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("buy_amount"), (Resource) arguments.get("buy_resource_type"));
+                    return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, t);
+                }
+                break;
+            case FULFILL_PRIVATE_TRADE:
+                Trade trade = (Trade) arguments.get("trade");
+                if (trade != null && trade.isConfirmed() && trade.callee_id == player.immutable) {
+                    EnumMap<Resource, Integer> traded_away = new EnumMap<Resource, Integer>(Resource.class);
+                    EnumMap<Resource, Integer> traded_in = new EnumMap<Resource, Integer>(Resource.class);
+                    traded_away.put(trade.sell_type, trade.sell_amount);
+                    traded_in.put(trade.buy_type, trade.buy_amount);
+                    /* TODO: Switch to player id */
+                    for(Player partner:players) {
+                        if (partner.immutable == trade.partner_id) {
+                            partner.takeResources(traded_in);
+                            partner.addResources(traded_away);
+                            player.takeResources(traded_away);
+                            player.addResources(traded_in);
+                            return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, new Boolean(true));
+                        }
+                    }
+                }
             case MOVE_MILITARY_UNIT:
                 Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
                 Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());

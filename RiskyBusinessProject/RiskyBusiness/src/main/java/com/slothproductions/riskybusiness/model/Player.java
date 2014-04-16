@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.model;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
@@ -16,13 +17,16 @@ final public class Player implements java.io.Serializable {
     private ArrayList<Edge.ImmutableEdge> immutableEdges;
     private ArrayList<Vertex.ImmutableVertex> immutableVertices;
     private ArrayList<MilitaryUnit.ImmutableMilitaryUnit> immutableMilitaryUnits;
+    /* TODO: These should go away */
     private ArrayList<Edge> edges;
     private ArrayList<MilitaryUnit> militaryUnits;
     private ArrayList<Building> buildings;
+    /* End of list */
     protected Map<Resource, Integer> trades;
     final Board board;
     final String name;
 
+    /* TODO: Implpement to player id */
     public class ImmutablePlayer implements java.io.Serializable {
         private static final long serialVersionUID = -242346795L;
         public int resource(Resource r) {
@@ -70,9 +74,26 @@ final public class Player implements java.io.Serializable {
                 trades.put(r, 4);
     }
 
-    public GameAction.ActionWrapper effect(GameAction action, Map<String, Object> arguments) {
-        /* TODO: Encapsulate any necessary exceptions */
-        return board.effect(this, action, arguments);
+    /* Used for private trades. TODO: Possibly also for public trades */
+    public Trade initiate_trade(Map<String, Object> arguments) {
+        GameAction.ActionWrapper wrapper = board.effect(this, GameAction.PRIVATE_TRADE, arguments);
+        if (wrapper != null && wrapper.el instanceof Trade) {
+            return (Trade)wrapper.el;
+        }
+        return null;
+    }
+
+    public Boolean effect(GameAction action, Map<String, Object> arguments) {
+        if (action == GameAction.PRIVATE_TRADE) throw new InvalidParameterException();
+        GameAction.ActionWrapper wrapper = board.effect(this, action, arguments);
+        if (wrapper == null) {
+            return false;
+        } else if (action == GameAction.BUILD_ROAD) {
+            if (wrapper.el instanceof Edge.ImmutableEdge) {
+                immutableEdges.add((Edge.ImmutableEdge)wrapper.el);
+            }
+        } /* TODO: etc for other actions */
+        return true;
     }
 
     protected void addResources(ArrayList<Resource> gains) {
@@ -92,6 +113,10 @@ final public class Player implements java.io.Serializable {
                 return false;
         }
         return true;
+    }
+
+    protected boolean hasResources(Resource r, Integer a) {
+        return (a <= resources.get(r));
     }
 
     protected void takeResources(Map<Resource, Integer> needed) {
