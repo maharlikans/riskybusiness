@@ -39,18 +39,24 @@ public class Board implements java.io.Serializable {
     }
 
     public Board (String [] playerNames) {
+        Log.d(TAG, "Generating board");
         prng = new SecureRandom();
         vertices = new ArrayList<Vertex>();
         edges = new ArrayList<Edge>();
         militaryUnits = new ArrayList<MilitaryUnit>();
         players = new ArrayList<Player>();
         hexes = new ArrayList<Hex>();
+        diceRolls = new ArrayList<ArrayList<Hex>>();
 
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
         int radius = 3;
 
         Resource[] resources = generateResources(radius);
+        int goldIndex = 0;
+        for (int counter = 0; counter < resources.length; counter++)
+            if (resources[counter] == Resource.GOLD)
+                goldIndex = counter;
 
         // Initializing values for the innermost ring with a single hex. This
         // is done manually as there is no pattern for this one.
@@ -88,7 +94,7 @@ public class Board implements java.io.Serializable {
         int elements = hexes.size();
 
         Log.d(TAG, "Generating Rolls");
-        int[] rolls = generateRolls();
+        int[] rolls = generateRolls(goldIndex);
         Log.d(TAG, "Finished Generating Rolls");
         for (int counter = 0; counter < elements; counter++)
             hexes.get(counter).setRoll(rolls[counter]);
@@ -134,7 +140,20 @@ public class Board implements java.io.Serializable {
                 vertices.add(new Vertex(vertices.size(), h1, null, null));
             }
         }
+        for (Vertex v1 : vertices)
+            for (Vertex v2 : vertices)
+                if (v1.index < v2.index && v1.isAdjacent(v2)) {
+                    v1.addAdjacent(v2);
+                    v2.addAdjacent(v1);
+                }
         Log.d(TAG, "Finished Generating Vertices");
+        for (Vertex v : vertices) {
+            Log.d(TAG, "Vertex " + v.index);
+            for (Hex h : v.hexagons)
+                Log.d(TAG, "Adjacent to hex " + h.index);
+            for (Vertex vertex : v.adjacent)
+                Log.d(TAG, "Adjacent to vertex " + vertex.index);
+        }
 
         Log.d(TAG, "Generating Edges");
         for (int i1 = 0; i1 < vertices.size(); i1++) {
@@ -147,12 +166,24 @@ public class Board implements java.io.Serializable {
                         if (v2.hexagons.contains(h))
                             shared.add(h);
                     }
-                    edges.add(new Edge(edges.size(), shared.get(0), shared.get(1), v1, v2));
+                    if (shared.size() == 2)
+                        edges.add(new Edge(edges.size(), shared.get(0), shared.get(1), v1, v2));
+                    else
+                        edges.add(new Edge(edges.size(), shared.get(0), null, v1, v2));
                 }
             }
         }
 
         Log.d(TAG, "Finished Generating Edges");
+        for (Edge e : edges) {
+            Log.d(TAG, "Edge " + e.index);
+            for (Hex h : e.hexagons)
+                if (h != null)
+                    Log.d(TAG, "Adjacent to hex " + h.index);
+            for (Vertex v : e.vertices)
+                if (v != null)
+                    Log.d(TAG, "Adjacent to vertex " + v.index);
+        }
 
         Log.d(TAG, "Locking Board Elements");
 
@@ -175,6 +206,14 @@ public class Board implements java.io.Serializable {
             players.add(new Player(this, name));
         }
         Log.d(TAG, "Finished Generating Players");
+
+        Log.d(TAG, "Constructing diceRolls");
+        for (int counter = 0; counter <= 12; counter++)
+            diceRolls.add(new ArrayList<Hex>());
+        for (Hex h : hexes)
+            diceRolls.get(h.roll).add(h);
+        Log.d(TAG, "Finished Generating diceRolls");
+
     }
 
     private void shuffleArray(Object[] array) {
@@ -221,58 +260,32 @@ public class Board implements java.io.Serializable {
         return resources;
     }
 
-    private int[] generateRolls() {
-        int[] rollsArray = {
-                8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
-        };
-
-        ArrayList<Integer> rolls = new ArrayList<Integer>();
-        for (int i : rollsArray)
-            rolls.add(i);
-        Collections.shuffle(rolls);
-        rolls.add(0, 7);
-
-        for (int i = 0; i <19; i ++) {
-            if (hexes.get(i).type == Resource.GOLD){
-                int temp = rolls.get(i);
-                rolls.set(0, temp);
-                rolls.set(i, 7);
-                Log.d(TAG, "Gold Roll Value Added");
-            }
-        }
-
-        int[] rollsArr = new int[19];
-
-        //move shuffled rolls arraylist to a rollsArr[] int for returning
-        for (int i = 0; i < 19; i++) {
-            rollsArr[i] = rolls.get(i);
-        }
-
-        return rollsArr;
-
-        /* the code that doesnt work
+    private int[] generateRolls(int goldIndex) {
         int[] rollsArray = {
                 2, 3, 3, 4, 4, 5, 5, 9, 9, 10, 10, 11, 11, 12
         };
 
         int elements = hexes.size();
+        Log.d(TAG, "Generating " + elements + " die rolls.");
 
         HashSet<Integer> invalid = new HashSet<Integer>();
+        invalid.add(goldIndex);
         ArrayList<Integer> sixOrEight = new ArrayList<Integer>();
         for (int counter = 0; counter < 4; counter++) {
             int index = prng.nextInt(elements);
             while (invalid.contains(index)) {
                 index = prng.nextInt(elements);
             }
-            invalid.add(index);
+            sixOrEight.add(index);
             for (Hex h : hexes.get(index).adjacent)
                 invalid.add(h.index);
+            invalid.add(index);
         }
 
-        int goldIndex = 0;
-        for (Hex h : hexes)
-            if (h.type == Resource.GOLD)
-                goldIndex = h.index;
+        Log.d(TAG, "Locations of six or 8:");
+        for (int i : sixOrEight)
+            Log.d(TAG, "Hex " + i + " is a 6 or 8");
+        Log.d(TAG, "Gold is located at hex " + goldIndex);
 
 
         int ret[] = new int[elements];
@@ -290,7 +303,37 @@ public class Board implements java.io.Serializable {
         }
 
         return ret;
-        */
+    }
+
+    public void beginTurn(int roll) {
+        for (Player p : players) {
+            for (MilitaryUnit mu : p.getMilitaryUnit())
+                mu.reset();
+            for (Building b : p.getBuildings())
+                b.reset();
+        }
+        getResources(roll);
+    }
+
+    public void getResources(int roll) {
+        ArrayList<Hex> rolled = diceRolls.get(roll);
+        HashMap<Player, ArrayList<Resource>> gained = new HashMap<Player, ArrayList<Resource>>();
+        for (Player p : players)
+            gained.put(p, new ArrayList<Resource>());
+        for (Hex h : rolled) {
+            for (Vertex v : h.vertices) {
+                if (v.building.owner == null)
+                    continue;
+                if (v.building.type == BuildingType.CITY) {
+                    gained.get(v.building.owner).add(h.type);
+                    gained.get(v.building.owner).add(h.type);
+                } else if (v.building.type == BuildingType.SETTLEMENT) {
+                    gained.get(v.building.owner).add(h.type);
+                }
+            }
+        }
+        for (Player p : players)
+            p.addResources(gained.get(p));
     }
 
     protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
@@ -335,6 +378,47 @@ public class Board implements java.io.Serializable {
         /* 1. Check for player resources, if not sufficient throw an exception
          * 2. Switch on action
          * */
+
+        if (!player.hasResources(action.resourcesNeeded))
+            throw new InvalidParameterException();
+        player.takeResources(action.resourcesNeeded);
+
+        switch(action) {
+            case BUILD_SETTLEMENT:
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.SETTLEMENT, target, player);
+                break;
+            case BUILD_CITY:
+                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.CITY, target, player);
+                break;
+            case BUILD_ROAD:
+                Edge e = edges.get(((Edge.ImmutableEdge) arguments.get("edge")).getIndex());
+                e.owner = player;
+                e.road = true;
+                break;
+            case BUILD_MILITARY_UNIT:
+                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                if (target.military != null) {
+                    target.military.haveNotMoved++;
+                    target.military.health++;
+                } else {
+                    target.military = new MilitaryUnit(player, target);
+                }
+                break;
+            case BANK_TRADE:
+                Integer amount = (Integer) arguments.get("sell_amount");
+                Resource sell = (Resource) arguments.get("sell_resource_type");
+                Resource buy = (Resource) arguments.get("buy_resource_type");
+                EnumMap<Resource, Integer> bought = new EnumMap<Resource, Integer>(Resource.class);
+                EnumMap<Resource, Integer> sold = new EnumMap<Resource, Integer>(Resource.class);
+                sold.put(sell, amount);
+                bought.put(buy, amount / player.trades.get(sell));
+                player.takeResources(sold);
+                player.addResources(bought);
+                break;
+
+        }
 
         return null;
     }
