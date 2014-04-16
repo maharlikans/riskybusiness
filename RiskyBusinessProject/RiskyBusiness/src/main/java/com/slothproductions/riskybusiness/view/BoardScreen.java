@@ -191,6 +191,8 @@ public class BoardScreen extends FragmentActivity {
         bundle.putIntArray(GameSetupScreen.COLORS,
                 intent.getIntArrayExtra(GameSetupScreen.COLORS));
         return bundle;
+    }
+
     public Fragment getButtonsFragment() {
         return mBoardButtonsFragment;
     }

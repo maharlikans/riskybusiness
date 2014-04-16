@@ -1,12 +1,20 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.opengl.Visibility;
+import android.view.View;
+import android.widget.ImageView;
+
 import com.View.R;
+import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.GameAction;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -19,6 +27,7 @@ public class ForwardBeginningGameState implements GameState{
     Player mCurrentPlayer;
     GameLoop mGameLoop;
     BoardScreen mBoardScreen;
+    Board mBoard;
 
     public ForwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
@@ -26,6 +35,7 @@ public class ForwardBeginningGameState implements GameState{
         mPlayerStack = new Stack<Player>();
         mCurrentPlayer = mPlayerQueue.poll();
         mBoardScreen = mGameLoop.getBoardScreen();
+        mBoard = mBoardScreen.getBoard();
 
         // force this player to start the turn
         startTurn();
@@ -33,7 +43,12 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public void init() {
-        // TODO merge the master branch into this one
+        // in the forward beginning game state, we don't need to see the tradeButton nor
+        // the endTurnButton, so hide them in the init method
+        ImageView tradeButton = (ImageView)mBoardScreen.findViewById(R.id.tradeButton);
+        tradeButton.setVisibility(View.GONE);
+        ImageView endTurnButton = (ImageView)mBoardScreen.findViewById(R.id.endTurnButton);
+        endTurnButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -44,19 +59,19 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void startTurn() {
-        // DOES NOTHING
-        // TODO: potentially throw exception
-    }
-
-    @Override
     public void buildRoad(Edge edge) {
-        // TODO package the BUILD_ROAD GameAction here
+        GameAction ga = GameAction.BUILD_ROAD;
+        Map<String, Object> hm =  new HashMap<String, Object>();
+        hm.put("edge", (Object)edge);
+        mCurrentPlayer.effect(ga, hm);
     }
 
     @Override
     public void buildSettlement(Vertex vertex) {
-        // TODO package the BUILD_SETTLEMENT GameAction here
+        GameAction ga = GameAction.BUILD_SETTLEMENT;
+        Map<String, Object> hm =  new HashMap<String, Object>();
+        hm.put("vertex", (Object)vertex);
+        mCurrentPlayer.effect(ga, hm);
     }
 
     @Override

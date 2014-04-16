@@ -81,7 +81,7 @@ public class GameLoop {
     }
 
     public void moveSoldier(/*some arguments*/) {
-        mCurrentGameState.moveSoldier(,/*some arguments*/);
+        mCurrentGameState.moveSoldier(/*some arguments*/);
     }
 
     public void attackWithSoldier(/*some arguments*/) {
@@ -127,5 +127,9 @@ public class GameLoop {
 
     public BoardScreen getBoardScreen() {
         return mBoardScreen;
+    }
+
+    public Board getBoard() {
+        return mBoard;
     }
 }

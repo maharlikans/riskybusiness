@@ -107,7 +107,7 @@ public class BoardButtonsFragment extends Fragment {
             }
         };
 
-        /*endTurnController = new View.OnClickListener() {
+        endTurnController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                if (mBtnEndTurn.getText().equals("End Turn")) {
@@ -116,7 +116,7 @@ public class BoardButtonsFragment extends Fragment {
                   showRollDialog();
 //                }
             }
-        };*/
+        };
     }
 
     void initializeControllers() {
@@ -264,7 +264,7 @@ public class BoardButtonsFragment extends Fragment {
     //Popup for use with corner objects
     public void showPopUp(final Coordinate c, Vertex v) {
         //TODO: add support for roads, fix everything to work with the board data.
-        //an anchor for the popupmenu to be placed on.
+        //an anchor for the popup menu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
         anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
