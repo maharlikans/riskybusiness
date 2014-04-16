@@ -281,10 +281,10 @@ public class BoardObjectManager {
         int y = mTile.getTop();
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -304,10 +304,10 @@ public class BoardObjectManager {
         int y = mTile.getTop();
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -327,10 +327,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+112;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -350,10 +350,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+224;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -373,10 +373,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+224;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -396,10 +396,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+112;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
