@@ -417,6 +417,28 @@ public class Board implements java.io.Serializable {
                 player.takeResources(sold);
                 player.addResources(bought);
                 break;
+            case MOVE_MILITARY_UNIT:
+                Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
+                boolean bonus = from.military.haveBonusMoved > 0;
+                if (to.military == null) {
+                    to.military = new MilitaryUnit(player, to);
+                    to.military.haveNotMoved--;
+                }
+                if (bonus) {
+                    from.military.haveBonusMoved--;
+                    to.military.haveMoved++;
+                } else {
+                    from.military.haveNotMoved--;
+                    boolean onRoad = false;
+                    for (Edge edge : from.edges)
+                        if (edge.vertices.contains(to) && edge.owner == player)
+                            onRoad = true;
+                    if (onRoad)
+                        to.military.haveBonusMoved++;
+                    else
+                        to.military.haveMoved++;
+                }
         }
 
         return null;
