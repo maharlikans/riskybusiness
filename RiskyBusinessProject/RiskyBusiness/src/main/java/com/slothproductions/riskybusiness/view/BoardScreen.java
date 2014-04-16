@@ -121,7 +121,6 @@ public class BoardScreen extends FragmentActivity {
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                song.release();
                 finish();
             }
         });
@@ -133,6 +132,19 @@ public class BoardScreen extends FragmentActivity {
         });
 
         alertDialog.show();
+    }
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        song.start();
+        //start song back again.
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        song.pause();
     }
 
     @Override
