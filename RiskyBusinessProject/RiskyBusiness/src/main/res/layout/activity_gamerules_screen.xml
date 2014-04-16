@@ -24,8 +24,6 @@
         android:layout_below="@+id/eachPlayersTurnButton"
         android:layout_centerHorizontal="true" />
 
-
-
     <Button
         android:layout_width="155dp"
         android:layout_height="wrap_content"

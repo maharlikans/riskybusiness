@@ -10,9 +10,9 @@ public class DiceRoll {
     private static Random randDice1 = new SecureRandom();
     private static Random randDice2 = new SecureRandom();
 
-    public int first;
-    public int second;
-    public int result;
+    private int first;
+    private int second;
+    private int result;
 
     public void roll() {
         first = 1 + randDice1.nextInt(6);
