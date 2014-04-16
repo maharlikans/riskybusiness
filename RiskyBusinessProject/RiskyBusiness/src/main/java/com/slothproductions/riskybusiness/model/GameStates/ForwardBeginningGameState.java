@@ -13,6 +13,7 @@ import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
+import java.lang.Override;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -110,5 +111,15 @@ public class ForwardBeginningGameState implements GameState{
         //     mCurrentPlayer = /*pop from the player queue*/;
         //     display their resources on the game board
         //     force turn to begin
+    }
+
+    @Override
+    void getValidMoves(Edge edge) {
+        mCurrentPlayer.getActions();
+    }
+
+    @Override
+    void getValidMoves(Vertex v) {
+
     }
 }

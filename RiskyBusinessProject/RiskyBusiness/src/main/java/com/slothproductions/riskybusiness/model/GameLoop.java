@@ -132,4 +132,12 @@ public class GameLoop {
     public Board getBoard() {
         return mBoard;
     }
+
+    void getValidMoves(Edge edge) {
+        mCurrentGameState.getValidMoves(edge);
+    }
+
+    void getValidMoves(Vertex v) {
+        mCurrentGameState.getValidMoves(v);
+    }
 }
