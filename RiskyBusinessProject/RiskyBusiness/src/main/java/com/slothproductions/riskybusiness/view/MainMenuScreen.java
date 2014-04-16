@@ -47,7 +47,6 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Game Rules activity
                 Intent i = new Intent(MainMenuScreen.this, GameRules.class);
-                song.release();
                 startActivity(i);
             }
         });
@@ -59,7 +58,6 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Options Activity
                 Intent i = new Intent(MainMenuScreen.this, OptionsScreen.class);
-                song.release();
                 startActivity(i);
             }
         });
@@ -69,6 +67,7 @@ public class MainMenuScreen extends Activity {
         mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                song.release();
                 finish();
             }
         });
