@@ -71,6 +71,8 @@ public class BoardObjectManager {
 
     }
 
+    //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
+    //Note: to make this work with the model, it may need to take an edge or vertex
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
         if (action.getItemId() == R.id.road) {
             //call build road from game loop
@@ -87,10 +89,13 @@ public class BoardObjectManager {
             buildItem(3, "city", coordinate);
         }
         else {
+            //TODO: Implement the move soldier method
             //move soldier
         }
     }
 
+    //this method builds an item on the screen at the given coordinate
+    //this should probably take an enum instead of a string.. it is probably fine as is
     public void buildItem(int identifier, String name, Coordinate coordinate) {
         //add Item to the appropriate vertex/edge
 
@@ -99,7 +104,11 @@ public class BoardObjectManager {
         item.setId((int)System.currentTimeMillis());
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         item.setRotation(coordinate.getRotation());
+
+        //places the image on the screen
         placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
+
+        //this should be unnecessary, should be able to do this elsewhere.
         switch(identifier) {
             case 0:
                 mRoads.add(item);
@@ -114,9 +123,13 @@ public class BoardObjectManager {
                 mCities.add(item);
                 break;
         }
+
+        //this makes sure that all the objects are placed at the proper z index
+        normalizeLevels();
     }
 
     //Creates the appropriate menu for the screen based on the tap event
+    //This will call the popup menu in the BoardButtons class
     public void findMenu(MotionEvent event) {
 
         //scan through hex corners to see if tap location matches a corner
@@ -148,7 +161,6 @@ public class BoardObjectManager {
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
-        normalizeLevels();
     }
 
 

@@ -263,7 +263,7 @@ public class BoardButtonsFragment extends Fragment {
 
     //Popup for use with corner objects
     public void showPopUp(final Coordinate c, Vertex v) {
-        //TODO: add support for roads, fix everything to work with the board data.
+        //TODO: fix everything to work with the board data.
         //an anchor for the popupmenu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
