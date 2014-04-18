@@ -29,11 +29,6 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void startTurn(int rollResult) {
-        // immediately roll dice
-    }
-
-    @Override
     public void startTurn() {
         // takes the result of the dice roll and results in collection
         // of resources on the main board. This method will consult the models,
@@ -67,14 +62,9 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void trade(Player other) {
+    public void trade() {
         // TODO: change the arguments and change this to call the effect change
         // on a player class
-    }
-
-    @Override
-    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
-        // TODO: change the arguments and change this to call the effect change
     }
 
     @Override
@@ -86,5 +76,20 @@ public class NormalGameState implements GameState {
     public void endTurn() {
         // TODO: change the current player by updating the queue
         // change the view to result in showing the new player's resources
+    }
+
+    @Override
+    public void diceRoll(int rollResult) {
+
+    }
+
+    @Override
+    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return null;
     }
 }

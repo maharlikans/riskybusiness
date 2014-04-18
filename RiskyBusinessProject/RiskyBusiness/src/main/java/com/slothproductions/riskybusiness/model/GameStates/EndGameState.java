@@ -22,11 +22,6 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public void startTurn(int rollResult) {
-        // DO NOTHING
-    }
-
-    @Override
     public void startTurn() {
         // DO NOTHING
     }
@@ -52,12 +47,7 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public void trade(Player other) {
-        // DO NOTHING
-    }
-
-    @Override
-    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
+    public void trade() {
         // DO NOTHING
     }
 
@@ -69,5 +59,20 @@ public class EndGameState implements GameState {
     @Override
     public void endTurn() {
         // DO NOTHING
+    }
+
+    @Override
+    public void diceRoll(int rollResult) {
+
+    }
+
+    @Override
+    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return null;
     }
 }

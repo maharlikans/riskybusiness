@@ -222,7 +222,6 @@ public class GameSetupScreen extends Activity {
                 startActivity(intent);
             }
         });
-
      }
 
     @Override

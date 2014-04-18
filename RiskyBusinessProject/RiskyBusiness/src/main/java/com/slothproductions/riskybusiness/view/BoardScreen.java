@@ -17,10 +17,12 @@ import android.media.MediaPlayer;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.GameLoop;
 
 public class BoardScreen extends FragmentActivity {
 
     private Board mBoardData;
+    private GameLoop mGameLoop;
 
     private Fragment mBoardScreenFragment;
     private Fragment mTradeScreenFragment;
@@ -37,7 +39,6 @@ public class BoardScreen extends FragmentActivity {
         public void onCompletion(MediaPlayer song) {
             song.release();
             startNextSong();
-
         }
     };
 
@@ -50,30 +51,19 @@ public class BoardScreen extends FragmentActivity {
         nextSong = 0;
         startNextSong();
 
-        String[] Players = new String [getIntent().getIntExtra("numplayerschosen", 0)];
+        String[] Players = new String [getIntent().getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0)];
         String[] defaultPlayers = getResources().getStringArray(R.array.player_names);
         for (int i = 0; i < Players.length; i++) {
+                Log.d("TAG", "This player is: " + defaultPlayers[i]);
                 Players[i] = defaultPlayers[i];
         }
 
         mBoardData = new Board(Players);
+        mGameLoop = new GameLoop(this);
 
         mFragmentManager = getSupportFragmentManager();
 
         initializeDefaultFragments();
-
-        if (mBoardScreenFragment == null) {
-
-            // TODO fetch the arguments from the BoardScreenMainFragment
-            Bundle args = fetchAndPlaceArguments();
-
-            mBoardScreenFragment = new BoardScreenMainFragment();
-            mBoardScreenFragment.setArguments(args);
-            mFragmentManager.beginTransaction()
-                    .add(R.id.BoardContainer, mBoardScreenFragment)
-                    .commit();
-        }
-
     }
 
     void startNextSong(){
@@ -176,14 +166,25 @@ public class BoardScreen extends FragmentActivity {
     public Bundle fetchAndPlaceArguments() {
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
+        int numPlayersChosen = intent.getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0);
+        String[] playerTypes = intent.getStringArrayExtra(GameSetupScreen.PLAYER_TYPES);
+        int numVictoryPoints = intent.getIntExtra(GameSetupScreen.NUM_VICTORY_POINTS, 0);
+        boolean variableBoard = intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false);
+        boolean attacksOn = intent.getBooleanExtra(GameSetupScreen.ATTACKS, false);
+        int[] colors = intent.getIntArrayExtra(GameSetupScreen.COLORS);
+        Log.d("TAG", "Number of players is: " + numPlayersChosen);
+        for (int i = 0; i < playerTypes.length; i++) {
+            Log.d("TAG", "Player " + i + " is of type " + playerTypes[i]);
+        }
+        Log.d("TAG", "The number of victory points is: " + numVictoryPoints);
+        Log.d("TAG", "Board generation is variable: " + variableBoard);
+        Log.d("TAG", "Attacks are on: " + attacksOn);
         bundle.putInt(GameSetupScreen.NUM_PLAYERS_CHOSEN,
                 intent.getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0));
         bundle.putStringArray(GameSetupScreen.PLAYER_TYPES,
                 intent.getStringArrayExtra(GameSetupScreen.PLAYER_TYPES));
         bundle.putInt(GameSetupScreen.NUM_VICTORY_POINTS,
                 intent.getIntExtra(GameSetupScreen.NUM_VICTORY_POINTS, 0));
-        bundle.putBoolean(GameSetupScreen.VARIABLE_BOARD,
-                intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false));
         bundle.putBoolean(GameSetupScreen.VARIABLE_BOARD,
                 intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false));
         bundle.putBoolean(GameSetupScreen.ATTACKS,
@@ -201,13 +202,20 @@ public class BoardScreen extends FragmentActivity {
         return mBoardData;
     }
 
+    public GameLoop getGameLoop() {
+        return mGameLoop;
+    }
+
     protected void initializeDefaultFragments() {
         mBoardScreenFragment = mFragmentManager.findFragmentById(R.id.hexParent);
         mBoardButtonsFragment = mFragmentManager.findFragmentById(R.id.BoardButtons);
         mPlayerInfoFragment = mFragmentManager.findFragmentById(R.id.PlayerInfo);
 
         if (mBoardScreenFragment == null) {
+            Bundle args = fetchAndPlaceArguments();
+
             mBoardScreenFragment = new BoardScreenMainFragment();
+            mBoardScreenFragment.setArguments(args);
             mFragmentManager.beginTransaction()
                     .add(R.id.BoardContainer, mBoardScreenFragment)
                     .commit();

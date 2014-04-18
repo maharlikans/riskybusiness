@@ -33,15 +33,15 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void startTurn(int rollResult) {
+    public void startTurn() {
         // force buildSettlement
         // force collectResources
         // force endTurn
     }
 
     @Override
-    public void startTurn() {
-        // DOES NOTHING, potentially throw exception
+    public void diceRoll(int rollResult) {
+
     }
 
     @Override
@@ -66,13 +66,13 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void trade(Player other) {
+    public void trade() {
         // TODO not sure yet
     }
 
     @Override
-    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
-        // TODO not sure yet
+    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+
     }
 
     @Override
@@ -90,6 +90,11 @@ public class BackwardBeginningGameState implements GameState {
         //     mCurrentPlayer = /*pop from the player stack*/;
         //     display their resources on the game board
         //     force turn to begin
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return mCurrentPlayer;
     }
 
     public void setPlayerStack(Stack<Player> playerStack) {

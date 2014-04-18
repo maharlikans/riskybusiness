@@ -123,8 +123,9 @@ public class BoardObjectManager {
         Vertex v = null;
         Edge e = null;
         if (checkCornerLocations(c, v)) {
-            //if this is true, then the coordinate is reassigned to the exact vertex location, and v is assigned to the vertex the object is being placed
-            //we are now calling the show popup menu in board buttons fragment
+            // if this is true, then the coordinate is reassigned to the exact vertex location, and
+            // v is assigned to the vertex the object is being placed we are now calling the show
+            // popup menu in board buttons fragment
             mBoardButtonsFragment.showPopUp(c, v);
         }
         else if (checkEdgeLocations(c, e)) {

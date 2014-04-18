@@ -1,6 +1,5 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
-import android.opengl.Visibility;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,6 +13,8 @@ import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.lang.Override;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -34,12 +35,9 @@ public class ForwardBeginningGameState implements GameState{
         mGameLoop = gameLoop;
         mPlayerQueue = mGameLoop.getPlayerQueue();
         mPlayerStack = new Stack<Player>();
-        mCurrentPlayer = mPlayerQueue.poll();
+        mCurrentPlayer = mGameLoop.getCurrentPlayer();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
-
-        // force this player to start the turn
-        startTurn();
     }
 
     @Override
@@ -53,10 +51,15 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void startTurn(int rollResult) {
+    public void startTurn() {
         // TODO force buildSettlement
         // force buildRoad
         // force endTurn
+    }
+
+    @Override
+    public void diceRoll(int rollResult) {
+        // DO NOTHING
     }
 
     @Override
@@ -86,12 +89,12 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void trade(Player other) {
+    public void trade() {
         // DO NOTHING
     }
 
     @Override
-    public void moveSoldier(Vertex vertexFrom, Edge edgeAcross) {
+    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
         // DO NOTHING
     }
 
@@ -114,12 +117,7 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    void getValidMoves(Edge edge) {
-        mCurrentPlayer.getActions();
-    }
-
-    @Override
-    void getValidMoves(Vertex v) {
-
+    public Player getCurrentPlayer() {
+        return mCurrentPlayer;
     }
 }

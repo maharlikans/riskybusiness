@@ -25,6 +25,7 @@ import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 public class BoardButtonsFragment extends Fragment {
@@ -33,6 +34,7 @@ public class BoardButtonsFragment extends Fragment {
 
     //Data and Managing Objects
     private Board mBoardData;           //Model Board class used for the backend
+    private GameLoop mGameLoop;
     private BoardScreen mBoardScreen;   //BoardScreen that manages this fragment
     private Activity mActivity;         //Activity that can be used instead of calling getActivity() every time
     private BoardObjectManager mBoardObjectManager; //BoardObjectManager is used to keep track of all the view elements specific to the playable game board
@@ -68,6 +70,8 @@ public class BoardButtonsFragment extends Fragment {
         //initialize variables based on the activity of superclass
         mActivity = getActivity();
         mBoardScreen = (BoardScreen)mActivity;
+        mBoardData = mBoardScreen.getBoard();
+        mGameLoop = mBoardScreen.getGameLoop();
 
         //maps the buttons and layouts in the view to the class variables
         initializeViewElements(v);
@@ -287,6 +291,9 @@ public class BoardButtonsFragment extends Fragment {
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeItem(R.id.road);
 
+        // pass the popup to be adjusted
+        mGameLoop.getActions(popup, v);
+
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
@@ -301,7 +308,7 @@ public class BoardButtonsFragment extends Fragment {
     //Popup for use with roads
     public void showPopUp(final Coordinate c, Edge e) {
         //TODO: fix everything to work with the board data.
-        //an anchor for the popupmenu to be placed on.
+        //an anchor for the popup menu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
         anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
@@ -318,7 +325,10 @@ public class BoardButtonsFragment extends Fragment {
         //if an action is available, itw ill be shown, otherwise it wont be shown.
         //if no actions are available, a toast will display saying there are no actions available at that vertex.
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-        popup.getMenu().removeGroup(R.id.corneritems);
+//        popup.getMenu().removeGroup(R.id.corneritems);
+
+        // Pass the popup menu to be adjusted
+        mGameLoop.getActions(popup, e);
 
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

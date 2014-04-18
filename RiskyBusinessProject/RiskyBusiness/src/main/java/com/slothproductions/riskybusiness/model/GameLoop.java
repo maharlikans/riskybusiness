@@ -1,5 +1,12 @@
 package com.slothproductions.riskybusiness.model;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+
+import com.View.R;
 import com.slothproductions.riskybusiness.model.GameStates.BackwardBeginningGameState;
 import com.slothproductions.riskybusiness.model.GameStates.EndGameState;
 import com.slothproductions.riskybusiness.model.GameStates.ForwardBeginningGameState;
@@ -9,6 +16,10 @@ import com.slothproductions.riskybusiness.view.BoardScreen;
 import com.slothproductions.riskybusiness.view.BoardScreenMainFragment;
 
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -16,13 +27,14 @@ import java.util.Queue;
  * Created by Kyle Maharlika on 4/4/2014.
  * Status: in progress... still need to construct object correctly
  *         encapsulate the class
- *
  */
 public class GameLoop {
     BoardScreen mBoardScreen;
     Board mBoard;
 
     Queue<Player> mPlayerQueue;
+    Player mCurrentPlayer;
+    HashMap<Enum, Integer> mActionToMenuItemIdMap;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
@@ -36,56 +48,70 @@ public class GameLoop {
 
         // Board will continue to be initialized in the BoardScreenMainFragment
         // not the best, but whatever dude
-        mBoard = ((BoardScreenMainFragment)boardScreen.getScreenFragment()).getBoardData();
-
-        mForwardBeginningGameState = new ForwardBeginningGameState(this);
-        mBackwardBeginningGameState = new BackwardBeginningGameState(this);
-        mNormalGameState = new NormalGameState(this);
-        mEndGameState = new EndGameState(this);
+//        mBoard = ((BoardScreenMainFragment)boardScreen.getScreenFragment()).getBoardData();
 
         // populate the player queue correctly
-        List<Player> playersList = mBoard.getPlayers();
+        List<Player> playersList = mBoardScreen.getBoard().getPlayers();
+        mPlayerQueue = new LinkedList<Player>();
         for (Player p : playersList) {
+//            Log.d("tag", "This player is: " + p.toString());
             mPlayerQueue.offer(p);
         }
+
+        // set the current player
+        mCurrentPlayer = mPlayerQueue.poll();
+
+        // TODO set the map for ALL actions
+        mActionToMenuItemIdMap = new HashMap<Enum, Integer>();
+        mActionToMenuItemIdMap.put(GameAction.BUILD_ROAD, R.id.road);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_SETTLEMENT, R.id.settlement);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.id.soldier);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_CITY, R.id.city);
+        mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
+
+        mForwardBeginningGameState = new ForwardBeginningGameState(this);
+//        mBackwardBeginningGameState = new BackwardBeginningGameState(this);
+//        mNormalGameState = new NormalGameState(this);
+//        mEndGameState = new EndGameState(this);
 
         // only reason I use this instead of just changing the game state is because the game state
         // must not only be changed, init() must also be called on the game state, which is built
         // into the setCurrentGameState function.
-        setCurrentGameState(mForwardBeginningGameState);
+
+        //setCurrentGameState(mForwardBeginningGameState);
     }
 
     // ALL BELOW TODO
-    public void rollDice(/* some arguments*/) {
-        mCurrentGameState.startTurn(/*some arguments*/);
+    public void startTurn(int rollResult) {
+        mCurrentGameState.startTurn();
     }
 
-    public void buildRoad(/* some arguments*/) {
-        mCurrentGameState.buildRoad(/* some arguments */);
+    public void buildRoad(Edge edge) {
+        mCurrentGameState.buildRoad(edge);
     }
 
-    public void buildSettlement(/* some arguments*/) {
-        mCurrentGameState.buildSettlement(/* some arguments*/);
+    public void buildSettlement(Vertex vertex) {
+        mCurrentGameState.buildSettlement(vertex);
     }
 
-    public void buildCity(/* some arguments*/) {
-        mCurrentGameState.buildCity(/* some arguments*/);
+    public void buildCity(Vertex vertex) {
+        mCurrentGameState.buildCity(vertex);
     }
 
-    public void buildMilitaryUnit(/* some arguments*/) {
-        mCurrentGameState.buildMilitaryUnit(/* some arguments*/);
+    public void buildMilitaryUnit(Vertex vertex) {
+        mCurrentGameState.buildMilitaryUnit(vertex);
     }
 
     public void trade(/*some arguments*/) {
         mCurrentGameState.trade(/*some arguments*/);
     }
 
-    public void moveSoldier(/*some arguments*/) {
-        mCurrentGameState.moveSoldier(/*some arguments*/);
+    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+        mCurrentGameState.moveSoldier(vertexFrom, vertexTo);
     }
 
-    public void attackWithSoldier(/*some arguments*/) {
-        mCurrentGameState.attackWithSoldier(/*some arguments*/);
+    public void attackWithSoldier(Vertex vertex) {
+        mCurrentGameState.attackWithSoldier(vertex);
     }
 
     public void endTurn(/*some arguments*/) {
@@ -129,15 +155,48 @@ public class GameLoop {
         return mBoardScreen;
     }
 
-    public Board getBoard() {
-        return mBoard;
+//    public Board getBoard() {
+//        return mBoard;
+//    }
+
+    // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    public void getActions(PopupMenu popupMenu, Edge edge) {
+        ArrayList<GameAction> gameActionArrayList =  mCurrentPlayer.getActions(edge);
+
+        Menu menu = popupMenu.getMenu();
+
+        // first just disable all menu items
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setEnabled(false);
+        }
+
+        // then enable only the menu items which are available in the list
+        for (GameAction ga : gameActionArrayList) {
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
+        }
     }
 
-    void getValidMoves(Edge edge) {
-        mCurrentGameState.getValidMoves(edge);
+
+    // This method, if given a vertex, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    public void getActions(PopupMenu popupMenu, Vertex vertex) {
+        ArrayList<GameAction> gameActionArrayList =  mCurrentPlayer.getActions(vertex);
+
+        Menu menu = popupMenu.getMenu();
+
+        // first just disable all menu items
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setEnabled(false);
+        }
+
+        // then enable only the menu items which are available in the list
+        for (GameAction ga : gameActionArrayList) {
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
+        }
     }
 
-    void getValidMoves(Vertex v) {
-        mCurrentGameState.getValidMoves(v);
+    public Player getCurrentPlayer() {
+        return mCurrentPlayer;
     }
 }

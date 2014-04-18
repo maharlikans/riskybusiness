@@ -203,6 +203,7 @@ public class Board implements java.io.Serializable {
 
         Log.d(TAG, "Generating Players");
         for(String name: playerNames) {
+            Log.d(TAG, "This player is: " + name);
             players.add(new Player(this, name));
         }
         Log.d(TAG, "Finished Generating Players");
