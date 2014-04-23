@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 
 import com.View.R;
 
@@ -28,7 +29,7 @@ public class TradeScreenFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_trade_screen, parent, false);
         ImageView cancelButton = (ImageView)v.findViewById(R.id.cancel_trade_button);
 
-        LinearLayout tradeBack = (LinearLayout)v.findViewById(R.id.tradeback);
+        TableLayout tradeBack = (TableLayout)v.findViewById(R.id.tradeback);
         tradeBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
