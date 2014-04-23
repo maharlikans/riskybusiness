@@ -1,297 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/blue_background">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:id="@+id/tradeback"
-              android:background="@color/blue_background">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:gravity="center"
+                  android:id="@+id/tradeback"
+                  android:layout_weight=".75">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res1"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/bricktradeicon"
-            android:id="@+id/bricktradeicon"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
 
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
+            <ImageView
+                android:id="@+id/left_side_res1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/bricktradeicon"
+                android:id="@+id/bricktradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
 
-        <ImageView
-            android:id="@+id/right_side_res1"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
+            <ImageView
+                android:id="@+id/left_side_res2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/goldtradeicon"
+                android:id="@+id/goldtradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:id="@+id/left_side_res3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/oretradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:id="@+id/left_side_res4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/sheeptradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:id="@+id/left_side_res5"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/wheattradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res5"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:id="@+id/left_side_res6"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+            <ImageView
+                android:src="@drawable/woodtradeicon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:minHeight="50dp"
+                android:minWidth="100dp"
+                />
+
+            <TextView
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:text="@string/bank4for1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/trade_text_size"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/right_side_res6"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/plusbutton"
+                android:textSize="@dimen/trade_text_size"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res2"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/goldtradeicon"
-            android:id="@+id/goldtradeicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/right_side_res2"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res3"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/oretradeicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/right_side_res3"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res4"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/sheeptradeicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/right_side_res4"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res5"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/wheattradeicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/right_side_res5"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/left_side_res6"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-        <ImageView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:src="@drawable/woodtradeicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:minWidth="100dp"
-            />
-
-        <TextView
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/bank4for1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/trade_text_size"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/right_side_res6"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/plusbutton"
-            android:textSize="@dimen/trade_text_size"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="50dp"
-        android:gravity="center">
+    <TableRow
+        android:gravity="center"
+        android:layout_weight=".25">
 
         <ImageView
             android:id="@+id/request_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:src="@drawable/requesttradebutton"/>
+            android:src="@drawable/requesttradebutton"
+            android:layout_marginRight="4dp"/>
 
         <ImageView
             android:id="@+id/confirm_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:src="@drawable/confirmtradebutton"/>
-
-        <Button
-            android:id="@+id/counter_trade_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/counter_trade"
-            android:visibility="gone"/>
+            android:src="@drawable/confirmtradebutton"
+            />
 
         <ImageView
             android:id="@+id/cancel_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:src="@drawable/canceltradebutton"/>
+            android:src="@drawable/canceltradebutton"
+            />
 
-    </LinearLayout>
+    </TableRow>
 
-</LinearLayout>
+</TableLayout>
+
