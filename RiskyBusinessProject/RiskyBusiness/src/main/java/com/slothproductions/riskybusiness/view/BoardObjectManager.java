@@ -54,6 +54,10 @@ public class BoardObjectManager {
     private ArrayList<ImageView> mCities;
     private ArrayList<ImageView> mRoads;
 
+    //used for determining which edge and vertex to use for object placement
+    private Vertex v;
+    private Edge e;
+
     public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity, BoardScreenMainFragment manager) {
         //initialize main variables
         mBoardBacklog = boardData;
@@ -86,7 +90,7 @@ public class BoardObjectManager {
             buildItem(3, "city", coordinate);
         }
         else {
-            //move soldier
+            moveSoldier(coordinate);
         }
     }
 
@@ -115,20 +119,31 @@ public class BoardObjectManager {
         }
     }
 
+    //move soldier
+    public void moveSoldier(Coordinate coordinate) {
+        //get military unit/s from the model
+        //get vertex moving from
+        //get vertex moving to
+        //determine if this is an appropriate move (maybe force an appropriate move somehow?) this will be done in model
+        //physically move the location (with animation)
+        //
+
+    }
+
     //Creates the appropriate menu for the screen based on the tap event
     public void findMenu(MotionEvent event) {
 
         //scan through hex corners to see if tap location matches a corner
         Coordinate c = new Coordinate(event.getX(), event.getY());
-        Vertex v = null;
-        Edge e = null;
-        if (checkCornerLocations(c, v)) {
+        v = null;
+        e = null;
+        if (checkCornerLocations(c)) {
             // if this is true, then the coordinate is reassigned to the exact vertex location, and
             // v is assigned to the vertex the object is being placed we are now calling the show
             // popup menu in board buttons fragment
             mBoardButtonsFragment.showPopUp(c, v);
         }
-        else if (checkEdgeLocations(c, e)) {
+        else if (checkEdgeLocations(c)) {
             //need to apply right rotation at some point...
             mBoardButtonsFragment.showPopUp(c, e);
         }
@@ -155,37 +170,37 @@ public class BoardObjectManager {
     /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
      * also checks to see if a location is available for an item to be placed.
      */
-    public boolean checkEdgeLocations(Coordinate coordinate, Edge e) {
+    public boolean checkEdgeLocations(Coordinate coordinate) {
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i = 0; i < mBoardBacklog.hexes.size(); i++) {
-            Hex temp = mBoardBacklog.hexes.get(i);
+        for (int i = 0; i < mBoardBacklog.getHexesSize(); i++) {
+            Hex tempHex = mBoardBacklog.getHex(i);
 
             //grabbing the tile
             ImageView mTile = (ImageView) mBoardLayout.getChildAt(i + 1); // i+1 because background image is at i = 0;
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftEdge(coordinate, mTile)) {
-                //assign vertex v to index 0 of the hex temp's list
+            if (addTopEdge(coordinate, mTile)) {
+                e = tempHex.getEdge(0);
                 return true;
             }
             if (addTopRightEdge(coordinate, mTile)) {
-                //assign vertex v to index 1 of the hex temp's list
-                return true;
-            }
-            if (addTopEdge(coordinate, mTile)) {
-                //assign vertex v to index 2 of the hex temp's list
-                return true;
-            }
-            if (addBottomLeftEdge(coordinate, mTile)) {
-                //assign vertex v to index 3 of the hex temp's list
+                e = tempHex.getEdge(1);
                 return true;
             }
             if (addBottomRightEdge(coordinate, mTile)) {
-                //assign vertex v to index 4 of the hex temp's list
+                e = tempHex.getEdge(2);
                 return true;
             }
             if (addBottomEdge(coordinate, mTile)) {
-                //assign vertex v to index 5 of the hex temp's list
+                e = tempHex.getEdge(3);
+                return true;
+            }
+            if (addBottomLeftEdge(coordinate, mTile)) {
+                e = tempHex.getEdge(4);
+                return true;
+            }
+            if (addTopLeftEdge(coordinate, mTile)) {
+                e = tempHex.getEdge(5);
                 return true;
             }
         }
@@ -198,44 +213,40 @@ public class BoardObjectManager {
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
      * if it is, then it return the vertex where the location is a match, the coordinate of the vertex, and true;
      */
-    public boolean checkCornerLocations(Coordinate coordinate, Vertex v) {
+    public boolean checkCornerLocations(Coordinate coordinate) {
         //adjust the given coordinate for zoom/pan
         coordinate.mapZoomCoordinates(mBoardLayout);
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < mBoardBacklog.hexes.size(); i++) {
-            Hex temp = mBoardBacklog.hexes.get(i);
+        for (int i =0; i < mBoardBacklog.getHexesSize(); i++) {
+            Hex tempHex = mBoardBacklog.getHex(i);
 
             //grabbing the tile
             ImageView mTile = (ImageView) mBoardLayout.getChildAt(i+1); // i+1 because background image is at i = 0;
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 0 of the hex temp's list
+                v = tempHex.getVertex(0);
                 return true;
             }
             if (addTopRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 1 of the hex temp's list
-                return true;
-            }
-            if (addTopRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 2 of the hex temp's list
+                v = tempHex.getVertex(1);
                 return true;
             }
             if (addMidRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 3 of the hex temp's list
+                v = tempHex.getVertex(2);
                 return true;
             }
             if (addBottomRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 4 of the hex temp's list
+                v = tempHex.getVertex(3);
                 return true;
             }
             if (addBottomLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 5 of the hex temp's list
+                v = tempHex.getVertex(4);
                 return true;
             }
             if (addMidLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 6 of the hex temp's list
+                v = tempHex.getVertex(5);
                 return true;
             }
         }

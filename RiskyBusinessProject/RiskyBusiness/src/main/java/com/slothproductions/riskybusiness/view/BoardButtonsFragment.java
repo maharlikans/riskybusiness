@@ -267,7 +267,6 @@ public class BoardButtonsFragment extends Fragment {
 
     //Popup for use with corner objects
     public void showPopUp(final Coordinate c, Vertex v) {
-        //TODO: add support for roads, fix everything to work with the board data.
         //an anchor for the popup menu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
@@ -280,14 +279,6 @@ public class BoardButtonsFragment extends Fragment {
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(mActivity, anchor);
 
-        //Here we need to check what actions are available on the vertex before inflating the menu.
-        //this is also determined by which player is currently playing
-        //remove all items from the menu
-        //get available actions from vertex.
-        //iterate through list of available actions
-        //switch on the available actions
-        //add each available action to the menu by id
-        //if no actions are available, create toast saying no actions available for that vertex
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeItem(R.id.road);
 
@@ -307,8 +298,7 @@ public class BoardButtonsFragment extends Fragment {
 
     //Popup for use with roads
     public void showPopUp(final Coordinate c, Edge e) {
-        //TODO: fix everything to work with the board data.
-        //an anchor for the popup menu to be placed on.
+        //an anchor for the popup menu to be placed on. It needs this for whatever reason..
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
         anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
@@ -320,12 +310,8 @@ public class BoardButtonsFragment extends Fragment {
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(mActivity, anchor);
 
-        //Here we need to check what actions are available on the vertex before inflating the menu.
-        //this is also determined by which player is currently playing
-        //if an action is available, itw ill be shown, otherwise it wont be shown.
-        //if no actions are available, a toast will display saying there are no actions available at that vertex.
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-//        popup.getMenu().removeGroup(R.id.corneritems);
+        popup.getMenu().removeGroup(R.id.corneritems);
 
         // Pass the popup menu to be adjusted
         mGameLoop.getActions(popup, e);

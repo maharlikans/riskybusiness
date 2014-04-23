@@ -163,9 +163,9 @@ public class BoardScreenMainFragment extends Fragment {
 
     //loop through indices, check which resource in board, color appropriately using code similar to below
     void addResourcesToBoard() {
-        for (int i = 0; i < mBoardData.hexes.size(); i++) {
+        for (int i = 0; i < mBoardData.getHexesSize(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i+1);
-            switch(mBoardData.hexes.get(i).type) {
+            switch(mBoardData.getHex(i).type) {
                 case LUMBER:
                     iv.setImageResource(getResources().getIdentifier("forestresource", "drawable", mActivity.getPackageName()));
                     break;
@@ -196,7 +196,7 @@ public class BoardScreenMainFragment extends Fragment {
      *
      */
     void addNumbersToBoard() {
-        int l = mBoardData.hexes.size();
+        int l = mBoardData.getHexesSize();
         for (int i = 0; i < l; i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i+1);
             TextView tv = new TextView(mActivity);
@@ -214,7 +214,7 @@ public class BoardScreenMainFragment extends Fragment {
 
             placeImage(x,y,textBackground);
 
-            tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
+            tv.setText(Integer.toString(mBoardData.getHex(i).getRoll()));
             tv.setTextSize(20);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
