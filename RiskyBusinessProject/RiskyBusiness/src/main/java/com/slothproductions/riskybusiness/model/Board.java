@@ -27,7 +27,7 @@ public class Board implements java.io.Serializable {
     final private Random prng;
 
     //hexes was changed to public because i need to access it somehow
-    public List<Hex> hexes;
+    protected List<Hex> hexes;
     protected List<Vertex> vertices;
     protected List<MilitaryUnit> militaryUnits;
     protected List<Edge> edges;
@@ -529,8 +529,12 @@ public class Board implements java.io.Serializable {
         return null;
     }
 
-    // TODO temporary get method
+    // TODO temporary getter methods
     public List<Player> getPlayers() {
         return players;
     }
+    public Hex getHex(int index) {
+        return hexes.get(index);
+    }
+    public int getHexesSize() { return hexes.size(); }
 }
