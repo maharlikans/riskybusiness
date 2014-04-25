@@ -420,11 +420,13 @@ public class BoardObjectManager {
                 if (hexIndexAdded == i) {
                     if (edgeIndexAdded == j) {
                         edgeParameter = 0;
+                        break;
                     } else if (edgeIndexAdded == j + 1) {
                         edgeParameter = 1;
+                        break;
                     }
                 }
-                if (i % 2 == 0) {
+                if (i > 10 && i % 2 == 0) {
                     j++;
                 }
             }
