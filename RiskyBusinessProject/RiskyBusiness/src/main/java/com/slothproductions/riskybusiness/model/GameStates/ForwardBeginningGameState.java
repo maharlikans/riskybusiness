@@ -1,7 +1,10 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
@@ -10,9 +13,11 @@ import com.slothproductions.riskybusiness.model.GameAction;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
+import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.lang.Override;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -42,17 +47,30 @@ public class ForwardBeginningGameState implements GameState{
     public void init() {
         // in the forward beginning game state, we don't need to see the tradeButton nor
         // the endTurnButton, so hide them in the init method
-        ImageView tradeButton = (ImageView)mBoardScreen.findViewById(R.id.tradeButton);
+        /*ImageView tradeButton = (ImageView)(mBoardScreen
+                .getButtonsFragment()
+                .getView()
+                .findViewById(R.id.tradeButton));*/
+
+        BoardButtonsFragment boardButtonsFragment = (BoardButtonsFragment)mBoardScreen.getButtonsFragment();
+        if (boardButtonsFragment == null)
+            Log.d("TAG", "BoardButtonsFragment is null");
+        View v = boardButtonsFragment.getView();
+        if (v == null) {
+            Log.d("TAG", "View for BoardButtonsFragment is not created");
+        }
+        ImageView tradeButton = (ImageView)v.findViewById(R.id.tradeButton);
         tradeButton.setVisibility(View.GONE);
-        ImageView endTurnButton = (ImageView)mBoardScreen.findViewById(R.id.endTurnButton);
-        endTurnButton.setVisibility(View.GONE);
+        /*ImageView endTurnButton = (ImageView)(mBoardScreen
+                .getButtonsFragment()
+                .getView()
+                .findViewById(R.id.endTurnButton));
+        endTurnButton.setVisibility(View.GONE);*/
     }
 
     @Override
     public void startTurn() {
-        // TODO force buildSettlement
-        // force buildRoad
-        // force endTurn
+
     }
 
     @Override
@@ -62,18 +80,16 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public void buildRoad(Edge edge) {
-        GameAction ga = GameAction.BUILD_ROAD;
-        Map<String, Object> hm =  new HashMap<String, Object>();
-        hm.put("edge", (Object)edge);
-        mCurrentPlayer.effect(ga, hm);
+        if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
+            mCurrentPlayer.buildInitial(edge, 1);
+        }
     }
 
     @Override
     public void buildSettlement(Vertex vertex) {
-        GameAction ga = GameAction.BUILD_SETTLEMENT;
-        Map<String, Object> hm =  new HashMap<String, Object>();
-        hm.put("vertex", (Object)vertex);
-        mCurrentPlayer.effect(ga, hm);
+        if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
+            mCurrentPlayer.buildInitial(vertex, 1);
+        }
     }
 
     @Override
@@ -117,5 +133,26 @@ public class ForwardBeginningGameState implements GameState{
     @Override
     public Player getCurrentPlayer() {
         return mCurrentPlayer;
+    }
+
+    // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    @Override
+    public void getActions(PopupMenu popupMenu, Edge edge) {
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(0, R.id.road, 0, "Build road");
+
+        Log.d("TAG", "found Edge Actions");
+    }
+
+    // This method, if given a vertex, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    @Override
+    public void getActions(PopupMenu popupMenu, Vertex vertex) {
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(0, R.id.settlement, 0, "Build settlement");
+        Log.d("TAG", "found Vertex Actions");
     }
 }

@@ -1,5 +1,7 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.widget.PopupMenu;
+
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
@@ -19,5 +21,7 @@ public interface GameState {
     void moveSoldier(Vertex vertexFrom, Vertex vertexTo);
     void attackWithSoldier(Vertex vertex);
     void endTurn();
+    void getActions(PopupMenu popupMenu, Edge edge);
+    void getActions(PopupMenu popupMenu, Vertex vertex);
     Player getCurrentPlayer();
 }

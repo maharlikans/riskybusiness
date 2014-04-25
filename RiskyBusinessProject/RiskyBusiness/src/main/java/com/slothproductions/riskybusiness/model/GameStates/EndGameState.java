@@ -1,5 +1,7 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.widget.PopupMenu;
+
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
@@ -74,5 +76,15 @@ public class EndGameState implements GameState {
     @Override
     public Player getCurrentPlayer() {
         return null;
+    }
+
+    @Override
+    public void getActions(PopupMenu popupMenu, Edge edge) {
+        // DO NOTHING
+    }
+
+    @Override
+    public void getActions(PopupMenu popupMenu, Vertex vertex) {
+        // DO NOTHING
     }
 }

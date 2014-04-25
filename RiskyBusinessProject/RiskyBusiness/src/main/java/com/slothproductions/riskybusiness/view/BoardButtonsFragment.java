@@ -71,7 +71,6 @@ public class BoardButtonsFragment extends Fragment {
         mActivity = getActivity();
         mBoardScreen = (BoardScreen)mActivity;
         mBoardData = mBoardScreen.getBoard();
-        mGameLoop = mBoardScreen.getGameLoop();
 
         //maps the buttons and layouts in the view to the class variables
         initializeViewElements(v);
@@ -281,7 +280,7 @@ public class BoardButtonsFragment extends Fragment {
         popup.getMenu().removeGroup(R.id.corneritems);
 
         // pass the popup to be adjusted
-        mGameLoop.getActions(popup, v);
+        mBoardScreen.getGameLoop().getActions(popup, v);
 
         if (popup.getMenu().size() == 0) {
             return;
@@ -290,8 +289,8 @@ public class BoardButtonsFragment extends Fragment {
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                mBoardObjectManager.callActionFromMenuSelection(item, c);
-                return true;
+            mBoardObjectManager.callActionFromMenuSelection(item, c);
+            return true;
             }
         });
 
@@ -317,7 +316,7 @@ public class BoardButtonsFragment extends Fragment {
         popup.getMenu().removeItem(R.id.road);
 
         // Pass the popup menu to be adjusted
-        mGameLoop.getActions(popup, e);
+        mBoardScreen.getGameLoop().getActions(popup, e);
 
         if (popup.getMenu().size() == 0) {
             return;
@@ -350,5 +349,12 @@ public class BoardButtonsFragment extends Fragment {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mBoardScreen.initializeGameLoop();
+        mBoardScreen.getGameLoop().startGame();
     }
 }

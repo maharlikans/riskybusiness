@@ -35,7 +35,7 @@ public class GameLoop {
 
     Queue<Player> mPlayerQueue;
     Player mCurrentPlayer;
-    HashMap<Enum, Integer> mActionToMenuItemIdMap;
+    public HashMap<Enum, Integer> mActionToMenuItemIdMap;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
@@ -79,11 +79,13 @@ public class GameLoop {
         // only reason I use this instead of just changing the game state is because the game state
         // must not only be changed, init() must also be called on the game state, which is built
         // into the setCurrentGameState function.
-
-        //setCurrentGameState(mForwardBeginningGameState);
     }
 
     // ALL BELOW TODO
+    public void startGame() {
+        setCurrentGameState(mForwardBeginningGameState);
+    }
+
     public void startTurn() {
         mCurrentGameState.startTurn();
     }
@@ -161,46 +163,14 @@ public class GameLoop {
 //        return mBoard;
 //    }
 
-    // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
-    // correctly with the proper options in the menu
+
+
     public void getActions(PopupMenu popupMenu, Edge edge) {
-        ArrayList<GameAction> gameActionArrayListUnfiltered =  mCurrentPlayer.getActions(edge, false);
-        ArrayList<GameAction> gameActionArrayListFiltered =  mCurrentPlayer.getActions(edge, true);
-
-        Menu menu = popupMenu.getMenu();
-
-        // then enable only the menu items which are available in the list
-        for (GameAction ga : gameActionArrayListUnfiltered) {
-            menu.add(mActionToMenuItemIdMap.get(ga));
-            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
-        }
-
-        for (GameAction ga : gameActionArrayListFiltered) {
-            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
-        }
-
-        Log.d(TAG, "found Edge Actions");
+        mCurrentGameState.getActions(popupMenu, edge);
     }
 
-
-    // This method, if given a vertex, will edit the popup menu passed to it so it can be displayed
-    // correctly with the proper options in the menu
     public void getActions(PopupMenu popupMenu, Vertex vertex) {
-        ArrayList<GameAction> gameActionArrayListUnfiltered =  mCurrentPlayer.getActions(vertex, false);
-        ArrayList<GameAction> gameActionArrayListFiltered =  mCurrentPlayer.getActions(vertex, true);
-
-        Menu menu = popupMenu.getMenu();
-
-        // then enable only the menu items which are available in the list
-        for (GameAction ga : gameActionArrayListUnfiltered) {
-            menu.add(mActionToMenuItemIdMap.get(ga));
-            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
-        }
-
-        for (GameAction ga : gameActionArrayListFiltered) {
-            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
-        }
-        Log.d(TAG, "found Vertex Actions");
+        mCurrentGameState.getActions(popupMenu, vertex);
     }
 
     public Player getCurrentPlayer() {

@@ -279,5 +279,7 @@ public class BoardScreenMainFragment extends Fragment {
     public Board getBoardData() {
         return mBoardData;
     }
+
+
 }
 

@@ -45,6 +45,14 @@
     <string name="vp">VP: </string>
     <string name="num_resources">R: </string>
 
+    <!--Popup Menu Item Titles-->
+    <string name="build_road">Build Road</string>
+    <string name="build_settlement">Build Settlement</string>
+    <string name="upgrade_city">Upgrade to City</string>
+    <string name="repair_settlement">Repair Settlement</string>
+    <string name="repair_city">Repair City</string>
+    <string name="train_soldier">Train Army Unit</string>
+    <string name="move_soldier">Move Army Unit</string>
 
     <string-array name="player_names">
         <item>@string/player_1</item>
