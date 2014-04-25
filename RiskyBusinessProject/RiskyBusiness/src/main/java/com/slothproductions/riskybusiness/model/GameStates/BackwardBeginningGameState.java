@@ -1,10 +1,17 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.util.Log;
+import android.view.Menu;
+import android.widget.PopupMenu;
+
+import com.View.R;
 import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.GameAction;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -99,5 +106,26 @@ public class BackwardBeginningGameState implements GameState {
 
     public void setPlayerStack(Stack<Player> playerStack) {
         mPlayerStack = playerStack;
+    }
+
+    // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    @Override
+    public void getActions(PopupMenu popupMenu, Edge edge) {
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(R.id.settlement);
+
+        Log.d("TAG", "found Edge Actions");
+    }
+
+    // This method, if given a vertex, will edit the popup menu passed to it so it can be displayed
+    // correctly with the proper options in the menu
+    @Override
+    public void getActions(PopupMenu popupMenu, Vertex vertex) {
+        Menu menu = popupMenu.getMenu();
+
+        menu.add(R.id.road);
+        Log.d("TAG", "found Vertex Actions");
     }
 }

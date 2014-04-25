@@ -33,7 +33,6 @@ public class BoardScreen extends FragmentActivity {
 
     private FragmentManager mFragmentManager;
 
-
     int[] music = {R.raw.song1, R.raw.song2, R.raw.song3, R.raw.song4, R.raw.song5};
     int nextSong;
     MediaPlayer song;
@@ -62,7 +61,6 @@ public class BoardScreen extends FragmentActivity {
         }
 
         mBoardData = new Board(Players);
-        mGameLoop = new GameLoop(this);
 
         mFragmentManager = getSupportFragmentManager();
 
@@ -222,6 +220,10 @@ public class BoardScreen extends FragmentActivity {
 
     public GameLoop getGameLoop() {
         return mGameLoop;
+    }
+
+    public void initializeGameLoop() {
+        mGameLoop = new GameLoop(this);
     }
 
     protected void initializeDefaultFragments() {
