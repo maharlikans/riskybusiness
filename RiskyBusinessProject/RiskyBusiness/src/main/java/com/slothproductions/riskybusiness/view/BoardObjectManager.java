@@ -332,32 +332,38 @@ public class BoardObjectManager {
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopRightEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
+                hexIndexAdded = i;
                 edgeIndexAdded = 0;
                 continue;
             }
             if (addBottomRightEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 edgeIndexAdded = 1;
+                hexIndexAdded = i;
                 continue;
             }
             if (addBottomEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 edgeIndexAdded = 2;
+                hexIndexAdded = i;
                 continue;
             }
             if (addBottomLeftEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 edgeIndexAdded = 3;
+                hexIndexAdded = i;
                 continue;
             }
             if (addTopLeftEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 edgeIndexAdded = 4;
+                hexIndexAdded = i;
                 continue;
             }
             if (addTopEdge(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 edgeIndexAdded = 5;
+                hexIndexAdded = i;
             }
         }
 
