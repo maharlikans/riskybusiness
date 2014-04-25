@@ -107,7 +107,7 @@ public class BoardObjectManager {
             buildItem(2, "settlement", coordinate);
         }
         else if (action.getItemId() == R.id.city) {
-            //remove settlement at coordinate
+            removeSettlement(coordinate);
             buildItem(3, "city", coordinate);
         }
         else if (action.getItemId() == R.id.repairsettlement) {
@@ -185,6 +185,24 @@ public class BoardObjectManager {
         }
         mGameLoop.moveSoldier(startVertex, v);
         translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
+    }
+
+    public void removeSettlement(Coordinate coordinate) {
+        ImageView tempSettlement;
+        float x;
+        float y;
+        for (int i = 0; i < mSettlements.size(); i ++) {
+            tempSettlement = mSettlements.get(i);
+            x = ((int)coordinate.getX())-(tempSettlement.getWidth()/2) - tempSettlement.getDrawable().getIntrinsicWidth()/2;
+            y = ((int)coordinate.getY())-(tempSettlement.getHeight()/2) - tempSettlement.getDrawable().getIntrinsicHeight()/2;
+            if (x == tempSettlement.getLeft()) {
+                if (y == tempSettlement.getTop()) {
+                    mBoardLayout.removeView(tempSettlement);
+                    mSettlements.remove(i);
+                    return;
+                }
+            }
+        }
     }
 
     //Creates the appropriate menu for the screen based on the tap event
