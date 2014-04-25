@@ -177,8 +177,8 @@
             android:layout_alignTop="@+id/imageView10"
             android:layout_toLeftOf="@+id/imageView10"
             android:layout_alignEnd="@+id/imageView10"
-            android:layout_marginRight="97dp"
-            android:layout_marginTop="56dp" />
+            android:layout_marginRight="97px"
+            android:layout_marginTop="56px" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -188,8 +188,8 @@
             android:layout_alignTop="@+id/imageView"
             android:layout_toLeftOf="@+id/imageView"
             android:layout_alignEnd="@+id/imageView"
-            android:layout_marginRight="97dp"
-            android:layout_marginTop="56dp"/>
+            android:layout_marginRight="97px"
+            android:layout_marginTop="56px"/>
 
     </com.slothproductions.riskybusiness.view.ZoomableLayout>
 
