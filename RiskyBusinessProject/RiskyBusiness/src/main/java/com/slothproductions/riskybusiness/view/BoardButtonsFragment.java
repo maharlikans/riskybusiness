@@ -283,6 +283,10 @@ public class BoardButtonsFragment extends Fragment {
         // pass the popup to be adjusted
         mGameLoop.getActions(popup, v);
 
+        if (popup.getMenu().size() == 0) {
+            return;
+        }
+
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
@@ -314,6 +318,10 @@ public class BoardButtonsFragment extends Fragment {
 
         // Pass the popup menu to be adjusted
         mGameLoop.getActions(popup, e);
+
+        if (popup.getMenu().size() == 0) {
+            return;
+        }
 
         //registering popup with OnMenuItemClickListener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

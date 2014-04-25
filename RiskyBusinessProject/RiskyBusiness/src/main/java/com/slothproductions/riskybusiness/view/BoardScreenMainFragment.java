@@ -122,7 +122,6 @@ public class BoardScreenMainFragment extends Fragment {
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 Log.d(TAG, "Single Tap Detected");
                 mBoardObjectManager.findMenu(e);
-                Log.d(TAG, "Item Built");
                 return super.onSingleTapConfirmed(e);
             }
 
