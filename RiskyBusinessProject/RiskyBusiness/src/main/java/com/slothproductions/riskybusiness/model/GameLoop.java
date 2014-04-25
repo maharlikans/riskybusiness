@@ -67,6 +67,8 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.id.soldier);
         mActionToMenuItemIdMap.put(GameAction.BUILD_CITY, R.id.city);
         mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
+//        mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
+//        mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
 
         mForwardBeginningGameState = new ForwardBeginningGameState(this);
 //        mBackwardBeginningGameState = new BackwardBeginningGameState(this);
