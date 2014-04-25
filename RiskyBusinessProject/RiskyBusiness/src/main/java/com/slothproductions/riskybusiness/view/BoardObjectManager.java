@@ -87,6 +87,7 @@ public class BoardObjectManager {
         mCities = new ArrayList<ImageView>();
         mRoads = new ArrayList<ImageView>();
 
+        mAdjacentHexes = new ArrayList<Hex>();
     }
 
     //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
@@ -174,7 +175,7 @@ public class BoardObjectManager {
             assignVertexFromIndex();
         }
         //mBoardData.moveSoldier(startVertex, v);
-        translateImage((int)c.getX(), (int)c.getY(), mSoldierMoving);
+        translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
     }
 
     //Creates the appropriate menu for the screen based on the tap event
@@ -198,6 +199,8 @@ public class BoardObjectManager {
                 //v = mBoardData.getVertex(mAdjacentHexes, 0);
             }
             // popup menu in board buttons fragment
+            //this is just temporary until the getVertex method is active
+            v = mBoardBacklog.getHex(0).getVertex(0);
             mBoardButtonsFragment.showPopUp(c, v);
         }
         else if (checkEdgeLocations(c)) {
@@ -293,7 +296,9 @@ public class BoardObjectManager {
             }
         }
 
-        //No corner location found for menu
+        if (mAdjacentHexes.size()!= 0) {
+            return true;
+        }
         return false;
     }
 
