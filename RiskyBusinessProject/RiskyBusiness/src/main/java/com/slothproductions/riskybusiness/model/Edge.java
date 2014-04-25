@@ -8,7 +8,6 @@ public class Edge implements java.io.Serializable {
     final protected List<Vertex> vertices;
     final public ImmutableEdge immutable;
     final public int index;
-    public int hp;
     protected Player owner;
     public boolean road;
 
@@ -46,7 +45,6 @@ public class Edge implements java.io.Serializable {
         }
         hexagons = Collections.unmodifiableList(tmp);
         vertices = Collections.unmodifiableList(tmp2);
-        hp = 2;
     }
 
     public List<Hex> getHexagons() {

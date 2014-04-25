@@ -161,7 +161,7 @@ final public class Player implements java.io.Serializable {
         e.owner = this;
     }
 
-    public ArrayList<GameAction> getActions(Vertex v) {
+    public ArrayList<GameAction> getActions(Vertex v, boolean filter) {
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
 
         if (v.building.type == BuildingType.EMPTY) {
@@ -196,16 +196,17 @@ final public class Player implements java.io.Serializable {
         if (v.military != null && v.military.haveNotMoved > 0) {
             boolean canAttack = false;
         }
-
-        for (GameAction action : actions) {
-            if (!hasResources(action.resourcesNeeded)) {
-                actions.remove(action);
+        if (filter) {
+            for (GameAction action : actions) {
+                if (!hasResources(action.resourcesNeeded)) {
+                    actions.remove(action);
+                }
             }
         }
         return actions;
     }
 
-    public ArrayList<GameAction> getActions(Edge e) {
+    public ArrayList<GameAction> getActions(Edge e, boolean filter) {
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
 
         if (!e.road) {
@@ -217,10 +218,11 @@ final public class Player implements java.io.Serializable {
             if (canBuild)
                 actions.add(GameAction.BUILD_ROAD);
         }
-
-        for (GameAction action : actions) {
-            if (!hasResources(action.resourcesNeeded)) {
-                actions.remove(action);
+        if (filter) {
+            for (GameAction action : actions) {
+                if (!hasResources(action.resourcesNeeded)) {
+                    actions.remove(action);
+                }
             }
         }
         return actions;
