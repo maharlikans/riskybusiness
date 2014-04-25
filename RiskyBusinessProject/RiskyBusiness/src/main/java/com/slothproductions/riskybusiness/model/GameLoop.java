@@ -161,17 +161,18 @@ public class GameLoop {
     // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
     // correctly with the proper options in the menu
     public void getActions(PopupMenu popupMenu, Edge edge) {
-        ArrayList<GameAction> gameActionArrayList =  mCurrentPlayer.getActions(edge);
+        ArrayList<GameAction> gameActionArrayListUnfiltered =  mCurrentPlayer.getActions(edge, false);
+        ArrayList<GameAction> gameActionArrayListFiltered =  mCurrentPlayer.getActions(edge, true);
 
         Menu menu = popupMenu.getMenu();
 
-        // first just disable all menu items
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(false);
+        // then enable only the menu items which are available in the list
+        for (GameAction ga : gameActionArrayListUnfiltered) {
+            menu.add(mActionToMenuItemIdMap.get(ga));
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
         }
 
-        // then enable only the menu items which are available in the list
-        for (GameAction ga : gameActionArrayList) {
+        for (GameAction ga : gameActionArrayListFiltered) {
             menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
     }
@@ -185,18 +186,14 @@ public class GameLoop {
 
         Menu menu = popupMenu.getMenu();
 
-        // first just disable all menu items
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(false);
-        }
-
         // then enable only the menu items which are available in the list
         for (GameAction ga : gameActionArrayListUnfiltered) {
-            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
+            menu.add(mActionToMenuItemIdMap.get(ga));
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
         }
 
         for (GameAction ga : gameActionArrayListFiltered) {
-            menu.findItem()
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
     }
 
