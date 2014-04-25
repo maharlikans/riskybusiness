@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.View.R;
 import android.app.Activity;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class OptionsScreen extends Activity {
 
@@ -13,6 +15,47 @@ public class OptionsScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options_screen);
+
+        final SeekBar musicSeeker = (SeekBar)findViewById(R.id.music_volume_seekbar);
+        final SeekBar volumeSeeker = (SeekBar) findViewById(R.id.sound_effect_seekbar);
+
+        final TextView musicTextView = (TextView) findViewById(R.id.music_volume_value);
+        final TextView soundTextView = (TextView) findViewById(R.id.sound_effect_value);
+
+        musicSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser == true)
+                    musicTextView.setText(String.valueOf(progress) + '%');
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        volumeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser == true)
+                    soundTextView.setText(String.valueOf(progress) + '%');
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
 

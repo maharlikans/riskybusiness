@@ -1,33 +1,26 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 import com.View.R;
-import android.widget.Button;
 
 
 public class GameRules extends Activity {
 
-    private Button mBtnEPTurn;
-    private Button mBtnResources;
-    private Button mBtnTrading;
-    private Button mBtnBuilding;
-    private Button mBtnMilitary;
-    private Button mBtnAttacking;
-    private Button mBtnWinning;
+    private ImageView mBtnEPTurn;
+    private ImageView mBtnResources;
+    private ImageView mBtnTrading;
+    private ImageView mBtnBuilding;
+    private ImageView mBtnMilitary;
+    private ImageView mBtnAttacking;
+    private ImageView mBtnWinning;
 
     ImageView item;
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gamerules_screen);
@@ -35,7 +28,7 @@ public class GameRules extends Activity {
         item = (ImageView)findViewById(R.id.game_rule_image);
         item.setVisibility(View.INVISIBLE);
 
-        mBtnEPTurn = (Button)findViewById(R.id.eachPlayersTurnButton);
+        mBtnEPTurn = (ImageView)findViewById(R.id.eachPlayersTurnButton);
         mBtnEPTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +37,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnResources = (Button)findViewById(R.id.resourcesButton);
+        mBtnResources = (ImageView)findViewById(R.id.resourcesButton);
         mBtnResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +46,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnTrading = (Button)findViewById(R.id.tradingButton);
+        mBtnTrading = (ImageView)findViewById(R.id.tradingButton);
         mBtnTrading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +55,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnBuilding = (Button)findViewById(R.id.buildingButton);
+        mBtnBuilding = (ImageView)findViewById(R.id.buildingButton);
         mBtnBuilding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +64,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnMilitary = (Button)findViewById(R.id.militaryButton);
+        mBtnMilitary = (ImageView)findViewById(R.id.militaryButton);
         mBtnMilitary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +73,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnAttacking = (Button)findViewById(R.id.attackingButton);
+        mBtnAttacking = (ImageView)findViewById(R.id.attackingButton);
         mBtnAttacking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +82,7 @@ public class GameRules extends Activity {
             }
         });
 
-        mBtnWinning = (Button)findViewById(R.id.winningButton);
+        mBtnWinning = (ImageView)findViewById(R.id.winningButton);
         mBtnWinning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

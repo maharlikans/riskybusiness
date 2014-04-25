@@ -19,7 +19,8 @@
         android:src="@drawable/tradebutton"
         android:id="@+id/tradeButton"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/settingsButton"/>
+        android:layout_below="@id/settingsButton"
+        />
 
    <ImageView
        android:layout_width="wrap_content"

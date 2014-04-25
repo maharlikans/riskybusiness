@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.View.R;
 
@@ -26,6 +27,14 @@ public class TradeScreenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_trade_screen, parent, false);
         ImageView cancelButton = (ImageView)v.findViewById(R.id.cancel_trade_button);
+
+        LinearLayout tradeBack = (LinearLayout)v.findViewById(R.id.tradeback);
+        tradeBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

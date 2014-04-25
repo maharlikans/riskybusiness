@@ -3,6 +3,7 @@ package com.slothproductions.riskybusiness.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
@@ -88,6 +89,8 @@ public class BoardObjectManager {
 
     }
 
+    //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
+    //Note: to make this work with the model, it may need to take an edge or vertex
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
         if (action.getItemId() == R.id.road) {
             //call build road from game loop
@@ -108,6 +111,8 @@ public class BoardObjectManager {
         }
     }
 
+    //this method builds an item on the screen at the given coordinate
+    //this should probably take an enum instead of a string.. it is probably fine as is
     public void buildItem(int identifier, String name, Coordinate coordinate) {
         //add Item to the appropriate vertex/edge
 
@@ -116,7 +121,11 @@ public class BoardObjectManager {
         item.setId((int)System.currentTimeMillis());
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         item.setRotation(coordinate.getRotation());
-        placeImage((int)coordinate.getX(), (int)coordinate.getY(), item);
+
+        //places the image on the screen
+        placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
+
+        //this should be unnecessary, should be able to do this elsewhere.
         switch(identifier) {
             case 0:
                 mRoads.add(item);
@@ -131,6 +140,9 @@ public class BoardObjectManager {
                 mCities.add(item);
                 break;
         }
+
+        //this makes sure that all the objects are placed at the proper z index
+        normalizeLevels();
     }
 
     //move soldier
@@ -166,6 +178,7 @@ public class BoardObjectManager {
     }
 
     //Creates the appropriate menu for the screen based on the tap event
+    //This will call the popup menu in the BoardButtons class
     public void findMenu(MotionEvent event) {
         Coordinate c = new Coordinate(event.getX(), event.getY());
 
@@ -213,7 +226,6 @@ public class BoardObjectManager {
         lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
-        normalizeLevels();
     }
 
     //im sure this will need some fixing..
@@ -392,10 +404,10 @@ public class BoardObjectManager {
         int y = mTile.getTop();
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -415,10 +427,10 @@ public class BoardObjectManager {
         int y = mTile.getTop();
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -438,10 +450,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+112;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -461,10 +473,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+224;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -484,10 +496,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+224;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {
@@ -507,10 +519,10 @@ public class BoardObjectManager {
         int y = mTile.getTop()+112;
 
         //range that is valid location
-        int lowX = x-50;
-        int highX = x+50;
-        int lowY = y-50;
-        int highY = y+50;
+        int lowX = x-35;
+        int highX = x+35;
+        int lowY = y-35;
+        int highY = y+35;
 
         //compare tap x,y locations against valid x and y range for top corner
         if (tapX >= lowX && tapX <=highX && tapY>=lowY && tapY<=highY) {

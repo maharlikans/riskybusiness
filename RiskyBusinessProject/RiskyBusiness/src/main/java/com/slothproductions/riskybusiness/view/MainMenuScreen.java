@@ -34,7 +34,6 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to main menu activity
                 Intent i = new Intent(MainMenuScreen.this, GameSetupScreen.class);
-                song.release(); //stops song
                 startActivity(i);
             }
         });
@@ -47,8 +46,8 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Game Rules activity
                 Intent i = new Intent(MainMenuScreen.this, GameRules.class);
-                song.release();
                 startActivity(i);
+
             }
         });
 
@@ -59,8 +58,8 @@ public class MainMenuScreen extends Activity {
             public void onClick(View v) {
                 //Should proceed to Options Activity
                 Intent i = new Intent(MainMenuScreen.this, OptionsScreen.class);
-                song.release();
                 startActivity(i);
+
             }
         });
 
@@ -87,6 +86,25 @@ public class MainMenuScreen extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menu) {
         return super.onOptionsItemSelected(menu);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        song.release();
+    }
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        song.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        song.reset();
+        song = MediaPlayer.create(MainMenuScreen.this, R.raw.mainmenusong);
     }
 
 }

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,12 +14,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.GameLoop;
+
+import java.util.Random;
 
 public class BoardScreen extends FragmentActivity {
 
@@ -34,6 +36,7 @@ public class BoardScreen extends FragmentActivity {
 
     int[] music = {R.raw.song1, R.raw.song2, R.raw.song3, R.raw.song4, R.raw.song5};
     int nextSong;
+    MediaPlayer song;
     OnCompletionListener mListener = new OnCompletionListener(){
         @Override
         public void onCompletion(MediaPlayer song) {
@@ -67,12 +70,14 @@ public class BoardScreen extends FragmentActivity {
     }
 
     void startNextSong(){
-        if(nextSong > 4) nextSong = 0;
-        if(nextSong < music.length){
-            MediaPlayer song = MediaPlayer.create(BoardScreen.this, music[nextSong++]);
+        Random r = new Random();
+        int random = r.nextInt(5 - 0) + 0;
+       // if(nextSong > 4) nextSong = 0;
+        //if(nextSong < music.length){
+            song = MediaPlayer.create(BoardScreen.this, music[random]);
             song.setOnCompletionListener(mListener);
             song.start();
-        }
+        //}
     }
 
 
@@ -130,6 +135,19 @@ public class BoardScreen extends FragmentActivity {
         });
 
         alertDialog.show();
+    }
+
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        song.start();
+        //start song back again.
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        song.pause();
     }
 
     @Override

@@ -4,75 +4,70 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <ImageView
         android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Each Players Turn"
+        android:src="@drawable/eachplayersturnbutton"
         android:id="@+id/eachPlayersTurnButton"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="102dp"
+        android:layout_marginTop="75dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="155dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Resources"
+        android:src="@drawable/resourcesbutton"
         android:id="@+id/resourcesButton"
         android:layout_gravity="center_horizontal"
         android:layout_alignStart="@+id/tradingButton"
         android:layout_below="@+id/eachPlayersTurnButton"
         android:layout_centerHorizontal="true" />
 
-
-
-    <Button
-        android:layout_width="155dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Trading"
+        android:src="@drawable/tradingbutton"
         android:id="@+id/tradingButton"
         android:layout_gravity="center_horizontal"
-
         android:layout_below="@+id/resourcesButton"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="157dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Building"
+        android:src="@drawable/buildingbutton"
         android:id="@+id/buildingButton"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/tradingButton"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="158dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Military"
+        android:src="@drawable/militarybutton"
         android:id="@+id/militaryButton"
         android:layout_gravity="center_horizontal"
-
         android:layout_alignStart="@+id/buildingButton"
         android:layout_below="@+id/buildingButton"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="159dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Attacking"
+        android:src="@drawable/attackingbutton"
         android:id="@+id/attackingButton"
         android:layout_gravity="center_horizontal"
         android:layout_alignStart="@+id/militaryButton"
         android:layout_below="@+id/militaryButton"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="163dp"
+    <ImageView
+        android:layout_width="156dp"
         android:layout_height="wrap_content"
-        android:text="Winning"
+        android:src="@drawable/winningbutton"
         android:id="@+id/winningButton"
         android:layout_gravity="center_horizontal"
-
         android:layout_below="@+id/attackingButton"
         android:layout_alignLeft="@+id/attackingButton"
         android:layout_alignStart="@+id/attackingButton"

@@ -5,6 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:gravity="center"
+              android:id="@+id/tradeback"
               android:background="@color/blue_background">
 
     <LinearLayout
@@ -36,11 +37,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -63,11 +64,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -77,11 +78,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -104,11 +105,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -118,11 +119,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -144,11 +145,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -158,11 +159,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -184,11 +185,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -198,11 +199,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -224,11 +225,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -238,11 +239,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageView
             android:id="@+id/left_side_res6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
         <ImageView
@@ -264,11 +265,11 @@
             android:textSize="@dimen/trade_text_size"
             android:visibility="gone"/>
 
-        <Button
+        <ImageView
             android:id="@+id/right_side_res6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/plus"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/plusbutton"
             android:textSize="@dimen/trade_text_size"/>
 
     </LinearLayout>
@@ -283,12 +284,14 @@
             android:id="@+id/request_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/requesttradebutton"/>
 
         <ImageView
             android:id="@+id/confirm_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/confirmtradebutton"/>
 
         <Button
@@ -302,6 +305,7 @@
             android:id="@+id/cancel_trade_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:src="@drawable/canceltradebutton"/>
 
     </LinearLayout>
