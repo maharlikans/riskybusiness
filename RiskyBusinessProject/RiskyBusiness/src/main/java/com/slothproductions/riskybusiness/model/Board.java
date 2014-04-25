@@ -338,10 +338,14 @@ public class Board implements java.io.Serializable {
     }
 
     public Vertex getVertex(ArrayList<Hex> hexes, int i) {
+        Log.d(TAG, "Getting vertex.");
+        for (Hex hex : hexes)
+            Log.d(TAG, "Given hex " + hex.index);
+        Log.d(TAG, "Given i = " + i);
         if (hexes.size() != 1) {
             List<Vertex> vertices = hexes.get(0).vertices;
             for (Vertex vertex : vertices) {
-                boolean isGood = true;
+                boolean isGood = vertex.hexagons.size() == hexes.size();
                 for (Hex hex : hexes)
                     if (!vertex.hexagons.contains(hex))
                         isGood = false;
@@ -363,6 +367,10 @@ public class Board implements java.io.Serializable {
     }
 
     public Edge getEdge(ArrayList<Hex> hexes, int i) {
+        Log.d(TAG, "Getting edge.");
+        for (Hex hex : hexes)
+            Log.d(TAG, "Given hex " + hex.index);
+        Log.d(TAG, "Given i = " + i);
         if (hexes.size() > 1) {
             List<Edge> edges = hexes.get(0).edges;
             for (Edge edge : edges)
@@ -378,7 +386,10 @@ public class Board implements java.io.Serializable {
                 if (edge.hexagons.size() == 1)
                     good.add(edge);
             if (hexes.get(0).index == 9) {
+                Log.d(TAG, "Extra case 1 - hex 9.");
                 ret = good.get(2 - i);
+            } else if (hexes.get(0).index == 7) {
+                ret = good.get(i);
             } else if (hexes.get(0).index == 8) {
                 ret = good.get(1 - i);
             } else if (edges.size() == 2) {
