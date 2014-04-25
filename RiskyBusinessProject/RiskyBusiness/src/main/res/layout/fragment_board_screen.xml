@@ -90,8 +90,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView2"
             android:src="@drawable/hexagon"
-            android:layout_marginLeft="97dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginLeft="194px"
+            android:layout_marginTop="112px"
             android:layout_alignTop="@+id/imageView"
             android:layout_alignLeft="@+id/imageView"
             android:layout_alignStart="@+id/imageView" />
@@ -104,8 +104,8 @@
             android:layout_alignTop="@+id/imageView2"
             android:layout_alignLeft="@+id/imageView2"
             android:layout_alignStart="@+id/imageView2"
-            android:layout_marginLeft="97dp"
-            android:layout_marginTop="56dp"/>
+            android:layout_marginLeft="194px"
+            android:layout_marginTop="112px"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -177,8 +177,8 @@
             android:layout_alignTop="@+id/imageView10"
             android:layout_toLeftOf="@+id/imageView10"
             android:layout_alignEnd="@+id/imageView10"
-            android:layout_marginRight="97px"
-            android:layout_marginTop="56px" />
+            android:layout_marginRight="194px"
+            android:layout_marginTop="112px" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -188,8 +188,8 @@
             android:layout_alignTop="@+id/imageView"
             android:layout_toLeftOf="@+id/imageView"
             android:layout_alignEnd="@+id/imageView"
-            android:layout_marginRight="97px"
-            android:layout_marginTop="56px"/>
+            android:layout_marginRight="194px"
+            android:layout_marginTop="112px"/>
 
     </com.slothproductions.riskybusiness.view.ZoomableLayout>
 

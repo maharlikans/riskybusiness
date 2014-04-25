@@ -210,7 +210,8 @@ public class BoardObjectManager {
             else {
                 //mBoardBacklog.getEdge(mAdjacentHexes, 0);
             }
-            //need to apply right rotation at some point...
+            //temporary unitl getedge method works
+            e = mBoardBacklog.getHex(0).getEdge(0);
             mBoardButtonsFragment.showPopUp(c, e);
         }
     }
