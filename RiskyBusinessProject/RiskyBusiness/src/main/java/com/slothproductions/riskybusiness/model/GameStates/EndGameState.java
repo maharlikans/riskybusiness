@@ -62,7 +62,7 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public void diceRoll(int rollResult) {
+    public void diceRoll() {
 
     }
 
