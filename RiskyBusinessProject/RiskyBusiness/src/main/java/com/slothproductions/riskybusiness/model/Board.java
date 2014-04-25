@@ -337,6 +337,66 @@ public class Board implements java.io.Serializable {
             p.addResources(gained.get(p));
     }
 
+    public Vertex getVertex(ArrayList<Hex> hexes, int i) {
+        if (hexes.size() != 1) {
+            List<Vertex> vertices = hexes.get(0).vertices;
+            for (Vertex vertex : vertices) {
+                boolean isGood = true;
+                for (Hex hex : hexes)
+                    if (!vertex.hexagons.contains(hex))
+                        isGood = false;
+                if (isGood) {
+                    Log.d(TAG, "Got vertex " + vertex.index);
+                    return vertex;
+                }
+            }
+        } else {
+            List<Vertex> vertices = hexes.get(0).vertices;
+            ArrayList<Vertex> good = new ArrayList<Vertex>();
+            for (Vertex vertex : vertices)
+                if (vertex.hexagons.size() == 1)
+                    good.add(vertex);
+            Log.d(TAG, "Got vertex " + good.get(i).index);
+            return good.get(i);
+        }
+        throw new InvalidParameterException("Bad hex list for getVertex.");
+    }
+
+    public Edge getEdge(ArrayList<Hex> hexes, int i) {
+        if (hexes.size() > 1) {
+            List<Edge> edges = hexes.get(0).edges;
+            for (Edge edge : edges)
+                if (edge.hexagons.contains(hexes.get(1))) {
+                    Log.d(TAG, "Got edge " + edge.index);
+                    return edge;
+                }
+        } else {
+            List<Edge> edges = hexes.get(0).edges;
+            ArrayList<Edge> good = new ArrayList<Edge>();
+            Edge ret;
+            for (Edge edge : edges)
+                if (edge.hexagons.size() == 1)
+                    good.add(edge);
+            if (hexes.get(0).index == 9) {
+                ret = good.get(2 - i);
+            } else if (hexes.get(0).index == 8) {
+                ret = good.get(1 - i);
+            } else if (edges.size() == 2) {
+                ret = good.get(i);
+            } else {
+                if (i == 0)
+                    ret = good.get(0);
+                else if (i == 1)
+                    ret = good.get(2);
+                else
+                    ret = good.get(1);
+            }
+            Log.d(TAG, "Got edge " + ret.index);
+            return ret;
+        }
+        throw new InvalidParameterException("Bad hex list for getEdge.");
+    }
+
     protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
         if (player == null || action == null || arguments == null) throw new InvalidParameterException();
         Iterator<Map.Entry<String, GameAction.ArgumentType>> it = action.arguments.entrySet().iterator();
