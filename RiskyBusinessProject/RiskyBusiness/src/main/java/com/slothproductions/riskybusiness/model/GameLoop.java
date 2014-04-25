@@ -29,6 +29,7 @@ import java.util.Queue;
  *         encapsulate the class
  */
 public class GameLoop {
+    private final String TAG = "Game Loop";
     BoardScreen mBoardScreen;
     Board mBoard;
 
@@ -177,6 +178,8 @@ public class GameLoop {
         for (GameAction ga : gameActionArrayListFiltered) {
             menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
+
+        Log.d(TAG, "found Edge Actions");
     }
 
 
@@ -197,6 +200,7 @@ public class GameLoop {
         for (GameAction ga : gameActionArrayListFiltered) {
             menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
+        Log.d(TAG, "found Vertex Actions");
     }
 
     public Player getCurrentPlayer() {
