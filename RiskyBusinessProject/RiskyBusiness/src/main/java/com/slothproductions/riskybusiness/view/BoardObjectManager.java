@@ -196,7 +196,7 @@ public class BoardObjectManager {
                 assignVertexFromIndex();
             }
             else {
-                //v = mBoardData.getVertex(mAdjacentHexes, 0);
+                //v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
             }
             // popup menu in board buttons fragment
             //this is just temporary until the getVertex method is active
@@ -208,7 +208,7 @@ public class BoardObjectManager {
                 assignEdgeFromIndex();
             }
             else {
-                //mBoardData.getEdge(mAdjacentHexes, 0);
+                //mBoardBacklog.getEdge(mAdjacentHexes, 0);
             }
             //need to apply right rotation at some point...
             mBoardButtonsFragment.showPopUp(c, e);
@@ -243,6 +243,7 @@ public class BoardObjectManager {
         translation.setFillBefore(true);
         translation.setFillAfter(true);
         translation.setFillEnabled(true);
+        image.startAnimation(translation);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
@@ -268,26 +269,31 @@ public class BoardObjectManager {
                 mAdjacentHexes.add(tempHex);
                 vertexIndexAdded = 0;
                 hexIndexAdded = i;
+                continue;
             }
             else if (addMidRightCorner(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 vertexIndexAdded = 1;
                 hexIndexAdded = i;
+                continue;
             }
             else if (addBottomRightCorner(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 vertexIndexAdded = 2;
                 hexIndexAdded = i;
+                continue;
             }
             else if (addBottomLeftCorner(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 vertexIndexAdded = 3;
                 hexIndexAdded = i;
+                continue;
             }
             else if (addMidLeftCorner(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
                 vertexIndexAdded = 4;
                 hexIndexAdded = i;
+                continue;
             }
             else if (addTopLeftCorner(coordinate, mTile)) {
                 mAdjacentHexes.add(tempHex);
@@ -319,31 +325,39 @@ public class BoardObjectManager {
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
             if (addTopRightEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(0);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 0;
+                continue;
             }
             if (addBottomRightEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(1);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 1;
+                continue;
             }
             if (addBottomEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(2);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 2;
+                continue;
             }
             if (addBottomLeftEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(3);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 3;
+                continue;
             }
             if (addTopLeftEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(4);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 4;
+                continue;
             }
             if (addTopEdge(coordinate, mTile)) {
-                e = tempHex.getEdge(0);
-                return true;
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 5;
             }
         }
 
+        if (mAdjacentHexes.size() > 0) {
+            return true;
+        }
         //object can't be placed, make toast
         mManagingFragment.createToast("Select the corner or edge of a tile for available actions", false);
         return false;
@@ -356,6 +370,7 @@ public class BoardObjectManager {
                 return;
             }
         }
+        //runs through each of the hex indices that could have a floating vertex. if the vertexadded is equal to the counter, than v is the first vertex
         int j = 0;
         for (int i = 9; i <=17; i+=2) {
             if (hexIndexAdded == i) {
@@ -370,6 +385,39 @@ public class BoardObjectManager {
     }
 
     public void assignEdgeFromIndex() {
+        int edgeParameter = 2;
+        if (hexIndexAdded == 7) {
+            if (edgeIndexAdded == 0) {
+                edgeParameter = 0;
+            }
+            else if (edgeIndexAdded == 4) {
+                edgeParameter = 1;
+            }
+        }
+        else if (hexIndexAdded == 8) {
+            if (edgeIndexAdded == 0) {
+                edgeParameter = 0;
+            }
+            else {
+                edgeParameter = 1;
+            }
+        }
+        else {
+            int j = 0;
+            for (int i = 9; i <= 18; i++) {
+                if (hexIndexAdded == i) {
+                    if (edgeIndexAdded == j) {
+                        edgeParameter = 0;
+                    } else if (edgeIndexAdded == j + 1) {
+                        edgeParameter = 1;
+                    }
+                }
+                if (i % 2 == 0) {
+                    j++;
+                }
+            }
+        }
+        //e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
     }
 
     /**
