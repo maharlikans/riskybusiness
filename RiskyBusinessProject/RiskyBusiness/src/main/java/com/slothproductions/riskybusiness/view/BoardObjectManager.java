@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,6 +62,10 @@ public class BoardObjectManager {
     private Vertex v;
     private Edge e;
 
+    //for soldier movement
+    private Vertex startVertex;
+    private ImageView mSoldierMoving;
+
     private ArrayList<Hex> mAdjacentHexes;
 
     int vertexIndexAdded;
@@ -98,7 +104,7 @@ public class BoardObjectManager {
             buildItem(3, "city", coordinate);
         }
         else {
-            moveSoldier(coordinate);
+            setMoveSoldierState(coordinate);
         }
     }
 
@@ -128,15 +134,35 @@ public class BoardObjectManager {
     }
 
     //move soldier
-    public void moveSoldier(Coordinate coordinate) {
+    public void setMoveSoldierState(Coordinate coordinate) {
         mSoldierAction = true;
-        //get military unit/s from the model
-        //get vertex moving from
-        //get vertex moving to
-        //determine if this is an appropriate move (maybe force an appropriate move somehow?) this will be done in model
-        //physically move the location (with animation)
-        //
+        startVertex = v;
+        ImageView tempSoldier;
+        float x;
+        float y;
+        for (int i = 0; i < mSoldiers.size(); i ++) {
+            tempSoldier = mSoldiers.get(i);
+            x = ((int)coordinate.getX())-(tempSoldier.getWidth()/2) - tempSoldier.getDrawable().getIntrinsicWidth()/2;
+            y = ((int)coordinate.getY())-(tempSoldier.getHeight()/2) - tempSoldier.getDrawable().getIntrinsicHeight()/2;
+            if (x == tempSoldier.getLeft()) {
+                if (y == tempSoldier.getTop()) {
+                    mSoldierMoving = tempSoldier;
+                    return;
+                }
+            }
+        }
 
+        //if we get this far, there is a problem with the above code...
+    }
+
+    public void moveSoldier(Coordinate c) {
+        mSoldierAction = false;
+        checkCornerLocations(c);
+        if (mAdjacentHexes.size() == 1) {
+            assignVertexFromIndex();
+        }
+        //mBoardData.moveSoldier(startVertex, v);
+        translateImage((int)c.getX(), (int)c.getY(), mSoldierMoving);
     }
 
     //Creates the appropriate menu for the screen based on the tap event
@@ -144,9 +170,8 @@ public class BoardObjectManager {
         Coordinate c = new Coordinate(event.getX(), event.getY());
 
         if (mSoldierAction) {
-            mSoldierAction = false;
-            //do soldier stuff
-            //return so it doesnt execute the rest of the code.
+            moveSoldier(c);
+            return;
         }
 
         //scan through hex corners to see if tap location matches a corner
@@ -189,6 +214,20 @@ public class BoardObjectManager {
 
         mBoardLayout.addView(image, lp);
         normalizeLevels();
+    }
+
+    //im sure this will need some fixing..
+    public void translateImage(int newX, int newY, ImageView image) {
+        newX = newX-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
+        newY = newY-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
+        int oldX = image.getLeft();
+        int oldY = image.getTop();
+
+        Animation translation = new TranslateAnimation(oldX, newX, oldY, newY);
+        translation.setDuration(1000);
+        translation.setFillBefore(true);
+        translation.setFillAfter(true);
+        translation.setFillEnabled(true);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
