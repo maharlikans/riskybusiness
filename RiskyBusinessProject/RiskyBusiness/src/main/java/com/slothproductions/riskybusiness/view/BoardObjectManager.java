@@ -107,6 +107,12 @@ public class BoardObjectManager {
             //remove settlement at coordinate
             buildItem(3, "city", coordinate);
         }
+        else if (action.getItemId() == R.id.repairsettlement) {
+            //repair settlement
+        }
+        else if (action.getItemId() == R.id.repaircity) {
+            //repaircity
+        }
         else {
             setMoveSoldierState(coordinate);
         }

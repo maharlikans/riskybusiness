@@ -6,21 +6,29 @@
         android:title="Build Road"/>
 
     <group android:id="@+id/corneritems">
-    <item
-        android:id="@+id/settlement"
-        android:title="Build Settlement"/>
+        <item
+            android:id="@+id/settlement"
+            android:title="Build Settlement"/>
 
-    <item
-        android:id="@+id/soldier"
-        android:title="Train Soldier"/>
+        <item
+            android:id="@+id/repairsettlement"
+            android:title="Repair Settlement" />
 
-    <item
-        android:id="@+id/city"
-        android:title="Upgrade to City"/>
+        <item
+            android:id="@+id/city"
+            android:title="Upgrade to City"/>
 
-    <item
-        android:id="@+id/move"
-        android:title="Move Military"/>
+        <item
+            android:id="@+id/repaircity"
+            android:title="Repair City"/>
+
+        <item
+            android:id="@+id/soldier"
+            android:title="Train Soldier"/>
+
+        <item
+            android:id="@+id/move"
+            android:title="Move Military"/>
     </group>
 
 </menu>

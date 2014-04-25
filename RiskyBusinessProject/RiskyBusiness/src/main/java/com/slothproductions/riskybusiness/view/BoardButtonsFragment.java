@@ -278,6 +278,7 @@ public class BoardButtonsFragment extends Fragment {
 
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeItem(R.id.road);
+        popup.getMenu().removeGroup(R.id.corneritems);
 
         // pass the popup to be adjusted
         mGameLoop.getActions(popup, v);
@@ -309,6 +310,7 @@ public class BoardButtonsFragment extends Fragment {
 
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeGroup(R.id.corneritems);
+        popup.getMenu().removeItem(R.id.road);
 
         // Pass the popup menu to be adjusted
         mGameLoop.getActions(popup, e);
