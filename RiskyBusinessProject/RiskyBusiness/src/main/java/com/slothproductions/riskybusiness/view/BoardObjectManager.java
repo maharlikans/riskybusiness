@@ -27,6 +27,7 @@ import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
 import com.slothproductions.riskybusiness.model.MilitaryUnit;
 import com.slothproductions.riskybusiness.model.Vertex;
@@ -47,6 +48,7 @@ public class BoardObjectManager {
 
     private Board mBoardBacklog;             //Model board class
     private ZoomableLayout mBoardLayout;     //Board Layout
+    private GameLoop mGameLoop;
     private Activity mGameBoardActivity;
     private BoardScreenMainFragment mManagingFragment;
     private BoardButtonsFragment mBoardButtonsFragment;
@@ -80,6 +82,7 @@ public class BoardObjectManager {
         mGameBoardActivity = activity;
         mManagingFragment = manager;
         mBoardButtonsFragment = (BoardButtonsFragment)((BoardScreen)mGameBoardActivity).getButtonsFragment();
+        mGameLoop = ((BoardScreen) mGameBoardActivity).getGameLoop();
 
         //Initialize lists
         mSoldiers = new ArrayList<ImageView>();
@@ -180,7 +183,7 @@ public class BoardObjectManager {
         if (mAdjacentHexes.size() == 1) {
             assignVertexFromIndex();
         }
-        //mBoardData.moveSoldier(startVertex, v);
+        mGameLoop.moveSoldier(startVertex, v);
         translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
     }
 
