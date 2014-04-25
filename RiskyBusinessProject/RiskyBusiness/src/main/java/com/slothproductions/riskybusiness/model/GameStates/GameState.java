@@ -10,7 +10,7 @@ import com.slothproductions.riskybusiness.model.Vertex;
 public interface GameState {
     void init();
     void startTurn();
-    void diceRoll(int rollResult);
+    void diceRoll();
     void buildRoad(Edge edge);
     void buildSettlement(Vertex vertex);
     void buildCity(Vertex vertex);

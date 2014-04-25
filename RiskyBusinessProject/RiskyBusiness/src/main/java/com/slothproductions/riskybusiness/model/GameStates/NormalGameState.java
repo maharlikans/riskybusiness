@@ -1,12 +1,16 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
+import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
+import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by Kyle Maharlika on 4/4/2014.
@@ -15,11 +19,16 @@ public class NormalGameState implements GameState {
 
     Queue<Player> mPlayerQueue;
     GameLoop mGameLoop;
+    Player mCurrentPlayer;
+    BoardScreen mBoardScreen;
+    Board mBoard;
 
     public NormalGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
-        mPlayerQueue = new LinkedList<Player>();
-        // TODO: populate the queue with players somehow
+        mPlayerQueue = mGameLoop.getPlayerQueue();
+        mCurrentPlayer = mGameLoop.getCurrentPlayer();
+        mBoardScreen = mGameLoop.getBoardScreen();
+        mBoard = mBoardScreen.getBoard();
     }
 
     @Override
@@ -39,6 +48,15 @@ public class NormalGameState implements GameState {
 
         // basic structure:
         // take result of dice roll and pass it into a game action "collect resources"
+        diceRoll();
+    }
+
+    @Override
+    public void diceRoll() {
+        int rollResult = ((BoardButtonsFragment)mBoardScreen.getButtonsFragment())
+                .showRollDialog();
+        mBoard.beginTurn(rollResult);
+        // TODO update the resources on the game board's view
     }
 
     @Override
@@ -78,10 +96,7 @@ public class NormalGameState implements GameState {
         // change the view to result in showing the new player's resources
     }
 
-    @Override
-    public void diceRoll(int rollResult) {
 
-    }
 
     @Override
     public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
@@ -90,6 +105,6 @@ public class NormalGameState implements GameState {
 
     @Override
     public Player getCurrentPlayer() {
-        return null;
+        return mCurrentPlayer;
     }
 }

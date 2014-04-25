@@ -107,6 +107,12 @@ public class BoardObjectManager {
             //remove settlement at coordinate
             buildItem(3, "city", coordinate);
         }
+        else if (action.getItemId() == R.id.repairsettlement) {
+            //repair settlement
+        }
+        else if (action.getItemId() == R.id.repaircity) {
+            //repaircity
+        }
         else {
             setMoveSoldierState(coordinate);
         }
@@ -196,11 +202,9 @@ public class BoardObjectManager {
                 assignVertexFromIndex();
             }
             else {
-                //v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
             }
             // popup menu in board buttons fragment
-            //this is just temporary until the getVertex method is active
-            v = mBoardBacklog.getHex(0).getVertex(0);
             mBoardButtonsFragment.showPopUp(c, v);
         }
         else if (checkEdgeLocations(c)) {
@@ -208,10 +212,8 @@ public class BoardObjectManager {
                 assignEdgeFromIndex();
             }
             else {
-                //mBoardBacklog.getEdge(mAdjacentHexes, 0);
+                mBoardBacklog.getEdge(mAdjacentHexes, 0);
             }
-            //temporary unitl getedge method works
-            e = mBoardBacklog.getHex(0).getEdge(0);
             mBoardButtonsFragment.showPopUp(c, e);
         }
     }
@@ -367,7 +369,7 @@ public class BoardObjectManager {
     public void assignVertexFromIndex() {
         if (hexIndexAdded == 7) {
             if (vertexIndexAdded == 0) {
-                //v = mBoardData.getVertex(mAdjacentHexes, 0);
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
                 return;
             }
         }
@@ -376,7 +378,7 @@ public class BoardObjectManager {
         for (int i = 9; i <=17; i+=2) {
             if (hexIndexAdded == i) {
                 if (vertexIndexAdded == j) {
-                    //v = mBoardData.getVertex(mAdjacentHexes, 0);
+                    v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
                     return;
                 }
             }
@@ -418,7 +420,7 @@ public class BoardObjectManager {
                 }
             }
         }
-        //e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
+        e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
     }
 
     /**

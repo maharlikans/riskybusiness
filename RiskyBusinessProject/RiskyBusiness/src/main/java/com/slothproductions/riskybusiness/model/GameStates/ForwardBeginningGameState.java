@@ -13,8 +13,6 @@ import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.lang.Override;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -58,7 +56,7 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void diceRoll(int rollResult) {
+    public void diceRoll() {
         // DO NOTHING
     }
 

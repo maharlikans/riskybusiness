@@ -61,7 +61,6 @@ public class GameLoop {
         // set the current player
         mCurrentPlayer = mPlayerQueue.poll();
 
-        // TODO set the map for ALL actions
         mActionToMenuItemIdMap = new HashMap<Enum, Integer>();
         mActionToMenuItemIdMap.put(GameAction.BUILD_ROAD, R.id.road);
         mActionToMenuItemIdMap.put(GameAction.BUILD_SETTLEMENT, R.id.settlement);
@@ -82,7 +81,7 @@ public class GameLoop {
     }
 
     // ALL BELOW TODO
-    public void startTurn(int rollResult) {
+    public void startTurn() {
         mCurrentGameState.startTurn();
     }
 
@@ -162,17 +161,18 @@ public class GameLoop {
     // This method, if given an edge, will edit the popup menu passed to it so it can be displayed
     // correctly with the proper options in the menu
     public void getActions(PopupMenu popupMenu, Edge edge) {
-        ArrayList<GameAction> gameActionArrayList =  mCurrentPlayer.getActions(edge);
+        ArrayList<GameAction> gameActionArrayListUnfiltered =  mCurrentPlayer.getActions(edge, false);
+        ArrayList<GameAction> gameActionArrayListFiltered =  mCurrentPlayer.getActions(edge, true);
 
         Menu menu = popupMenu.getMenu();
 
-        // first just disable all menu items
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(false);
+        // then enable only the menu items which are available in the list
+        for (GameAction ga : gameActionArrayListUnfiltered) {
+            menu.add(mActionToMenuItemIdMap.get(ga));
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
         }
 
-        // then enable only the menu items which are available in the list
-        for (GameAction ga : gameActionArrayList) {
+        for (GameAction ga : gameActionArrayListFiltered) {
             menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
     }
@@ -181,17 +181,18 @@ public class GameLoop {
     // This method, if given a vertex, will edit the popup menu passed to it so it can be displayed
     // correctly with the proper options in the menu
     public void getActions(PopupMenu popupMenu, Vertex vertex) {
-        ArrayList<GameAction> gameActionArrayList =  mCurrentPlayer.getActions(vertex);
+        ArrayList<GameAction> gameActionArrayListUnfiltered =  mCurrentPlayer.getActions(vertex, false);
+        ArrayList<GameAction> gameActionArrayListFiltered =  mCurrentPlayer.getActions(vertex, true);
 
         Menu menu = popupMenu.getMenu();
 
-        // first just disable all menu items
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(false);
+        // then enable only the menu items which are available in the list
+        for (GameAction ga : gameActionArrayListUnfiltered) {
+            menu.add(mActionToMenuItemIdMap.get(ga));
+            menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(false);
         }
 
-        // then enable only the menu items which are available in the list
-        for (GameAction ga : gameActionArrayList) {
+        for (GameAction ga : gameActionArrayListFiltered) {
             menu.findItem(mActionToMenuItemIdMap.get(ga)).setEnabled(true);
         }
     }

@@ -40,7 +40,7 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void diceRoll(int rollResult) {
+    public void diceRoll() {
 
     }
 

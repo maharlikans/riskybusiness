@@ -173,15 +173,13 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     //TODO: Move the dice to the location of the player that is currently going.
-    public void showRollDialog() {
+    public int showRollDialog() {
         viceDice.roll();
         dice1 = viceDice.getFirstDice();
         dice2 = viceDice.getSecondDice();
 
         ImageView outputdice1 = new ImageView(mActivity);
         outputdice1.setId((int) System.currentTimeMillis());
-
-
 
         RelativeLayout.LayoutParams lpDice1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
@@ -261,8 +259,7 @@ public class BoardButtonsFragment extends Fragment {
 
         }
 
-       // mBtnEndTurn.setText("End Turn");
-
+        return viceDice.getResults();
     }
 
     //Popup for use with corner objects
@@ -281,6 +278,7 @@ public class BoardButtonsFragment extends Fragment {
 
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeItem(R.id.road);
+        popup.getMenu().removeGroup(R.id.corneritems);
 
         // pass the popup to be adjusted
         mGameLoop.getActions(popup, v);
@@ -312,6 +310,7 @@ public class BoardButtonsFragment extends Fragment {
 
         popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
         popup.getMenu().removeGroup(R.id.corneritems);
+        popup.getMenu().removeItem(R.id.road);
 
         // Pass the popup menu to be adjusted
         mGameLoop.getActions(popup, e);
