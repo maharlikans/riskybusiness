@@ -42,9 +42,6 @@ public class BackwardBeginningGameState implements GameState {
         mBoard = mBoardScreen.getBoard();
         mPlayerBuiltRoad = false;
         mPlayerBuiltSettlement = false;
-        // TODO: know some sort of ordering to the players
-        // via a queue?
-        startTurn();
     }
 
     @Override
@@ -57,6 +54,8 @@ public class BackwardBeginningGameState implements GameState {
         tradeButton.setVisibility(View.GONE);
         ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
         endTurnButton.setVisibility(View.GONE);
+
+        mBoardButtonsFragment.createToast("Now in BackwardBeginningGameState", false);
     }
 
     @Override
@@ -71,17 +70,19 @@ public class BackwardBeginningGameState implements GameState {
 
     @Override
     public boolean buildRoad(Edge edge) {
-        if (mPlayerBuiltRoad) {
-            if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
-                mCurrentPlayer.buildInitial(edge, 1);
+        if (mPlayerBuiltSettlement) {
+            if (mCurrentPlayer.canBuildInitial(edge, 2)) { // 1 means the first
+                mCurrentPlayer.buildInitial(edge, 2);
+                mPlayerBuiltRoad = true;
                 endTurn();
+
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a road here.", false);
                 return false;
             }
         } else {
-            mBoardButtonsFragment.createToast("Please build a road first.", false);
+            mBoardButtonsFragment.createToast("Please build a settlement first.", false);
             return false;
         }
     }
@@ -89,8 +90,9 @@ public class BackwardBeginningGameState implements GameState {
     @Override
     public boolean buildSettlement(Vertex vertex) {
         if (!mPlayerBuiltSettlement) {
-            if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
-                mCurrentPlayer.buildInitial(vertex, 1);
+            if (mCurrentPlayer.canBuildInitial(vertex, 2)) {
+                mCurrentPlayer.buildInitial(vertex, 2);
+                mPlayerBuiltSettlement = true;
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
@@ -157,8 +159,7 @@ public class BackwardBeginningGameState implements GameState {
     @Override
     public void getActions(PopupMenu popupMenu, Edge edge) {
         Menu menu = popupMenu.getMenu();
-
-        menu.add(R.id.settlement);
+        menu.add(0, R.id.road, 0, R.string.build_road);
 
         Log.d("TAG", "found Edge Actions");
     }
@@ -169,7 +170,7 @@ public class BackwardBeginningGameState implements GameState {
     public void getActions(PopupMenu popupMenu, Vertex vertex) {
         Menu menu = popupMenu.getMenu();
 
-        menu.add(R.id.road);
+        menu.add(0, R.id.settlement, 0, R.string.build_settlement);
         Log.d("TAG", "found Vertex Actions");
     }
 }

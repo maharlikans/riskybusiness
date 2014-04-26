@@ -61,6 +61,8 @@ public class ForwardBeginningGameState implements GameState{
         tradeButton.setVisibility(View.GONE);
         ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
         endTurnButton.setVisibility(View.GONE);
+
+        mBoardButtonsFragment.createToast("Now in ForwardBeginningGameState", false);
     }
 
     @Override
@@ -80,7 +82,6 @@ public class ForwardBeginningGameState implements GameState{
                 mCurrentPlayer.buildInitial(edge, 1);
                 mPlayerBuiltRoad = true;
                 endTurn();
-
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a road here.", false);

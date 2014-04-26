@@ -60,6 +60,10 @@ final public class Player implements java.io.Serializable {
         immutable = new ImmutablePlayer();
         points = 0;
         resources = new EnumMap<Resource, Integer>(Resource.class);
+        // DONE BY KYLE: INITIALIZE THE RESOURCES CLASS
+        for (Resource r : Resource.values()) {
+            resources.put(r, 0);
+        }
         immutableEdges = new ArrayList<Edge.ImmutableEdge>();
         immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
         immutableMilitaryUnits = new ArrayList<MilitaryUnit.ImmutableMilitaryUnit>();
