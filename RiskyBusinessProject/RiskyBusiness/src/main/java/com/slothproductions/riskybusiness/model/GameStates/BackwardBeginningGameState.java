@@ -2,14 +2,20 @@ package com.slothproductions.riskybusiness.model.GameStates;
 
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.View.R;
+import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
+import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
+import com.slothproductions.riskybusiness.view.BoardScreen;
 
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -18,13 +24,24 @@ import java.util.Stack;
 public class BackwardBeginningGameState implements GameState {
 
     Stack<Player> mPlayerStack;
+    Queue<Player> mPlayerQueue;
     Player mCurrentPlayer;
     GameLoop mGameLoop;
+    BoardScreen mBoardScreen;
+    BoardButtonsFragment mBoardButtonsFragment;
+    Board mBoard;
+    boolean mPlayerBuiltRoad;
+    boolean mPlayerBuiltSettlement;
 
     public BackwardBeginningGameState (GameLoop gameLoop, Stack<Player> playerStack) {
         mGameLoop = gameLoop;
         mPlayerStack = playerStack;
+        mPlayerQueue = gameLoop.getPlayerQueue();
         mCurrentPlayer = mPlayerStack.pop();
+        mBoardScreen = mGameLoop.getBoardScreen();
+        mBoard = mBoardScreen.getBoard();
+        mPlayerBuiltRoad = false;
+        mPlayerBuiltSettlement = false;
         // TODO: know some sort of ordering to the players
         // via a queue?
         startTurn();
@@ -32,33 +49,59 @@ public class BackwardBeginningGameState implements GameState {
 
     @Override
     public void init() {
-        // hide the necessary buttons here and perform setup
-        // on the view elements
+        // in the forward beginning game state, we don't need to see the tradeButton nor
+        // the endTurnButton, so hide them in the init method
+        mBoardButtonsFragment = (BoardButtonsFragment)mBoardScreen.getButtonsFragment();
+        View v = mBoardButtonsFragment.getView();
+        ImageView tradeButton = (ImageView)v.findViewById(R.id.tradeButton);
+        tradeButton.setVisibility(View.GONE);
+        ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
+        endTurnButton.setVisibility(View.GONE);
     }
 
     @Override
     public void startTurn() {
-        // force buildSettlement
-        // force collectResources
-        // force endTurn
+        // DO NOTHING
     }
 
     @Override
     public void diceRoll() {
-
+        // DO NOTHING
     }
 
     @Override
     public boolean buildRoad(Edge edge) {
-        // TODO package the BUILD_ROAD GameAction here
-        return false;
+        if (mPlayerBuiltRoad) {
+            if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
+                mCurrentPlayer.buildInitial(edge, 1);
+                endTurn();
+                return true;
+            } else {
+                mBoardButtonsFragment.createToast("You can't build a road here.", false);
+                return false;
+            }
+        } else {
+            mBoardButtonsFragment.createToast("Please build a road first.", false);
+            return false;
+        }
     }
 
     @Override
     public boolean buildSettlement(Vertex vertex) {
-        // TODO package the BUILD_SETTLEMENT GameAction here
-        // COLLECT RESOURCES HERE
-        return false;
+        if (!mPlayerBuiltSettlement) {
+            if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
+                mCurrentPlayer.buildInitial(vertex, 1);
+                return true;
+            } else {
+                mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
+                return false;
+            }
+        } else {
+            mBoardButtonsFragment.createToast(
+                    "You already built a settlement, you can't build another",
+                    false);
+            return false;
+        }
     }
 
     @Override
@@ -88,23 +131,25 @@ public class BackwardBeginningGameState implements GameState {
 
     @Override
     public void endTurn() {
-        // put the current player in the queue
-        // check if all the players have gone (i.e. the Stack is empty)
-        // if so,
-        //     transition to the NormalGameState and pass it the queue from this state
-        // if not,
-        //     mCurrentPlayer = /*pop from the player stack*/;
-        //     display their resources on the game board
-        //     force turn to begin
+        mPlayerQueue.offer(mCurrentPlayer);
+        if (mPlayerStack.isEmpty()) {
+            NormalGameState normalGameState = new NormalGameState(mGameLoop);
+            mGameLoop.setCurrentGameState(normalGameState);
+        } else {
+            mCurrentPlayer = mPlayerStack.pop();
+            // TODO BoardScreenMainFragment updateResourceView() method
+            // get the resources from the player class and pass it with the method
+            mPlayerBuiltSettlement = false;
+            mPlayerBuiltRoad = false;
+            mBoardButtonsFragment.createToast(
+                    "Now player " + mCurrentPlayer.getName() + "'s turn",
+                    false);
+        }
     }
 
     @Override
     public Player getCurrentPlayer() {
         return mCurrentPlayer;
-    }
-
-    public void setPlayerStack(Stack<Player> playerStack) {
-        mPlayerStack = playerStack;
     }
 
     // This method, if given an edge, will edit the popup menu passed to it so it can be displayed

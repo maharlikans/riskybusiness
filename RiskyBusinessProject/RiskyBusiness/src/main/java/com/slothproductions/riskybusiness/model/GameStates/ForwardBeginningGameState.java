@@ -144,6 +144,8 @@ public class ForwardBeginningGameState implements GameState{
             mCurrentPlayer = mPlayerQueue.poll();
             // TODO BoardScreenMainFragment updateResourceView() method
             // get the resources from the player class and pass it with the method
+            mPlayerBuiltSettlement = false;
+            mPlayerBuiltRoad = false;
             mBoardButtonsFragment.createToast(
                     "Now player " + mCurrentPlayer.getName() + "'s turn",
                     false);

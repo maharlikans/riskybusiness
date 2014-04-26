@@ -82,12 +82,12 @@ public class GameLoop {
         mCurrentGameState.startTurn();
     }
 
-    public void buildRoad(Edge edge) {
-        mCurrentGameState.buildRoad(edge);
+    public boolean buildRoad(Edge edge) {
+        return mCurrentGameState.buildRoad(edge);
     }
 
-    public void buildSettlement(Vertex vertex) {
-        mCurrentGameState.buildSettlement(vertex);
+    public boolean buildSettlement(Vertex vertex) {
+        return mCurrentGameState.buildSettlement(vertex);
     }
 
     public void buildCity(Vertex vertex) {
