@@ -29,6 +29,10 @@
         <item
             android:id="@+id/move"
             android:title="@string/move_soldier"/>
+
+        <item
+            android:id="@+id/attack"
+            android:title="@string/attack"/>
     </group>
 
 </menu>

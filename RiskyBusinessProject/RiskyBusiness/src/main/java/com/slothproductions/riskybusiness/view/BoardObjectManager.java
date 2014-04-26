@@ -1,27 +1,15 @@
 package com.slothproductions.riskybusiness.view;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.PopupWindow;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
@@ -29,7 +17,6 @@ import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
-import com.slothproductions.riskybusiness.model.MilitaryUnit;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
@@ -59,8 +46,6 @@ public class BoardObjectManager {
     private ArrayList<ImageView> mCities;
     private ArrayList<ImageView> mRoads;
 
-    boolean mSoldierAction;
-
     //used for determining which edge and vertex to use for object placement
     private Vertex v;
     private Edge e;
@@ -68,6 +53,7 @@ public class BoardObjectManager {
     //for soldier movement
     private Vertex startVertex;
     private ImageView mSoldierMoving;
+    private ArrayList<ImageView> mSoldiersAttacking;
 
     private ArrayList<Hex> mAdjacentHexes;
 
@@ -91,6 +77,7 @@ public class BoardObjectManager {
         mRoads = new ArrayList<ImageView>();
 
         mAdjacentHexes = new ArrayList<Hex>();
+        mSoldiersAttacking = new ArrayList<ImageView>();
     }
 
     //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
@@ -116,8 +103,11 @@ public class BoardObjectManager {
         else if (action.getItemId() == R.id.repaircity) {
             //repaircity
         }
-        else {
+        else if (action.getItemId() == R.id.move) {
             setMoveSoldierState(coordinate);
+        }
+        else if (action.getItemId() == R.id.attack) {
+            setAttacking(coordinate);
         }
     }
 
@@ -157,34 +147,48 @@ public class BoardObjectManager {
 
     //move soldier
     public void setMoveSoldierState(Coordinate coordinate) {
-        mSoldierAction = true;
         startVertex = v;
         ImageView tempSoldier;
         float x;
         float y;
         for (int i = 0; i < mSoldiers.size(); i ++) {
             tempSoldier = mSoldiers.get(i);
-            x = ((int)coordinate.getX())-(tempSoldier.getWidth()/2) - tempSoldier.getDrawable().getIntrinsicWidth()/2;
-            y = ((int)coordinate.getY())-(tempSoldier.getHeight()/2) - tempSoldier.getDrawable().getIntrinsicHeight()/2;
-            if (x == tempSoldier.getLeft()) {
-                if (y == tempSoldier.getTop()) {
-                    mSoldierMoving = tempSoldier;
-                    return;
-                }
+            int topLeftx = (int) tempSoldier.getX();
+            int topLeftY = (int) tempSoldier.getY();
+            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mSoldierMoving = tempSoldier;
+                return;
             }
         }
-
-        //if we get this far, there is a problem with the above code...
     }
 
     public void moveSoldier(Coordinate c) {
-        mSoldierAction = false;
         checkCornerLocations(c);
         if (mAdjacentHexes.size() == 1) {
             assignVertexFromIndex();
         }
-        mGameLoop.moveSoldier(startVertex, v);
+        //mGameLoop.moveSoldier(startVertex, v);
+        //should only translate if it could move
         translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
+        mSoldierMoving = null;
+    }
+
+    public void setAttacking(Coordinate c) {
+        /*int numUnits = 3; //v.getNumberMilitaryUnits();get number of army units
+        //show popup of number of units to select
+        //after they select a number, allow them to tap on the corner to attack
+        //call attack from model
+        NumberPicker np = new NumberPicker(mGameBoardActivity);
+        np.setMinValue(1);
+        np.setMaxValue(numUnits);
+        np.setWrapSelectorWheel(true);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.leftMargin = (int)c.getX();
+        lp.topMargin = (int)c.getY();
+        mBoardLayout.addView(np, lp);
+        */
     }
 
     public void removeSettlement(Coordinate coordinate) {
@@ -193,14 +197,14 @@ public class BoardObjectManager {
         float y;
         for (int i = 0; i < mSettlements.size(); i ++) {
             tempSettlement = mSettlements.get(i);
-            x = ((int)coordinate.getX())-(tempSettlement.getWidth()/2) - tempSettlement.getDrawable().getIntrinsicWidth()/2;
-            y = ((int)coordinate.getY())-(tempSettlement.getHeight()/2) - tempSettlement.getDrawable().getIntrinsicHeight()/2;
-            if (x == tempSettlement.getLeft()) {
-                if (y == tempSettlement.getTop()) {
-                    mBoardLayout.removeView(tempSettlement);
-                    mSettlements.remove(i);
-                    return;
-                }
+            int topLeftx = (int) tempSettlement.getX();
+            int topLeftY = (int) tempSettlement.getY();
+            int bottomRightx = topLeftx + tempSettlement.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSettlement.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mBoardLayout.removeView(tempSettlement);
+                mSettlements.remove(i);
+                return;
             }
         }
     }
@@ -210,7 +214,7 @@ public class BoardObjectManager {
     public void findMenu(MotionEvent event) {
         Coordinate c = new Coordinate(event.getX(), event.getY());
 
-        if (mSoldierAction) {
+        if (mSoldierMoving != null) {
             moveSoldier(c);
             return;
         }
@@ -226,7 +230,7 @@ public class BoardObjectManager {
                 v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
             }
             // popup menu in board buttons fragment
-            mBoardButtonsFragment.showPopUp(c, v);
+            mBoardButtonsFragment.showActionsMenu(c, v);
         }
         else if (checkEdgeLocations(c)) {
             if (mAdjacentHexes.size() == 1) {
@@ -235,7 +239,7 @@ public class BoardObjectManager {
             else {
                 mBoardBacklog.getEdge(mAdjacentHexes, 0);
             }
-            mBoardButtonsFragment.showPopUp(c, e);
+            mBoardButtonsFragment.showActionsMenu(c, e);
         }
     }
 
@@ -249,25 +253,49 @@ public class BoardObjectManager {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         //center object on location with margins
-        lp.leftMargin = x-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
-        lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
+        lp.leftMargin = x-image.getDrawable().getIntrinsicWidth()/2;
+        lp.topMargin = y-image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
     }
 
-    //im sure this will need some fixing..
-    public void translateImage(int newX, int newY, ImageView image) {
-        newX = newX-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
-        newY = newY-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
+
+    public void translateImage(final int x, final int y, final ImageView image) {
+        mBoardLayout.removeView(image);
+        int newX= x-image.getDrawable().getIntrinsicWidth()/2;
+        int newY = y-image.getDrawable().getIntrinsicHeight()/2;
         int oldX = image.getLeft();
         int oldY = image.getTop();
 
-        Animation translation = new TranslateAnimation(oldX, newX, oldY, newY);
+        Animation translation = new TranslateAnimation(0, newX-oldX, 0, newY - oldY);
         translation.setDuration(1000);
-        translation.setFillBefore(true);
         translation.setFillAfter(true);
         translation.setFillEnabled(true);
-        image.startAnimation(translation);
+        translation.setFillBefore(false);
+        translation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG, "Animation Started");
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Log.d(TAG, "Animation Ended");
+                mBoardLayout.removeView(image);
+                placeImage(x, y, image);
+                Log.d(TAG, "Image Swapped");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        image.setAnimation(translation);
+        translation.startNow();
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) image.getLayoutParams();
+        mBoardLayout.removeView(image);
+        mBoardLayout.addView(image, lp);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match

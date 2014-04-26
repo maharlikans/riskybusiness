@@ -53,6 +53,7 @@
     <string name="repair_city">Repair City</string>
     <string name="train_soldier">Train Army Unit</string>
     <string name="move_soldier">Move Army Unit</string>
+    <string name="attack">Attack</string>
 
     <string-array name="player_names">
         <item>@string/player_1</item>
@@ -82,7 +83,5 @@
         <item>12</item>
         <item>13</item>
     </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

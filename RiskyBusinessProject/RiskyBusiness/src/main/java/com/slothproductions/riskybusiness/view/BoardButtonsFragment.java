@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -262,7 +263,7 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     //Popup for use with corner objects
-    public void showPopUp(final Coordinate c, Vertex v) {
+    public void showActionsMenu(final Coordinate c, Vertex v) {
         //an anchor for the popup menu to be placed on.
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
@@ -298,7 +299,7 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     //Popup for use with roads
-    public void showPopUp(final Coordinate c, Edge e) {
+    public void showActionsMenu(final Coordinate c, Edge e) {
         //an anchor for the popup menu to be placed on. It needs this for whatever reason..
         ImageView anchor = new ImageView(mActivity);
         anchor.setId((int)System.currentTimeMillis());
