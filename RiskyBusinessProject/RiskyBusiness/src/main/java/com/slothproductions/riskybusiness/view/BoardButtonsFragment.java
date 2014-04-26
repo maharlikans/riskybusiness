@@ -334,6 +334,36 @@ public class BoardButtonsFragment extends Fragment {
         popup.show();//showing popup menu
     }
 
+    public void setMilitaryNumberPicker(final Coordinate c, Vertex v) {
+        int maxNumberMilitary = 3; //v.get...
+
+        //an anchor for the popup menu to be placed on. It needs this for whatever reason..
+        ImageView anchor = new ImageView(mActivity);
+        anchor.setId((int)System.currentTimeMillis());
+        anchor.setImageResource(mActivity.getResources().getIdentifier("anchor", "drawable", mActivity.getPackageName()));
+        anchor.setX(c.getUnMappedX());
+        anchor.setY(c.getUnMappedY());
+
+        mButtonsParent.addView(anchor);
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(mActivity, anchor);
+        popup.getMenuInflater().inflate(R.menu.numberpicker, popup.getMenu());
+
+        Menu menu = popup.getMenu();
+        for (int i = 1; i <= maxNumberMilitary; i++) {
+            menu.add(Integer.toString(i));
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mBoardObjectManager.setNumberAttacking(c, Integer.parseInt(item.getTitle().toString()));
+                return true;
+            }
+        });
+        popup.show();
+    }
+
     void createToast(String text, boolean isLong) {
         cancelToast();
         int length = Toast.LENGTH_SHORT;
