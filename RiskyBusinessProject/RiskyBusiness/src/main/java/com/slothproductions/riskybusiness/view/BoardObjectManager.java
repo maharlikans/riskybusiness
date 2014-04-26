@@ -176,19 +176,11 @@ public class BoardObjectManager {
     }
 
     public void setAttacking(Coordinate c) {
-        /*int numUnits = 3; //v.getNumberMilitaryUnits();get number of army units
-        //show popup of number of units to select
-        //after they select a number, allow them to tap on the corner to attack
-        //call attack from model
-        NumberPicker np = new NumberPicker(mGameBoardActivity);
-        np.setMinValue(1);
-        np.setMaxValue(numUnits);
-        np.setWrapSelectorWheel(true);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lp.leftMargin = (int)c.getX();
-        lp.topMargin = (int)c.getY();
-        mBoardLayout.addView(np, lp);
-        */
+        mBoardButtonsFragment.setMilitaryNumberPicker(c, v);
+    }
+
+    public void setNumberAttacking(Coordinate c, int num) {
+
     }
 
     public void removeSettlement(Coordinate coordinate) {
@@ -439,7 +431,7 @@ public class BoardObjectManager {
             }
             j++;
         }
-        //v = mBoardData.getVertex(mAdjacentHexes, 1);
+        v = mBoardBacklog.getVertex(mAdjacentHexes, 1);
     }
 
     public void assignEdgeFromIndex() {
@@ -472,11 +464,12 @@ public class BoardObjectManager {
                         break;
                     }
                 }
-                if (i > 10 && i % 2 == 0) {
+                if (i >= 11 && i % 2 != 0) {
                     j++;
                 }
             }
         }
+        Log.d(TAG, "Index Added = " + edgeParameter);
         e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
     }
 
