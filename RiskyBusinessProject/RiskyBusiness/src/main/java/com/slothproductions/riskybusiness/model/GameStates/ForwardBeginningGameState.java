@@ -75,17 +75,19 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public boolean buildRoad(Edge edge) {
-        if (mPlayerBuiltRoad) {
+        if (mPlayerBuiltSettlement) {
             if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
                 mCurrentPlayer.buildInitial(edge, 1);
+                mPlayerBuiltRoad = true;
                 endTurn();
+
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a road here.", false);
                 return false;
             }
         } else {
-            mBoardButtonsFragment.createToast("Please build a road first.", false);
+            mBoardButtonsFragment.createToast("Please build a settlement first.", false);
             return false;
         }
     }
@@ -95,6 +97,7 @@ public class ForwardBeginningGameState implements GameState{
         if (!mPlayerBuiltSettlement) {
             if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
                 mCurrentPlayer.buildInitial(vertex, 1);
+                mPlayerBuiltSettlement = true;
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
@@ -142,7 +145,7 @@ public class ForwardBeginningGameState implements GameState{
             mGameLoop.setCurrentGameState(backwardBeginningGameState);
         } else {
             mCurrentPlayer = mPlayerQueue.poll();
-            // TODO BoardScreenMainFragment updateResourceView() method
+            // TODO PlayerInfoFragment updateResourceView() method
             // get the resources from the player class and pass it with the method
             mPlayerBuiltSettlement = false;
             mPlayerBuiltRoad = false;

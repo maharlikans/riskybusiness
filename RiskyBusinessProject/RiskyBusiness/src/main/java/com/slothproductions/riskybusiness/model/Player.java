@@ -148,6 +148,7 @@ final public class Player implements java.io.Serializable {
 
     public void buildInitial(Vertex v, int i) {
         v.building = new Building(BuildingType.SETTLEMENT, v, this);
+        buildings.add(v.building);
         if (i == 2) {
             ArrayList<Resource> resources = new ArrayList<Resource>();
             for (Hex h : v.hexagons)

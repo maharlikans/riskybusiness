@@ -21,7 +21,6 @@ import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
 
-//TODO: update all the methods to work with the new way of placing objects
 //This includes adding functionality to work with roads, and adjusting the method signatures as appropriate.
 
 /**
@@ -68,7 +67,6 @@ public class BoardObjectManager {
         mGameBoardActivity = activity;
         mManagingFragment = manager;
         mBoardButtonsFragment = (BoardButtonsFragment)((BoardScreen)mGameBoardActivity).getButtonsFragment();
-        mGameLoop = ((BoardScreen) mGameBoardActivity).getGameLoop();
 
         //Initialize lists
         mSoldiers = new ArrayList<ImageView>();
@@ -83,15 +81,21 @@ public class BoardObjectManager {
     //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
     //Note: to make this work with the model, it may need to take an edge or vertex
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
+        if (mGameLoop == null) {
+            mGameLoop = ((BoardScreen) mGameBoardActivity).getGameLoop();
+        }
         if (action.getItemId() == R.id.road) {
-            // TODO call build road from game loop
-            buildItem(0, "road", coordinate);
+            if (mGameLoop.buildRoad(e)) {
+                buildItem(0, "road", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.soldier) {
             buildItem(1, "soldier", coordinate);
         }
         else if (action.getItemId() == R.id.settlement) {
-            buildItem(2, "settlement", coordinate);
+            if (mGameLoop.buildSettlement(v)) {
+                buildItem(2, "settlement", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.city) {
             removeSettlement(coordinate);
@@ -229,7 +233,7 @@ public class BoardObjectManager {
                 assignEdgeFromIndex();
             }
             else {
-                mBoardBacklog.getEdge(mAdjacentHexes, 0);
+                e = mBoardBacklog.getEdge(mAdjacentHexes, 0);
             }
             mBoardButtonsFragment.showActionsMenu(c, e);
         }
@@ -250,7 +254,6 @@ public class BoardObjectManager {
 
         mBoardLayout.addView(image, lp);
     }
-
 
     public void translateImage(final int x, final int y, final ImageView image) {
         mBoardLayout.removeView(image);
@@ -469,7 +472,6 @@ public class BoardObjectManager {
                 }
             }
         }
-        Log.d(TAG, "Index Added = " + edgeParameter);
         e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
     }
 
