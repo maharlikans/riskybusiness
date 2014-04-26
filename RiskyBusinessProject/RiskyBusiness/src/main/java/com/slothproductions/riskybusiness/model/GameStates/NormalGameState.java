@@ -14,9 +14,7 @@ import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 /**
  * Created by Kyle Maharlika on 4/4/2014.
@@ -66,13 +64,15 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public void buildRoad(Edge edge) {
+    public boolean buildRoad(Edge edge) {
         // TODO package the BUILD_ROAD GameAction and effect it
+        return false;
     }
 
     @Override
-    public void buildSettlement(Vertex vertex) {
+    public boolean buildSettlement(Vertex vertex) {
         // TODO package the BUILD_SETTLEMENT GameAction and effect it
+        return false;
     }
 
     @Override

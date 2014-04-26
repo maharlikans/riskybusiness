@@ -84,7 +84,7 @@ public class BoardObjectManager {
     //Note: to make this work with the model, it may need to take an edge or vertex
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
         if (action.getItemId() == R.id.road) {
-            //call build road from game loop
+            // TODO call build road from game loop
             buildItem(0, "road", coordinate);
         }
         else if (action.getItemId() == R.id.soldier) {

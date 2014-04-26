@@ -6,12 +6,10 @@ import android.widget.PopupMenu;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Edge;
-import com.slothproductions.riskybusiness.model.GameAction;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -36,7 +34,6 @@ public class BackwardBeginningGameState implements GameState {
     public void init() {
         // hide the necessary buttons here and perform setup
         // on the view elements
-        // TODO as Joseph fixes this part of things
     }
 
     @Override
@@ -52,14 +49,16 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void buildRoad(Edge edge) {
+    public boolean buildRoad(Edge edge) {
         // TODO package the BUILD_ROAD GameAction here
+        return false;
     }
 
     @Override
-    public void buildSettlement(Vertex vertex) {
+    public boolean buildSettlement(Vertex vertex) {
         // TODO package the BUILD_SETTLEMENT GameAction here
         // COLLECT RESOURCES HERE
+        return false;
     }
 
     @Override

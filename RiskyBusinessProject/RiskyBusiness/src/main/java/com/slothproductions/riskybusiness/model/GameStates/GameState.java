@@ -13,8 +13,8 @@ public interface GameState {
     void init();
     void startTurn();
     void diceRoll();
-    void buildRoad(Edge edge);
-    void buildSettlement(Vertex vertex);
+    boolean buildRoad(Edge edge);
+    boolean buildSettlement(Vertex vertex);
     void buildCity(Vertex vertex);
     void buildMilitaryUnit(Vertex vertex);
     void trade(); // TODO change the parameters for trade

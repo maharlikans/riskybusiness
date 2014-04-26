@@ -29,13 +29,15 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public void buildRoad(Edge edge) {
+    public boolean buildRoad(Edge edge) {
         // do nothing
+        return false;
     }
 
     @Override
-    public void buildSettlement(Vertex vertex) {
+    public boolean buildSettlement(Vertex vertex) {
         // do nothing
+        return false;
     }
 
     @Override

@@ -9,7 +9,6 @@ import android.widget.PopupMenu;
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Edge;
-import com.slothproductions.riskybusiness.model.GameAction;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
@@ -17,9 +16,7 @@ import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.lang.Override;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -34,7 +31,8 @@ public class ForwardBeginningGameState implements GameState{
     BoardScreen mBoardScreen;
     BoardButtonsFragment mBoardButtonsFragment;
     Board mBoard;
-    HashMap<Player, Boolean> mPlayerBooleanHashMap;
+    boolean mPlayerBuiltRoad;
+    boolean mPlayerBuiltSettlement;
 
     public ForwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
@@ -43,6 +41,9 @@ public class ForwardBeginningGameState implements GameState{
         mCurrentPlayer = mGameLoop.getCurrentPlayer();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
+        mPlayerBuiltRoad = false;
+        mPlayerBuiltSettlement = false;
+
     }
 
     @Override
@@ -64,6 +65,7 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public void startTurn() {
+        // DO NOTHING
     }
 
     @Override
@@ -72,20 +74,37 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void buildRoad(Edge edge) {
-        if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
-            mCurrentPlayer.buildInitial(edge, 1);
+    public boolean buildRoad(Edge edge) {
+        if (mPlayerBuiltRoad) {
+            if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
+                mCurrentPlayer.buildInitial(edge, 1);
+                endTurn();
+                return true;
+            } else {
+                mBoardButtonsFragment.createToast("You can't build a road here.", false);
+                return false;
+            }
         } else {
-            mBoardButtonsFragment.createToast("You can't build a road here.", false);
+            mBoardButtonsFragment.createToast("Please build a road first.", false);
+            return false;
         }
     }
 
     @Override
-    public void buildSettlement(Vertex vertex) {
-        if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
-            mCurrentPlayer.buildInitial(vertex, 1);
+    public boolean buildSettlement(Vertex vertex) {
+        if (!mPlayerBuiltSettlement) {
+            if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
+                mCurrentPlayer.buildInitial(vertex, 1);
+                return true;
+            } else {
+                mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
+                return false;
+            }
         } else {
-            mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
+            mBoardButtonsFragment.createToast(
+                    "You already built a settlement, you can't build another",
+                    false);
+            return false;
         }
     }
 
@@ -116,15 +135,6 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public void endTurn() {
-        // put the current player in the stack
-        // check if all the players have gone (i.e. the Queue is empty)
-        // if so,
-        //     transition to the next state and pass it the stack from this state
-        //     using setPlayerStack
-        // if not,
-        //     mCurrentPlayer = /*pop from the player queue*/;
-        //     display their resources on the game board
-        //     force turn to begin
         mPlayerStack.push(mCurrentPlayer);
         if (mPlayerQueue.isEmpty()) {
             BackwardBeginningGameState backwardBeginningGameState =
