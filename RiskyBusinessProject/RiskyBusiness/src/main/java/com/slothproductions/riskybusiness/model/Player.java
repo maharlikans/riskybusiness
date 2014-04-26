@@ -239,4 +239,12 @@ final public class Player implements java.io.Serializable {
     public ArrayList<MilitaryUnit> getMilitaryUnit() {
         return militaryUnits;
     }
+
+    public Map<Resource, Integer> getResources() {
+        return resources;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

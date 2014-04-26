@@ -39,10 +39,6 @@ public class GameLoop {
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
-    ForwardBeginningGameState mForwardBeginningGameState;
-    BackwardBeginningGameState mBackwardBeginningGameState;
-    NormalGameState mNormalGameState;
-    EndGameState mEndGameState;
 
     public GameLoop(BoardScreen boardScreen) {
         mBoardScreen = boardScreen;
@@ -68,22 +64,18 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.id.soldier);
         mActionToMenuItemIdMap.put(GameAction.BUILD_CITY, R.id.city);
         mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
-//        mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
-//        mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
-
-        mForwardBeginningGameState = new ForwardBeginningGameState(this);
-//        mBackwardBeginningGameState = new BackwardBeginningGameState(this);
-//        mNormalGameState = new NormalGameState(this);
-//        mEndGameState = new EndGameState(this);
-
-        // only reason I use this instead of just changing the game state is because the game state
-        // must not only be changed, init() must also be called on the game state, which is built
-        // into the setCurrentGameState function.
+        mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
+        mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
     }
 
     // ALL BELOW TODO
     public void startGame() {
-        setCurrentGameState(mForwardBeginningGameState);
+        // only reason I use this instead of just changing the game state is because the game state
+        // must not only be changed, init() must also be called on the game state, which is built
+        // into the setCurrentGameState function.
+        ForwardBeginningGameState forwardBeginningGameState =
+                new ForwardBeginningGameState(this);
+        setCurrentGameState(forwardBeginningGameState);
     }
 
     public void startTurn() {
@@ -135,22 +127,6 @@ public class GameLoop {
         mCurrentGameState.init();
     }
 
-    public ForwardBeginningGameState getForwardBeginningGameState() {
-        return mForwardBeginningGameState;
-    }
-
-    public BackwardBeginningGameState getBackwardBeginningGameState() {
-        return mBackwardBeginningGameState;
-    }
-
-    public NormalGameState getNormalGameState() {
-        return mNormalGameState;
-    }
-
-    public EndGameState getEndGameState() {
-        return mEndGameState;
-    }
-
     public Queue<Player> getPlayerQueue() {
         return mPlayerQueue;
     }
@@ -162,8 +138,6 @@ public class GameLoop {
 //    public Board getBoard() {
 //        return mBoard;
 //    }
-
-
 
     public void getActions(PopupMenu popupMenu, Edge edge) {
         mCurrentGameState.getActions(popupMenu, edge);

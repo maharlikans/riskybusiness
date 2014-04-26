@@ -334,7 +334,7 @@ public class BoardButtonsFragment extends Fragment {
         popup.show();//showing popup menu
     }
 
-    void createToast(String text, boolean isLong) {
+    public void createToast(String text, boolean isLong) {
         cancelToast();
         int length = Toast.LENGTH_SHORT;
         if (isLong) {
@@ -344,7 +344,7 @@ public class BoardButtonsFragment extends Fragment {
         mLastToast.show();
     }
 
-    boolean cancelToast() {
+    public boolean cancelToast() {
         if (mLastToast!= null) {
             mLastToast.cancel();
             return true;

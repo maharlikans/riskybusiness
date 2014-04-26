@@ -32,7 +32,9 @@ public class ForwardBeginningGameState implements GameState{
     Player mCurrentPlayer;
     GameLoop mGameLoop;
     BoardScreen mBoardScreen;
+    BoardButtonsFragment mBoardButtonsFragment;
     Board mBoard;
+    HashMap<Player, Boolean> mPlayerBooleanHashMap;
 
     public ForwardBeginningGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
@@ -47,30 +49,21 @@ public class ForwardBeginningGameState implements GameState{
     public void init() {
         // in the forward beginning game state, we don't need to see the tradeButton nor
         // the endTurnButton, so hide them in the init method
-        /*ImageView tradeButton = (ImageView)(mBoardScreen
-                .getButtonsFragment()
-                .getView()
-                .findViewById(R.id.tradeButton));*/
-
-        BoardButtonsFragment boardButtonsFragment = (BoardButtonsFragment)mBoardScreen.getButtonsFragment();
-        if (boardButtonsFragment == null)
-            Log.d("TAG", "BoardButtonsFragment is null");
-        View v = boardButtonsFragment.getView();
-        if (v == null) {
+        mBoardButtonsFragment = (BoardButtonsFragment)mBoardScreen.getButtonsFragment();
+        /*if (boardButtonsFragment == null)
+            Log.d("TAG", "BoardButtonsFragment is null");*/
+        View v = mBoardButtonsFragment.getView();
+        /*if (v == null) {
             Log.d("TAG", "View for BoardButtonsFragment is not created");
-        }
+        }*/
         ImageView tradeButton = (ImageView)v.findViewById(R.id.tradeButton);
         tradeButton.setVisibility(View.GONE);
-        /*ImageView endTurnButton = (ImageView)(mBoardScreen
-                .getButtonsFragment()
-                .getView()
-                .findViewById(R.id.endTurnButton));
-        endTurnButton.setVisibility(View.GONE);*/
+        ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
+        endTurnButton.setVisibility(View.GONE);
     }
 
     @Override
     public void startTurn() {
-
     }
 
     @Override
@@ -82,6 +75,8 @@ public class ForwardBeginningGameState implements GameState{
     public void buildRoad(Edge edge) {
         if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
             mCurrentPlayer.buildInitial(edge, 1);
+        } else {
+            mBoardButtonsFragment.createToast("You can't build a road here.", false);
         }
     }
 
@@ -89,6 +84,8 @@ public class ForwardBeginningGameState implements GameState{
     public void buildSettlement(Vertex vertex) {
         if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
             mCurrentPlayer.buildInitial(vertex, 1);
+        } else {
+            mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
         }
     }
 
@@ -128,6 +125,19 @@ public class ForwardBeginningGameState implements GameState{
         //     mCurrentPlayer = /*pop from the player queue*/;
         //     display their resources on the game board
         //     force turn to begin
+        mPlayerStack.push(mCurrentPlayer);
+        if (mPlayerQueue.isEmpty()) {
+            BackwardBeginningGameState backwardBeginningGameState =
+                    new BackwardBeginningGameState(mGameLoop, mPlayerStack);
+            mGameLoop.setCurrentGameState(backwardBeginningGameState);
+        } else {
+            mCurrentPlayer = mPlayerQueue.poll();
+            // TODO BoardScreenMainFragment updateResourceView() method
+            // get the resources from the player class and pass it with the method
+            mBoardButtonsFragment.createToast(
+                    "Now player " + mCurrentPlayer.getName() + "'s turn",
+                    false);
+        }
     }
 
     @Override
@@ -141,7 +151,7 @@ public class ForwardBeginningGameState implements GameState{
     public void getActions(PopupMenu popupMenu, Edge edge) {
         Menu menu = popupMenu.getMenu();
 
-        menu.add(0, R.id.road, 0, "Build road");
+        menu.add(0, R.id.road, 0, R.string.build_road);
 
         Log.d("TAG", "found Edge Actions");
     }
@@ -152,7 +162,7 @@ public class ForwardBeginningGameState implements GameState{
     public void getActions(PopupMenu popupMenu, Vertex vertex) {
         Menu menu = popupMenu.getMenu();
 
-        menu.add(0, R.id.settlement, 0, "Build settlement");
+        menu.add(0, R.id.settlement, 0, R.string.build_settlement);
         Log.d("TAG", "found Vertex Actions");
     }
 }

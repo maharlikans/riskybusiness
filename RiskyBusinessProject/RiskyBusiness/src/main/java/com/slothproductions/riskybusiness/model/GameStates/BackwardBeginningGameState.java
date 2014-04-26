@@ -23,9 +23,9 @@ public class BackwardBeginningGameState implements GameState {
     Player mCurrentPlayer;
     GameLoop mGameLoop;
 
-    public BackwardBeginningGameState (GameLoop gameLoop) {
+    public BackwardBeginningGameState (GameLoop gameLoop, Stack<Player> playerStack) {
         mGameLoop = gameLoop;
-        mPlayerStack = new Stack<Player>();
+        mPlayerStack = playerStack;
         mCurrentPlayer = mPlayerStack.pop();
         // TODO: know some sort of ordering to the players
         // via a queue?
