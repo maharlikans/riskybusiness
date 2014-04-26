@@ -1,5 +1,7 @@
 package com.slothproductions.riskybusiness.model;
 
+import android.graphics.Color;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -25,6 +27,7 @@ final public class Player implements java.io.Serializable {
     protected Map<Resource, Integer> trades;
     final Board board;
     final String name;
+    private int color;
 
     /* TODO: Implpement to player id */
     public class ImmutablePlayer implements java.io.Serializable {
@@ -251,5 +254,13 @@ final public class Player implements java.io.Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public void setColor(int c) {
+        color = c;
+    }
+
+    public int getColor() {
+        return color;
     }
 }

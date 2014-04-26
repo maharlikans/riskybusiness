@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -126,6 +127,8 @@ public class BoardObjectManager {
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         item.setRotation(coordinate.getRotation());
 
+        item.setColorFilter(mGameLoop.getCurrentGameState().getCurrentPlayer().getColor());
+
         //places the image on the screen
         placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
 
@@ -149,7 +152,7 @@ public class BoardObjectManager {
         normalizeLevels();
     }
 
-    //move soldier
+    //prepare a soldier to be moved
     public void setMoveSoldierState(Coordinate coordinate) {
         startVertex = v;
         ImageView tempSoldier;

@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.model;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,9 @@ public class GameLoop {
     // all game state objects will be held in this class
     GameState mCurrentGameState;
 
+    //sorry to clutter your class...
+    private int[] colors = {Color.BLUE, Color.GREEN, Color.YELLOW, Color.DKGRAY};
+
     public GameLoop(BoardScreen boardScreen) {
         mBoardScreen = boardScreen;
 
@@ -50,8 +54,10 @@ public class GameLoop {
         // populate the player queue correctly
         List<Player> playersList = mBoardScreen.getBoard().getPlayers();
         mPlayerQueue = new LinkedList<Player>();
-        for (Player p : playersList) {
+        for (int i = 0; i < playersList.size(); i++) {
 //            Log.d("tag", "This player is: " + p.toString());
+            Player p = playersList.get(i);
+            p.setColor(colors[i]);
             mPlayerQueue.offer(p);
         }
 

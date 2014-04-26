@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.model.GameStates;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -74,7 +75,14 @@ public class BackwardBeginningGameState implements GameState {
             if (mCurrentPlayer.canBuildInitial(edge, 2)) { // 1 means the first
                 mCurrentPlayer.buildInitial(edge, 2);
                 mPlayerBuiltRoad = true;
-                endTurn();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        endTurn();
+                    }
+                }, 200);
 
                 return true;
             } else {
