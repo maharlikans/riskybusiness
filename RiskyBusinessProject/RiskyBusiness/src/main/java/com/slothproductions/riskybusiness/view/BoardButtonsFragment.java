@@ -334,9 +334,6 @@ public class BoardButtonsFragment extends Fragment {
         popup.show();//showing popup menu
     }
 
-<<<<<<< HEAD
-    public void createToast(String text, boolean isLong) {
-=======
     public void setMilitaryNumberPicker(final Coordinate c, Vertex v) {
         int maxNumberMilitary = 3; //v.get...
 
@@ -368,7 +365,6 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     void createToast(String text, boolean isLong) {
->>>>>>> e3b626f1b187d77c4c8d97ee2c6c36035b318080
         cancelToast();
         int length = Toast.LENGTH_SHORT;
         if (isLong) {
