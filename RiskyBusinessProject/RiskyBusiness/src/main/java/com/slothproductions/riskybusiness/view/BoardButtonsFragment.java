@@ -364,7 +364,7 @@ public class BoardButtonsFragment extends Fragment {
         popup.show();
     }
 
-    void createToast(String text, boolean isLong) {
+    public void createToast(String text, boolean isLong) {
         cancelToast();
         int length = Toast.LENGTH_SHORT;
         if (isLong) {
