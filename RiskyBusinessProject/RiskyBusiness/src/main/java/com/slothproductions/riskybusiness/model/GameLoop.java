@@ -41,15 +41,14 @@ public class GameLoop {
     // all game state objects will be held in this class
     GameState mCurrentGameState;
 
-    //sorry to clutter your class...
-    private int[] colors = {Color.BLUE, Color.GREEN, Color.YELLOW, Color.DKGRAY};
-
     public GameLoop(BoardScreen boardScreen) {
         mBoardScreen = boardScreen;
 
         // Board will continue to be initialized in the BoardScreenMainFragment
         // not the best, but whatever dude
 //        mBoard = ((BoardScreenMainFragment)boardScreen.getScreenFragment()).getBoardData();
+
+        int[] colors = {Color.argb(150,20,120,200), Color.argb(150,10,140,30), Color.argb(150,170,15,15), Color.argb(150,100,100,100)};
 
         // populate the player queue correctly
         List<Player> playersList = mBoardScreen.getBoard().getPlayers();

@@ -420,6 +420,10 @@ public class BoardObjectManager {
     }
 
     public void assignVertexFromIndex() {
+        if (hexIndexAdded % 2 == 0) {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            return;
+        }
         if (hexIndexAdded == 7) {
             if (vertexIndexAdded == 0) {
                 v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
