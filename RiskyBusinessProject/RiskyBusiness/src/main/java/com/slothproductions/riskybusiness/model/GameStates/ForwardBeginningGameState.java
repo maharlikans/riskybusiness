@@ -44,7 +44,6 @@ public class ForwardBeginningGameState implements GameState{
         mBoard = mBoardScreen.getBoard();
         mPlayerBuiltRoad = false;
         mPlayerBuiltSettlement = false;
-
     }
 
     @Override
@@ -160,7 +159,7 @@ public class ForwardBeginningGameState implements GameState{
             mPlayerBuiltSettlement = false;
             mPlayerBuiltRoad = false;
             mBoardButtonsFragment.createToast(
-                    "Now player " + mCurrentPlayer.getName() + "'s turn",
+                    "Now " + mCurrentPlayer.getName() + "'s turn",
                     false);
         }
     }

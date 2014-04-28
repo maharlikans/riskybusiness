@@ -37,6 +37,7 @@ public class GameLoop {
     Queue<Player> mPlayerQueue;
     Player mCurrentPlayer;
     public HashMap<Enum, Integer> mActionToMenuItemIdMap;
+    public HashMap<Enum, Integer> mActionToMenuItemStringMap;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
@@ -71,6 +72,15 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
+
+        mActionToMenuItemStringMap = new HashMap<Enum, Integer>();
+        mActionToMenuItemIdMap.put(GameAction.BUILD_ROAD, R.string.build_road);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_SETTLEMENT, R.string.build_settlement);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.string.train_soldier);
+        mActionToMenuItemIdMap.put(GameAction.BUILD_CITY, R.string.upgrade_city);
+        mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.string.move_soldier);
+        mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.string.repair_city);
+        mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.string.repair_settlement);
     }
 
     // ALL BELOW TODO

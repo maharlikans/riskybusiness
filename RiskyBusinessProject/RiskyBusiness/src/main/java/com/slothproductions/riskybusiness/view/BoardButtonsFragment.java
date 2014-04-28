@@ -114,11 +114,7 @@ public class BoardButtonsFragment extends Fragment {
         endTurnController = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (mBtnEndTurn.getText().equals("End Turn")) {
                   showEndTurnDialog();
-//                } else if (mBtnEndTurn.getText().equals("Roll Dice")) {
-                  showRollDialog();
-//                }
             }
         };
     }
@@ -159,7 +155,7 @@ public class BoardButtonsFragment extends Fragment {
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 createToast("Turn Ended", false);
-//                mBtnEndTurn.setText("Roll Dice");
+                mGameLoop.endTurn();
             }
         });
 
@@ -386,6 +382,7 @@ public class BoardButtonsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mBoardScreen.initializeGameLoop();
-        mBoardScreen.getGameLoop().startGame();
+        mGameLoop = mBoardScreen.getGameLoop();
+        mGameLoop.startGame();
     }
 }
