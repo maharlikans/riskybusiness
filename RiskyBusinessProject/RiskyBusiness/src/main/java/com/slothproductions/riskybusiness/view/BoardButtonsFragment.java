@@ -57,12 +57,6 @@ public class BoardButtonsFragment extends Fragment {
     //Last toast variable is kept track of in order to cancel last toast upon creating new one
     private Toast mLastToast;
 
-    private int dice1;
-    private int dice2;
-
-    private DiceRoll viceDice;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_board_buttons, parent, false);
@@ -81,8 +75,6 @@ public class BoardButtonsFragment extends Fragment {
 
         //Adds the listeners to the appropriate buttons
         initializeControllers();
-
-        viceDice = new DiceRoll();
 
         return v;
     }
@@ -166,98 +158,6 @@ public class BoardButtonsFragment extends Fragment {
         });
 
         alertDialog.show();
-    }
-
-    //TODO: Move the dice to the location of the player that is currently going.
-    public int showRollDialog() {
-        viceDice.roll();
-        dice1 = viceDice.getFirstDice();
-        dice2 = viceDice.getSecondDice();
-
-        Log.d("TAG", "dice 1 rolled " + dice1);
-        Log.d("TAG", "dice 2 rolled " + dice2);
-
-        ImageView outputdice1 = new ImageView(mActivity);
-        outputdice1.setId((int) System.currentTimeMillis());
-
-        RelativeLayout.LayoutParams lpDice1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        lpDice1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-
-        switch(dice1){
-            case 1:
-                outputdice1.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);
-                break;
-            case 2:
-                outputdice1.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);
-            case 3:
-                outputdice1.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);        //Crashes here?
-                break;
-            case 4:
-                outputdice1.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);
-                break;
-            case 5:
-                outputdice1.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);
-                break;
-            case 6:
-                outputdice1.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice1);
-                mButtonsParent.addView(outputdice1, lpDice1);
-                break;
-        }
-
-        ImageView outputdice2 = new ImageView(mActivity);
-        outputdice2.setId((int)System.currentTimeMillis()+1);
-
-        RelativeLayout.LayoutParams lpDice2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        lpDice2.addRule(RelativeLayout.RIGHT_OF, outputdice1.getId());
-        lpDice2.addRule(RelativeLayout.ALIGN_BOTTOM, outputdice1.getId());
-
-
-        switch (dice2) {
-            case 1:
-                outputdice2.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-            case 2:
-                outputdice2.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-            case 3:
-                outputdice2.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-            case 4:
-                outputdice2.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-            case 5:
-                outputdice2.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-            case 6:
-                outputdice2.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
-                mButtonsParent.removeView(outputdice2);
-                mButtonsParent.addView(outputdice2, lpDice2);
-                break;
-        }
-
-        return viceDice.getResults();
     }
 
     //Popup for use with corner objects

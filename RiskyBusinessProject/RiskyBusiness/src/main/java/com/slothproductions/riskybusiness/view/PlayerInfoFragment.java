@@ -1,5 +1,6 @@
 package com.slothproductions.riskybusiness.view;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Resource;
@@ -34,7 +37,11 @@ public class PlayerInfoFragment extends Fragment {
 
     private ArrayList<ImageView> mPlayerSquares;
 
-    ArrayList<Player> mPlayersArrayList;
+    private ArrayList<Player> mPlayersArrayList;
+
+    private DiceRoll mDice;
+    private ImageView mFirstDice;
+    private ImageView mSecondDice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +60,8 @@ public class PlayerInfoFragment extends Fragment {
         initializeVictoryPoints(v);
         initializeNumberResources(v); //total number available resources for each player
         initializePlayerSquares(v);
+
+        initializeDice(v);
 
         colorBoxes();
         //TODO: Only show player info boxes for the number of players that there are
@@ -80,10 +89,90 @@ public class PlayerInfoFragment extends Fragment {
         }
     }
 
+    //TODO: Move the dice to the location of the player that is currently going.
+    public int showRollDialog() {
+        mDice.roll();
+        int dice1 = mDice.getFirstDice();
+        int dice2 = mDice.getSecondDice();
+
+        Log.d("TAG", "dice 1 rolled " + dice1);
+        Log.d("TAG", "dice 2 rolled " + dice2);
+
+        if (mFirstDice.getVisibility() == View.INVISIBLE) {
+            mFirstDice.setVisibility(View.VISIBLE);
+            mSecondDice.setVisibility(View.VISIBLE);
+        }
+
+        Player p = mGameLoop.getCurrentGameState().getCurrentPlayer();
+        int playerInfoId = 0;
+        for (int i = 0; i < mPlayersArrayList.size(); i++) {
+            if (p == mPlayersArrayList.get(i)) {
+                playerInfoId = mPlayerSquares.get(i).getId();
+            }
+        }
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ALIGN_END, playerInfoId);
+        lp.addRule(RelativeLayout.ALIGN_BOTTOM, playerInfoId);
+        mSecondDice.setLayoutParams(lp);
+
+        switch(dice1){
+            case 1:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
+                break;
+            case 2:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
+            case 3:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
+                break;
+            case 4:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
+                break;
+            case 5:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
+                break;
+            case 6:
+                mFirstDice.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
+                break;
+        }
+
+        switch (dice2) {
+            case 1:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice1", "drawable", mActivity.getPackageName()));
+                break;
+            case 2:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
+                break;
+            case 3:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
+                break;
+            case 4:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice4", "drawable", mActivity.getPackageName()));
+                break;
+            case 5:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice5", "drawable", mActivity.getPackageName()));
+                break;
+            case 6:
+                mSecondDice.setImageResource(getResources().getIdentifier("dice6", "drawable", mActivity.getPackageName()));
+                break;
+        }
+
+        mSecondDice.invalidate();
+        mFirstDice.invalidate();
+
+        return mDice.getResults();
+    }
+
     public void colorBoxes() {
         for (int i = 0; i < mPlayersArrayList.size(); i++) {
             mPlayerSquares.get(i).setColorFilter(mPlayersArrayList.get(i).getColor());
         }
+    }
+
+    public void initializeDice(View v) {
+        mDice = new DiceRoll();
+        mFirstDice = (ImageView)v.findViewById(R.id.dice_1);
+        mSecondDice = (ImageView)v.findViewById(R.id.dice_2);
     }
 
     public void initializePlayerSquares(View v) {

@@ -33,6 +33,24 @@
         android:src="@drawable/square"
         android:layout_below="@+id/player_3_info"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dice_2"
+        android:src="@drawable/dice1"
+        android:visibility="invisible"
+        android:layout_alignEnd="@id/player_1_info"
+        android:layout_alignBottom="@id/player_1_info"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dice_1"
+        android:src="@drawable/dice1"
+        android:visibility="invisible"
+        android:layout_alignRight="@id/dice_2"
+        android:layout_above="@id/dice_2"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -64,8 +64,7 @@ public class NormalGameState implements GameState {
 
     @Override
     public void diceRoll() {
-        int rollResult = ((BoardButtonsFragment)mBoardScreen.getButtonsFragment())
-                .showRollDialog();
+        int rollResult = mPlayerInfo.showRollDialog();
         Log.d("TAG", "The dice roll result is " + rollResult);
         mBoard.beginTurn(rollResult);
         mPlayerInfo.updatePlayerValues();
