@@ -17,6 +17,8 @@ import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -61,41 +63,80 @@ public class NormalGameState implements GameState {
     public void diceRoll() {
         int rollResult = ((BoardButtonsFragment)mBoardScreen.getButtonsFragment())
                 .showRollDialog();
+        Log.d("TAG", "The dice roll result is " + rollResult);
         mBoard.beginTurn(rollResult);
-        // TODO update the resources on the game board's view
+        // TODO call to update the resources on the game board's view
     }
 
     @Override
     public boolean buildRoad(Edge edge) {
-        // TODO package the BUILD_ROAD GameAction and effect it
-        return false;
+        GameAction gameAction = GameAction.BUILD_ROAD;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("edge", edge);
+        return mCurrentPlayer.effect(gameAction, map);
     }
 
     @Override
     public boolean buildSettlement(Vertex vertex) {
-        // TODO package the BUILD_SETTLEMENT GameAction and effect it
-        return false;
+        GameAction gameAction = GameAction.BUILD_SETTLEMENT;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
     }
 
     @Override
-    public void buildCity(Vertex vertex) {
-        // TODO package the BUILD_CITY GameAction and effect it
+    public boolean buildCity(Vertex vertex) {
+        GameAction gameAction = GameAction.BUILD_CITY;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
     }
 
     @Override
-    public void buildMilitaryUnit(Vertex vertex) {
-        // TODO package the BUILD_MILITARY_UNIT and effect it
+    public boolean buildMilitaryUnit(Vertex vertex) {
+        GameAction gameAction = GameAction.BUILD_MILITARY_UNIT;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
+    }
+
+    @Override
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+        GameAction gameAction = GameAction.MOVE_MILITARY_UNIT;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex_from", vertexFrom);
+        map.put("vertex_to", vertexTo);
+        return mCurrentPlayer.effect(gameAction, map);
+    }
+
+    @Override
+    public boolean repairSettlement(Vertex vertex) {
+        GameAction gameAction = GameAction.REPAIR_SETTLEMENT;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
+    }
+
+    @Override
+    public boolean repairCity(Vertex vertex) {
+        GameAction gameAction = GameAction.REPAIR_CITY;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
+    }
+
+    @Override
+    public boolean attack(Vertex vertex) {
+        GameAction gameAction = GameAction.ATTACK;
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("vertex", vertex);
+        return mCurrentPlayer.effect(gameAction, map);
     }
 
     @Override
     public void trade() {
         // TODO: change the arguments and change this to call the effect change
         // on a player class
-    }
-
-    @Override
-    public void attackWithSoldier(Vertex vertex) {
-        // TODO: change the arguments and change this to call the effect change
     }
 
     @Override
@@ -106,14 +147,7 @@ public class NormalGameState implements GameState {
                 "Now " + mCurrentPlayer.getName() + "'s turn",
                 false);
         startTurn();
-        // update the current player on the screen and show the players' resources
-    }
-
-
-
-    @Override
-    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-
+        // TODO update the current player on the screen and show the players' resources
     }
 
     @Override

@@ -115,28 +115,44 @@ public class BackwardBeginningGameState implements GameState {
     }
 
     @Override
-    public void buildCity(Vertex vertex) {
-        // do nothing
+    public boolean buildCity(Vertex vertex) {
+        // DO NOTHING
+        return false;
     }
 
     @Override
-    public void buildMilitaryUnit(Vertex vertex) {
-        // do nothing
+    public boolean buildMilitaryUnit(Vertex vertex) {
+        // DO NOTHING
+        return false;
     }
 
     @Override
     public void trade() {
-        // TODO not sure yet
+        // DO NOTHING
     }
 
     @Override
-    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+        // DO NOTHING
+        return false;
     }
 
     @Override
-    public void attackWithSoldier(Vertex vertex) {
-        // TODO not sure yet
+    public boolean attack(Vertex vertex) {
+        // DO NOTHING
+        return false;
+    }
+
+    @Override
+    public boolean repairCity(Vertex vertex) {
+        // DO NOTHING
+        return false;
+    }
+
+    @Override
+    public boolean repairSettlement(Vertex vertex) {
+        // DO NOTHING
+        return false;
     }
 
     @Override
@@ -152,7 +168,7 @@ public class BackwardBeginningGameState implements GameState {
             mPlayerBuiltSettlement = false;
             mPlayerBuiltRoad = false;
             mBoardButtonsFragment.createToast(
-                    "Now player " + mCurrentPlayer.getName() + "'s turn",
+                    "Now " + mCurrentPlayer.getName() + "'s turn",
                     false);
         }
     }

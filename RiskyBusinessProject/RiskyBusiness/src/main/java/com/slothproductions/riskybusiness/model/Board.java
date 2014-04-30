@@ -112,6 +112,7 @@ public class Board implements java.io.Serializable {
                 }
             }
         }
+
         for (int i1 = 0; i1 < elements; i1++) {
             for (int i2 = 0; i2 < i1; i2++) {
                 Hex h1 = hexes.get(i1);

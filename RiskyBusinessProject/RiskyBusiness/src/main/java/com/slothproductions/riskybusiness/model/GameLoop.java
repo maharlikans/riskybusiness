@@ -1,24 +1,14 @@
 package com.slothproductions.riskybusiness.model;
 
 import android.graphics.Color;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 import com.View.R;
-import com.slothproductions.riskybusiness.model.GameStates.BackwardBeginningGameState;
-import com.slothproductions.riskybusiness.model.GameStates.EndGameState;
 import com.slothproductions.riskybusiness.model.GameStates.ForwardBeginningGameState;
 import com.slothproductions.riskybusiness.model.GameStates.GameState;
-import com.slothproductions.riskybusiness.model.GameStates.NormalGameState;
 import com.slothproductions.riskybusiness.view.BoardScreen;
-import com.slothproductions.riskybusiness.view.BoardScreenMainFragment;
 
 
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,11 +108,11 @@ public class GameLoop {
     }
 
     public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-        mCurrentGameState.moveSoldier(vertexFrom, vertexTo);
+        mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
 
     public void attackWithSoldier(Vertex vertex) {
-        mCurrentGameState.attackWithSoldier(vertex);
+        mCurrentGameState.attack(vertex);
     }
 
     public void endTurn(/*some arguments*/) {

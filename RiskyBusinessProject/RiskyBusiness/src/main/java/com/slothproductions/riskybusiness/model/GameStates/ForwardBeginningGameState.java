@@ -17,7 +17,6 @@ import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 import java.lang.Override;
-import java.util.HashMap;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -121,13 +120,15 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void buildCity(Vertex vertex) {
+    public boolean buildCity(Vertex vertex) {
         // DO NOTHING
+        return false;
     }
 
     @Override
-    public void buildMilitaryUnit(Vertex vertex) {
+    public boolean buildMilitaryUnit(Vertex vertex) {
         // DO NOTHING
+        return false;
     }
 
     @Override
@@ -136,13 +137,25 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
         // DO NOTHING
+        return false;
     }
 
     @Override
-    public void attackWithSoldier(Vertex vertex) {
+    public boolean attack(Vertex vertex) {
         // DO NOTHING
+        return false;
+    }
+
+    @Override
+    public boolean repairCity(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public boolean repairSettlement(Vertex vertex) {
+        return false;
     }
 
     @Override

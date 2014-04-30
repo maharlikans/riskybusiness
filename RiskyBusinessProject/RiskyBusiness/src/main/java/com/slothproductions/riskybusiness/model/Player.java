@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.model;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -104,8 +105,18 @@ final public class Player implements java.io.Serializable {
     }
 
     protected void addResources(ArrayList<Resource> gains) {
-        for (Resource r : gains)
+        // TODO remove this test statement
+        for (Resource r: gains) {
+            Log.d("TAG", "Before adding, player " + name + " has " + resources.get(r) + " " + r.toString());
+        }
+        for (Resource r: gains) {
+            Log.d("TAG", "Adding " + r.toString());
+        }
+        for (Resource r : gains) {
             resources.put(r, resources.get(r) + 1);
+            Log.d("TAG", "Now player " + name + " has " + resources.get(r) + " " + r.toString());
+        }
+
     }
 
     protected void addResources(Map<Resource, Integer> gained) {

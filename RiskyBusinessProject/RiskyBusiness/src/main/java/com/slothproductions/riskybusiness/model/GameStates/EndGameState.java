@@ -20,49 +20,12 @@ public class EndGameState implements GameState {
 
     @Override
     public void init() {
-        // show the necessary view elements on the screen
+
     }
 
     @Override
     public void startTurn() {
-        // DO NOTHING
-    }
 
-    @Override
-    public boolean buildRoad(Edge edge) {
-        // do nothing
-        return false;
-    }
-
-    @Override
-    public boolean buildSettlement(Vertex vertex) {
-        // do nothing
-        return false;
-    }
-
-    @Override
-    public void buildCity(Vertex vertex) {
-        // do nothing
-    }
-
-    @Override
-    public void buildMilitaryUnit(Vertex vertex) {
-        // do nothing
-    }
-
-    @Override
-    public void trade() {
-        // DO NOTHING
-    }
-
-    @Override
-    public void attackWithSoldier(Vertex vertex) {
-        // DO NOTHING
-    }
-
-    @Override
-    public void endTurn() {
-        // DO NOTHING
     }
 
     @Override
@@ -71,22 +34,67 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+    public boolean buildRoad(Edge edge) {
+        return false;
+    }
+
+    @Override
+    public boolean buildSettlement(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public boolean buildCity(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public boolean buildMilitaryUnit(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public void trade() {
+
+    }
+
+    @Override
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+        return false;
+    }
+
+    @Override
+    public boolean attack(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public boolean repairCity(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public boolean repairSettlement(Vertex vertex) {
+        return false;
+    }
+
+    @Override
+    public void endTurn() {
+
+    }
+
+    @Override
+    public void getActions(PopupMenu popupMenu, Edge edge) {
+
+    }
+
+    @Override
+    public void getActions(PopupMenu popupMenu, Vertex vertex) {
 
     }
 
     @Override
     public Player getCurrentPlayer() {
         return null;
-    }
-
-    @Override
-    public void getActions(PopupMenu popupMenu, Edge edge) {
-        // DO NOTHING
-    }
-
-    @Override
-    public void getActions(PopupMenu popupMenu, Vertex vertex) {
-        // DO NOTHING
     }
 }

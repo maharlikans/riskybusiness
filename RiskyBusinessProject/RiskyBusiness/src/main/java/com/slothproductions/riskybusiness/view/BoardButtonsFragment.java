@@ -174,6 +174,9 @@ public class BoardButtonsFragment extends Fragment {
         dice1 = viceDice.getFirstDice();
         dice2 = viceDice.getSecondDice();
 
+        Log.d("TAG", "dice 1 rolled " + dice1);
+        Log.d("TAG", "dice 2 rolled " + dice2);
+
         ImageView outputdice1 = new ImageView(mActivity);
         outputdice1.setId((int) System.currentTimeMillis());
 
@@ -252,7 +255,6 @@ public class BoardButtonsFragment extends Fragment {
                 mButtonsParent.removeView(outputdice2);
                 mButtonsParent.addView(outputdice2, lpDice2);
                 break;
-
         }
 
         return viceDice.getResults();

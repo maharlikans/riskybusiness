@@ -15,11 +15,13 @@ public interface GameState {
     void diceRoll();
     boolean buildRoad(Edge edge);
     boolean buildSettlement(Vertex vertex);
-    void buildCity(Vertex vertex);
-    void buildMilitaryUnit(Vertex vertex);
+    boolean buildCity(Vertex vertex);
+    boolean buildMilitaryUnit(Vertex vertex);
     void trade(); // TODO change the parameters for trade
-    void moveSoldier(Vertex vertexFrom, Vertex vertexTo);
-    void attackWithSoldier(Vertex vertex);
+    boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo);
+    boolean attack(Vertex vertex);
+    boolean repairCity(Vertex vertex);
+    boolean repairSettlement(Vertex vertex);
     void endTurn();
     void getActions(PopupMenu popupMenu, Edge edge);
     void getActions(PopupMenu popupMenu, Vertex vertex);
