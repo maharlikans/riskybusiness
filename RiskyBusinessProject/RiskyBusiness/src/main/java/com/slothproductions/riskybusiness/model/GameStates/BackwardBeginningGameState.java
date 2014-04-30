@@ -15,6 +15,7 @@ import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
+import com.slothproductions.riskybusiness.view.PlayerInfoFragment;
 
 import java.util.Queue;
 import java.util.Stack;
@@ -101,6 +102,7 @@ public class BackwardBeginningGameState implements GameState {
             if (mCurrentPlayer.canBuildInitial(vertex, 2)) {
                 mCurrentPlayer.buildInitial(vertex, 2);
                 mPlayerBuiltSettlement = true;
+                ((PlayerInfoFragment)(mBoardScreen.getPlayerInfoFragment())).updatePlayerValues();
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a settlement here.", false);

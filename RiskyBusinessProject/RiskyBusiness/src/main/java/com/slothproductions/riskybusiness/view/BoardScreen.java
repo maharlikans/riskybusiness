@@ -214,6 +214,10 @@ public class BoardScreen extends FragmentActivity {
         return mBoardButtonsFragment;
     }
 
+    public Fragment getPlayerInfoFragment() {
+        return mPlayerInfoFragment;
+    }
+
     public Board getBoard() {
         return mBoardData;
     }
