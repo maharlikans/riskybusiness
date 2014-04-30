@@ -109,24 +109,24 @@ public class GameLoop {
         return mCurrentGameState.buildSettlement(vertex);
     }
 
-    public void buildCity(Vertex vertex) {
-        mCurrentGameState.buildCity(vertex);
+    public boolean buildCity(Vertex vertex) {
+        return mCurrentGameState.buildCity(vertex);
     }
 
-    public void buildMilitaryUnit(Vertex vertex) {
-        mCurrentGameState.buildMilitaryUnit(vertex);
+    public boolean buildMilitaryUnit(Vertex vertex) {
+        return mCurrentGameState.buildMilitaryUnit(vertex);
     }
 
     public void trade(/*some arguments*/) {
         mCurrentGameState.trade(/*some arguments*/);
     }
 
-    public void moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-        mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
+    public boolean moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
+        return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
 
-    public void attackWithSoldier(Vertex vertex) {
-        mCurrentGameState.attack(vertex);
+    public boolean attackWithSoldier(Vertex vertex) {
+        return mCurrentGameState.attack(vertex);
     }
 
     public void endTurn(/*some arguments*/) {

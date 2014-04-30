@@ -91,7 +91,9 @@ public class BoardObjectManager {
             }
         }
         else if (action.getItemId() == R.id.soldier) {
-            buildItem(1, "soldier", coordinate);
+            if (mGameLoop.buildMilitaryUnit(v)) {
+                buildItem(1, "soldier", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.settlement) {
             if (mGameLoop.buildSettlement(v)) {
@@ -99,8 +101,10 @@ public class BoardObjectManager {
             }
         }
         else if (action.getItemId() == R.id.city) {
-            removeSettlement(coordinate);
-            buildItem(3, "city", coordinate);
+            if (mGameLoop.buildCity(v)) {
+                removeSettlement(coordinate);
+                buildItem(3, "city", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.repairsettlement) {
             //repair settlement
@@ -176,7 +180,9 @@ public class BoardObjectManager {
         if (mAdjacentHexes.size() == 1) {
             assignVertexFromIndex();
         }
-        //mGameLoop.moveSoldier(startVertex, v);
+        if (!mGameLoop.moveSoldier(startVertex, v)) {
+            return;
+        }
         //should only translate if it could move
         translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
         mSoldierMoving = null;

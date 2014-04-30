@@ -38,7 +38,7 @@ public class NormalGameState implements GameState {
     public NormalGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
         mPlayerQueue = mGameLoop.getPlayerQueue();
-        mCurrentPlayer = mGameLoop.getCurrentPlayer();
+        mCurrentPlayer = mPlayerQueue.poll();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
         mPlayerInfo = (PlayerInfoFragment)mBoardScreen.getPlayerInfoFragment();
@@ -75,7 +75,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.BUILD_ROAD;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("edge", edge);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -83,7 +85,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.BUILD_SETTLEMENT;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -91,7 +95,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.BUILD_CITY;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -99,7 +105,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.BUILD_MILITARY_UNIT;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -108,7 +116,9 @@ public class NormalGameState implements GameState {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex_from", vertexFrom);
         map.put("vertex_to", vertexTo);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -116,7 +126,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.REPAIR_SETTLEMENT;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -124,7 +136,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.REPAIR_CITY;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
@@ -132,7 +146,9 @@ public class NormalGameState implements GameState {
         GameAction gameAction = GameAction.ATTACK;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex", vertex);
-        return mCurrentPlayer.effect(gameAction, map);
+        boolean result = mCurrentPlayer.effect(gameAction, map);
+        mPlayerInfo.updatePlayerValues();
+        return result;
     }
 
     @Override
