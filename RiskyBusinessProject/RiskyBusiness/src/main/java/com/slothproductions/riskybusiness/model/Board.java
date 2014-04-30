@@ -38,7 +38,7 @@ public class Board implements java.io.Serializable {
         return ring * (ring + 1) * 3;
     }
 
-    public Board (String [] playerNames) {
+    public Board (String[] playerNames) {
         Log.d(TAG, "Generating board");
         prng = new SecureRandom();
         vertices = new ArrayList<Vertex>();

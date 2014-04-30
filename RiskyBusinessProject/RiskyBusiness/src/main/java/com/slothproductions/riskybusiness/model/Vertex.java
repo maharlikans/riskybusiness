@@ -168,11 +168,19 @@ public class Vertex implements java.io.Serializable {
         return building;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     final protected void setBuilding(Building b) {
         building = b;
     }
 
     final protected void setMilitary(MilitaryUnit mu) {
         military = mu;
+    }
+
+    public ImmutableVertex getImmutable() {
+        return immutable;
     }
 }
