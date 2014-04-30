@@ -110,11 +110,11 @@ public class GameLoop {
     }
 
     public boolean buildCity(Vertex vertex) {
-        mCurrentGameState.buildCity(vertex);
+        return mCurrentGameState.buildCity(vertex);
     }
 
     public boolean buildMilitaryUnit(Vertex vertex) {
-        mCurrentGameState.buildMilitaryUnit(vertex);
+        return mCurrentGameState.buildMilitaryUnit(vertex);
     }
 
     public void trade(/*some arguments*/) {
@@ -122,11 +122,11 @@ public class GameLoop {
     }
 
     public boolean moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-        mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
+        return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
 
     public boolean attackWithSoldier(Vertex vertex) {
-        mCurrentGameState.attack(vertex);
+        return mCurrentGameState.attack(vertex);
     }
 
     public void endTurn(/*some arguments*/) {
