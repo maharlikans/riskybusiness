@@ -1,6 +1,5 @@
 package com.slothproductions.riskybusiness.view;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -89,7 +88,6 @@ public class PlayerInfoFragment extends Fragment {
         }
     }
 
-    //TODO: Move the dice to the location of the player that is currently going.
     public int showRollDialog() {
         mDice.roll();
         int dice1 = mDice.getFirstDice();
@@ -122,6 +120,7 @@ public class PlayerInfoFragment extends Fragment {
                 break;
             case 2:
                 mFirstDice.setImageResource(getResources().getIdentifier("dice2", "drawable", mActivity.getPackageName()));
+                break;
             case 3:
                 mFirstDice.setImageResource(getResources().getIdentifier("dice3", "drawable", mActivity.getPackageName()));
                 break;
