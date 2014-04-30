@@ -15,6 +15,7 @@ import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 import com.slothproductions.riskybusiness.view.BoardButtonsFragment;
 import com.slothproductions.riskybusiness.view.BoardScreen;
+import com.slothproductions.riskybusiness.view.PlayerInfoFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class NormalGameState implements GameState {
     BoardScreen mBoardScreen;
     BoardButtonsFragment mBoardButtonsFragment;
     Board mBoard;
+    PlayerInfoFragment mPlayerInfo;
 
     public NormalGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
@@ -39,6 +41,7 @@ public class NormalGameState implements GameState {
         mCurrentPlayer = mGameLoop.getCurrentPlayer();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
+        mPlayerInfo = (PlayerInfoFragment)mBoardScreen.getPlayerInfoFragment();
     }
 
     @Override
@@ -65,7 +68,7 @@ public class NormalGameState implements GameState {
                 .showRollDialog();
         Log.d("TAG", "The dice roll result is " + rollResult);
         mBoard.beginTurn(rollResult);
-        // TODO call to update the resources on the game board's view
+        mPlayerInfo.updatePlayerValues();
     }
 
     @Override
@@ -147,7 +150,7 @@ public class NormalGameState implements GameState {
                 "Now " + mCurrentPlayer.getName() + "'s turn",
                 false);
         startTurn();
-        // TODO update the current player on the screen and show the players' resources
+        mPlayerInfo.updatePlayerValues();
     }
 
     @Override

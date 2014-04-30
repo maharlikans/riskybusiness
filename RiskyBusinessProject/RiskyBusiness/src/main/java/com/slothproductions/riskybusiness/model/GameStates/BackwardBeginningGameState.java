@@ -32,6 +32,7 @@ public class BackwardBeginningGameState implements GameState {
     BoardScreen mBoardScreen;
     BoardButtonsFragment mBoardButtonsFragment;
     Board mBoard;
+    PlayerInfoFragment mPlayerInfo;
     boolean mPlayerBuiltRoad;
     boolean mPlayerBuiltSettlement;
 
@@ -42,6 +43,7 @@ public class BackwardBeginningGameState implements GameState {
         mCurrentPlayer = mPlayerStack.pop();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
+        mPlayerInfo = (PlayerInfoFragment)mBoardScreen.getPlayerInfoFragment();
         mPlayerBuiltRoad = false;
         mPlayerBuiltSettlement = false;
     }
@@ -102,7 +104,7 @@ public class BackwardBeginningGameState implements GameState {
             if (mCurrentPlayer.canBuildInitial(vertex, 2)) {
                 mCurrentPlayer.buildInitial(vertex, 2);
                 mPlayerBuiltSettlement = true;
-                ((PlayerInfoFragment)(mBoardScreen.getPlayerInfoFragment())).updatePlayerValues();
+                mPlayerInfo.updatePlayerValues();
                 return true;
             } else {
                 mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
@@ -172,6 +174,7 @@ public class BackwardBeginningGameState implements GameState {
             mBoardButtonsFragment.createToast(
                     "Now " + mCurrentPlayer.getName() + "'s turn",
                     false);
+            mPlayerInfo.updatePlayerValues();
         }
     }
 

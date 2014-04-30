@@ -16,6 +16,7 @@ import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Resource;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PlayerInfoFragment extends Fragment {
@@ -64,9 +65,10 @@ public class PlayerInfoFragment extends Fragment {
         }
         //first updates all resources on the bottom row (the current players resources)
         Map<Resource, Integer> resources = mGameLoop.getCurrentGameState().getCurrentPlayer().getResources();
-        //note order is wood, brick, wool, ore, grain, gold.. Can change order of arraylist if needed
+        Iterator it = resources.entrySet().iterator();
         for (int i = 0; i < mCurrentPlayerResources.size(); i++) {
-            //mTotalNumberResources.get(i).setText();
+            Map.Entry resource = (Map.Entry)it.next();
+            mCurrentPlayerResources.get(i).setText(Integer.toString((Integer)resource.getValue()));
         }
         //now update the total number of resources for all the players
         for (int i = 0; i < mPlayersArrayList.size(); i++) {
@@ -94,12 +96,12 @@ public class PlayerInfoFragment extends Fragment {
 
     public void initializeResources(View v) {
         mCurrentPlayerResources = new ArrayList<TextView>();
-        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_wood));
+        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_gold));
         mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_brick));
-        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_wool));
         mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_ore));
         mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_grain));
-        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_gold));
+        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_wool));
+        mCurrentPlayerResources.add((TextView) v.findViewById(R.id.num_wood));
     }
 
     public void initializeVictoryPoints(View v) {
