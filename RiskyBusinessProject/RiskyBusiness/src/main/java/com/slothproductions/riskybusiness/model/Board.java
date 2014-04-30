@@ -466,7 +466,7 @@ public class Board implements java.io.Serializable {
             } case REPAIR_SETTLEMENT: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building.setHealth((int) Math.max(5, target.building.getHealth() + 2));
-                return null;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BUILD_CITY: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.CITY, target, player);
@@ -474,7 +474,7 @@ public class Board implements java.io.Serializable {
             } case REPAIR_CITY: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building.setHealth((int) Math.max(10, target.building.getHealth() + 3));
-                return null;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BUILD_ROAD: {
                 Edge e = edges.get(((Edge) arguments.get("edge")).getIndex());
                 e.owner = player;
@@ -489,7 +489,7 @@ public class Board implements java.io.Serializable {
                     target.military = new MilitaryUnit(player, target);
                 }
                 target.building.numSoldiersBuilt++;
-                break;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BANK_TRADE: {
                 Integer amount = (Integer) arguments.get("sell_amount");
                 Resource sell = (Resource) arguments.get("sell_resource_type");
@@ -500,7 +500,7 @@ public class Board implements java.io.Serializable {
                 bought.put(buy, amount / player.trades.get(sell));
                 player.takeResources(sold);
                 player.addResources(bought);
-                break;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
             } case PRIVATE_TRADE: {
                 if (player.hasResources((Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("sell_amount"))) {
                     Trade t = new Trade(player, (Player) arguments.get("partner"), (Integer) arguments.get("sell_amount"), (Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("buy_amount"), (Resource) arguments.get("buy_resource_type"));
@@ -526,8 +526,8 @@ public class Board implements java.io.Serializable {
                     }
                 }
             } case MOVE_MILITARY_UNIT: {
-                Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
-                Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
+                Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
                 if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player))
                     return null;
                 boolean bonus = from.military.haveBonusMoved > 0;
@@ -553,7 +553,7 @@ public class Board implements java.io.Serializable {
                     else
                         to.military.haveMoved++;
                 }
-                return null;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             } case ATTACK: {
                 Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
                 Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
