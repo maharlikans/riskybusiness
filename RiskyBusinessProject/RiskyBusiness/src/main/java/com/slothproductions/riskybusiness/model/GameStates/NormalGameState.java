@@ -163,10 +163,17 @@ public class NormalGameState implements GameState {
         ArrayList<GameAction> gameActionArrayListFiltered =
                 mCurrentPlayer.getActions(edge, true);
 
+        Log.d("TAG", "The size of the GameAction list returned is "
+                + gameActionArrayListFiltered.size());
+        for (GameAction ga : gameActionArrayListUnfiltered) {
+            Log.d("TAG", "One available game action is " + ga.toString());
+        }
+
         Menu menu = popupMenu.getMenu();
 
         // then enable only the menu items which are available in the list
         for (GameAction ga : gameActionArrayListUnfiltered) {
+            Log.d("TAG", "Menu is " + menu.toString());
             menu.add(0, mGameLoop.mActionToMenuItemIdMap.get(ga), 0,
                     mGameLoop.mActionToMenuItemStringMap.get(ga));
             menu.findItem(mGameLoop.mActionToMenuItemIdMap.get(ga)).setEnabled(false);
@@ -186,6 +193,8 @@ public class NormalGameState implements GameState {
         ArrayList<GameAction> gameActionArrayListFiltered =
                 mCurrentPlayer.getActions(vertex, true);
 
+        Log.d("TAG", "The size of the GameAction list returned is "
+                + gameActionArrayListUnfiltered.size());
         for (GameAction ga : gameActionArrayListUnfiltered) {
             Log.d("TAG", "One available game action is " + ga.toString());
         }
@@ -194,6 +203,21 @@ public class NormalGameState implements GameState {
 
         // then enable only the menu items which are available in the list
         for (GameAction ga : gameActionArrayListUnfiltered) {
+            /*if (menu != null) {
+                Log.d("TAG", "Menu is not null");
+            }*/
+            if (mGameLoop == null) {
+                Log.d("TAG", "GameLoop is not null");
+            }
+            if (mGameLoop.mActionToMenuItemIdMap == null)
+                Log.d("TAG", "mActionToMenuItemIdMap is null");
+            if (mGameLoop.mActionToMenuItemStringMap == null)
+                Log.d("TAG", "mActionToMenuItemStringMap is null");
+            if (mGameLoop.mActionToMenuItemIdMap.get(ga) == null)
+                Log.d("TAG", "mActionToMenuItemIdMap.get(" + ga.toString() + ")" + " is null");
+            if (mGameLoop.mActionToMenuItemStringMap.get(ga) == null)
+                Log.d("TAG", "mActionToMenuItemStringMap.get(" + ga.toString() + ")" + " is null");
+
             menu.add(0, mGameLoop.mActionToMenuItemIdMap.get(ga), 0,
                     mGameLoop.mActionToMenuItemStringMap.get(ga));
             menu.findItem(mGameLoop.mActionToMenuItemIdMap.get(ga)).setEnabled(false);

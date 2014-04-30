@@ -1,6 +1,7 @@
 package com.slothproductions.riskybusiness.model;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.PopupMenu;
 
 import com.View.R;
@@ -9,6 +10,7 @@ import com.slothproductions.riskybusiness.model.GameStates.GameState;
 import com.slothproductions.riskybusiness.view.BoardScreen;
 
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,8 +18,6 @@ import java.util.Queue;
 
 /**
  * Created by Kyle Maharlika on 4/4/2014.
- * Status: in progress... still need to construct object correctly
- *         encapsulate the class
  */
 public class GameLoop {
     private final String TAG = "Game Loop";
@@ -26,8 +26,8 @@ public class GameLoop {
 
     Queue<Player> mPlayerQueue;
     Player mCurrentPlayer;
-    public HashMap<Enum, Integer> mActionToMenuItemIdMap;
-    public HashMap<Enum, Integer> mActionToMenuItemStringMap;
+    public EnumMap<GameAction, Integer> mActionToMenuItemIdMap;
+    public EnumMap<GameAction, Integer> mActionToMenuItemStringMap;
 
     // all game state objects will be held in this class
     GameState mCurrentGameState;
@@ -54,7 +54,7 @@ public class GameLoop {
         // set the current player
         mCurrentPlayer = mPlayerQueue.poll();
 
-        mActionToMenuItemIdMap = new HashMap<Enum, Integer>();
+        mActionToMenuItemIdMap = new EnumMap<GameAction, Integer>(GameAction.class);
         mActionToMenuItemIdMap.put(GameAction.BUILD_ROAD, R.id.road);
         mActionToMenuItemIdMap.put(GameAction.BUILD_SETTLEMENT, R.id.settlement);
         mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.id.soldier);
@@ -63,14 +63,28 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
 
-        mActionToMenuItemStringMap = new HashMap<Enum, Integer>();
-        mActionToMenuItemIdMap.put(GameAction.BUILD_ROAD, R.string.build_road);
-        mActionToMenuItemIdMap.put(GameAction.BUILD_SETTLEMENT, R.string.build_settlement);
-        mActionToMenuItemIdMap.put(GameAction.BUILD_MILITARY_UNIT, R.string.train_soldier);
-        mActionToMenuItemIdMap.put(GameAction.BUILD_CITY, R.string.upgrade_city);
-        mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.string.move_soldier);
-        mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.string.repair_city);
-        mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.string.repair_settlement);
+        /*Log.d("TAG", "The String ID for the BUILD_CITY item is: " + R.string.upgrade_city);*/
+
+        mActionToMenuItemStringMap = new EnumMap<GameAction, Integer>(GameAction.class);
+        mActionToMenuItemStringMap.put(GameAction.BUILD_ROAD, R.string.build_road);
+        mActionToMenuItemStringMap.put(GameAction.BUILD_SETTLEMENT, R.string.build_settlement);
+        mActionToMenuItemStringMap.put(GameAction.BUILD_MILITARY_UNIT, R.string.train_soldier);
+        mActionToMenuItemStringMap.put(GameAction.BUILD_CITY, R.string.upgrade_city);
+        mActionToMenuItemStringMap.put(GameAction.MOVE_MILITARY_UNIT, R.string.move_soldier);
+        mActionToMenuItemStringMap.put(GameAction.REPAIR_CITY, R.string.repair_city);
+        mActionToMenuItemStringMap.put(GameAction.REPAIR_SETTLEMENT, R.string.repair_settlement);
+
+       /* Log.d("TAG", "The ID for BUILDCITY is " +
+                mActionToMenuItemIdMap.get(GameAction.BUILD_CITY));
+        Log.d("TAG", "mActionToMenuItemStringMap contains the key "
+                        + GameAction.BUILD_CITY.toString() + ": "
+                + mActionToMenuItemStringMap.containsKey(GameAction.BUILD_CITY));
+        Log.d("TAG", "The String ID for BUILDCITY is " +
+                mActionToMenuItemStringMap.get(GameAction.BUILD_CITY));
+
+        for (GameAction ga : mActionToMenuItemStringMap.keySet()) {
+            Log.d("TAG", "A key of mActionToMenuItemStringMap: " + ga.toString());
+        }*/
     }
 
     // ALL BELOW TODO
@@ -119,7 +133,7 @@ public class GameLoop {
         mCurrentGameState.endTurn(/*some arguments*/);
     }
 
-    // all getters and setters
+    /* GETTERS AND SETTERS */
 
     public GameState getCurrentGameState() {
         return mCurrentGameState;
