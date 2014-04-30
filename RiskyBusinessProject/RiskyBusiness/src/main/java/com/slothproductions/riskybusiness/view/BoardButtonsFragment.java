@@ -333,7 +333,7 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     public void setMilitaryNumberPicker(final Coordinate c, Vertex v) {
-        int maxNumberMilitary = 3; //v.get...
+        int maxNumberMilitary = Math.min(5, v.getImmutable().getMilitary().getHealth());
 
         //an anchor for the popup menu to be placed on. It needs this for whatever reason..
         ImageView anchor = new ImageView(mActivity);

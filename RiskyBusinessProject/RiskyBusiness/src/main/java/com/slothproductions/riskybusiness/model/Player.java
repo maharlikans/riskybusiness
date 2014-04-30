@@ -6,6 +6,7 @@ import android.util.Log;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.Map;
 
 final public class Player implements java.io.Serializable {
@@ -297,6 +298,19 @@ final public class Player implements java.io.Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public int getTotalNumberResources() {
+        int i = 0;
+        Iterator it = resources.entrySet().iterator();
+        while (it.hasNext()) {
+            i += (Integer)((Map.Entry)it.next()).getValue();
+        }
+        return i;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     public void setColor(int c) {
