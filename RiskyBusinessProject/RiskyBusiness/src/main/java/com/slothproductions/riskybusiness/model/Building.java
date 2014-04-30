@@ -42,6 +42,8 @@ public class Building implements java.io.Serializable {
         return health;
     }
 
+    public int getNumSoldiersBuilt() { return numSoldiersBuilt;}
+
     public Player getPlayer() {
         return owner;
     }

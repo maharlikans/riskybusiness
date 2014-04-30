@@ -11,6 +11,8 @@ import java.util.Map;
 final public class Player implements java.io.Serializable {
     private static final long serialVersionUID = -677559079L;
 
+    private static final String TAG = "PLAYER";
+
     protected class ImmutablePlayerAccounting implements java.io.Serializable {
     }
 
@@ -198,11 +200,13 @@ final public class Player implements java.io.Serializable {
             }
         }
 
-        if (v.building.type == BuildingType.SETTLEMENT) {
+        if (v.getBuilding().getPlayer() == this && v.building.type == BuildingType.SETTLEMENT) {
+            Log.d(TAG, "Player has settlement, access to city unlocked.");
             actions.add(GameAction.BUILD_CITY);
         }
 
-        if (v.building.owner == this) {
+        if (v.getBuilding().getPlayer() == this) {
+            Log.d(TAG, "Number of soldiers built here this turn: " + v.getBuilding().getNumSoldiersBuilt());
             if (v.building.type == BuildingType.CITY && v.building.numSoldiersBuilt < 2)
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
             else if (v.building.type == BuildingType.SETTLEMENT && v.building.numSoldiersBuilt < 1)
@@ -245,12 +249,18 @@ final public class Player implements java.io.Serializable {
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
 
         if (!e.road) {
+            Log.d(TAG, "Road is empty.");
             boolean canBuild = false;
             for (Vertex v : e.getVertices()) {
-                if (v.building.owner == this)
+                Log.d(TAG, "Checking adjacent vertex " + v.getIndex());
+                Log.d(TAG, "Building is of type: " + v.getBuilding().getType());
+                if (v.getBuilding().getPlayer() != null)
+                    Log.d(TAG, "Adjacent vertex is owned by player " + v.getBuilding().getPlayer().getName());
+                if (v.getBuilding().getPlayer() == this) {
+                    Log.d(TAG, "Adjacent building is owned.");
                     canBuild = true;
-                if (v.getBuilding().getPlayer() == null || v.getBuilding().getPlayer() == this) {
-                    for (Edge.ImmutableEdge edge : v.immutable.getEdges()) {
+                } else if (v.getBuilding().getPlayer() == null) {
+                    for (Edge edge : v.edges) {
                         if (edge.getOwner() == this)
                             canBuild = true;
                     }

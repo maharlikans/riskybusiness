@@ -163,6 +163,10 @@ public class NormalGameState implements GameState {
         ArrayList<GameAction> gameActionArrayListFiltered =
                 mCurrentPlayer.getActions(edge, true);
 
+        for (GameAction ga : gameActionArrayListUnfiltered) {
+            Log.d("TAG", "One available game action is " + ga.toString());
+        }
+
         Menu menu = popupMenu.getMenu();
 
         // then enable only the menu items which are available in the list
