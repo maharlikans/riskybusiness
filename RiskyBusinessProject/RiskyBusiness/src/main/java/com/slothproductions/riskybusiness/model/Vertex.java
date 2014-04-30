@@ -175,4 +175,8 @@ public class Vertex implements java.io.Serializable {
     final protected void setMilitary(MilitaryUnit mu) {
         military = mu;
     }
+
+    public ImmutableVertex getImmutable() {
+        return immutable;
+    }
 }

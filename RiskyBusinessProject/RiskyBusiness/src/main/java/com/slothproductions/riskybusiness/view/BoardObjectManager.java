@@ -112,7 +112,7 @@ public class BoardObjectManager {
             setMoveSoldierState(coordinate);
         }
         else if (action.getItemId() == R.id.attack) {
-            setAttacking(coordinate);
+            mBoardButtonsFragment.setMilitaryNumberPicker(coordinate, v);
         }
     }
 
@@ -182,12 +182,30 @@ public class BoardObjectManager {
         mSoldierMoving = null;
     }
 
-    public void setAttacking(Coordinate c) {
-        mBoardButtonsFragment.setMilitaryNumberPicker(c, v);
+    public void setNumberAttacking(Coordinate coordinate, int num) {
+        ImageView tempSoldier;
+        for (int i = 0; i < mSoldiers.size(); i ++) {
+            tempSoldier = mSoldiers.get(i);
+            int topLeftx = (int) tempSoldier.getX();
+            int topLeftY = (int) tempSoldier.getY();
+            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mSoldiersAttacking.add(tempSoldier);
+                if (mSoldiersAttacking.size() >= num) {
+                    return;
+                }
+            }
+        }
     }
 
-    public void setNumberAttacking(Coordinate c, int num) {
-
+    public void attack(Coordinate c) {
+        int numAttacking = mSoldiersAttacking.size();
+        //attack with soldiers
+        //if attack was successful, move all the soldiers to the new location;
+        for (ImageView soldier : mSoldiersAttacking) {
+            translateImage((int)c.getX(), (int)c.getY(), soldier);
+        }
     }
 
     public void removeSettlement(Coordinate coordinate) {
@@ -215,6 +233,10 @@ public class BoardObjectManager {
 
         if (mSoldierMoving != null) {
             moveSoldier(c);
+            return;
+        }
+        if (mSoldiersAttacking.size() > 0) {
+            attack(c);
             return;
         }
 
@@ -259,7 +281,6 @@ public class BoardObjectManager {
     }
 
     public void translateImage(final int x, final int y, final ImageView image) {
-        mBoardLayout.removeView(image);
         int newX= x-image.getDrawable().getIntrinsicWidth()/2;
         int newY = y-image.getDrawable().getIntrinsicHeight()/2;
         int oldX = image.getLeft();
@@ -291,9 +312,6 @@ public class BoardObjectManager {
         });
         image.setAnimation(translation);
         translation.startNow();
-        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) image.getLayoutParams();
-        mBoardLayout.removeView(image);
-        mBoardLayout.addView(image, lp);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
