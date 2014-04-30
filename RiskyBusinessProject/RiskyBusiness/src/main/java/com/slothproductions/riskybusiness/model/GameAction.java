@@ -66,7 +66,9 @@ public enum GameAction {
         put("vertex_to", ArgumentType.VERTEX);
     }}),
     ATTACK(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
-        put("vertex", ArgumentType.VERTEX);
+        put("vertex_from", ArgumentType.VERTEX);
+        put("vertex_to", ArgumentType.VERTEX);
+        put("amount", ArgumentType.MILITARY_QUANTITY);
     }}),
     PUBLIC_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);

@@ -17,6 +17,8 @@ public class Vertex implements java.io.Serializable {
     private boolean locked;
 
     final public class ImmutableVertex implements java.io.Serializable {
+        protected List<Edge.ImmutableEdge> edges;
+        protected List<ImmutableVertex> adjacent;
         private static final long serialVersionUID = 758148154L;
         public int getIndex() {
             return index;
@@ -28,6 +30,18 @@ public class Vertex implements java.io.Serializable {
 
         public MilitaryUnit getMilitary() {
             return military;
+        }
+
+        public List<Edge.ImmutableEdge> getEdges() {
+            return edges;
+        }
+
+        public List<ImmutableVertex> getAdjacent() {
+            return adjacent;
+        }
+
+        public Building getBuilding() {
+            return building;
         }
     }
 
@@ -68,6 +82,7 @@ public class Vertex implements java.io.Serializable {
     final protected void addEdge(Edge e) {
         if (!locked) {
             edges.add(e);
+            // immutable.edges.add(e.immutable);
         } else {
             throw new RuntimeException();
         }
@@ -75,8 +90,10 @@ public class Vertex implements java.io.Serializable {
 
     final protected void addAdjacent(Vertex v) {
         if (!locked) {
-            if (!adjacent.contains(v));
+            if (!adjacent.contains(v)) {
                 adjacent.add(v);
+                // immutable.adjacent.add(v.immutable);
+            }
         } else {
             throw new RuntimeException();
         }
@@ -93,15 +110,6 @@ public class Vertex implements java.io.Serializable {
     }
 
     final protected boolean isAdjacent(Vertex v) {
-//        int s = hexagons.size();
-//        if (s >= 2 && v.hexagons.size() >= 2) {
-//            for (int i=0, c=0; i<s;i++) {
-//                if (v.hexagons.contains(hexagons.get(i)) && ++c==2) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
         if (v.index == index)
             return false;
         int s = hexagons.size();

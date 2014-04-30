@@ -91,7 +91,7 @@ final public class Player implements java.io.Serializable {
         return null;
     }
 
-    public Boolean effect(GameAction action, Map<String, Object> arguments) {
+    public boolean effect(GameAction action, Map<String, Object> arguments) {
         if (action == GameAction.PRIVATE_TRADE) throw new InvalidParameterException();
         GameAction.ActionWrapper wrapper = board.effect(this, action, arguments);
         if (wrapper == null) {
@@ -100,7 +100,7 @@ final public class Player implements java.io.Serializable {
             if (wrapper.el instanceof Edge.ImmutableEdge) {
                 immutableEdges.add((Edge.ImmutableEdge)wrapper.el);
             }
-        } /* TODO: etc for other actions */
+        }
         return true;
     }
 
@@ -209,11 +209,27 @@ final public class Player implements java.io.Serializable {
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
         }
 
-//        if (v.military != null && v.military.haveBonusMoved + v.military.haveNotMoved > 0)
-//            actions.add(GameAction.MOVE_MILITARY_UNIT);
+        if (v.military != null && v.military.haveBonusMoved + v.military.haveNotMoved > 0) {
+            boolean canMove = false;
+            // for (Vertex.ImmutableVertex vertex : v.immutable.getAdjacent()) {
+            for (Vertex vertex : v.adjacent) {
+                if (vertex.getBuilding().getPlayer() == null || vertex.getBuilding().getPlayer() == this)
+                    canMove = true;
+            }
+            if (canMove)
+                actions.add(GameAction.MOVE_MILITARY_UNIT);
+        }
 
         if (v.military != null && v.military.haveNotMoved > 0) {
             boolean canAttack = false;
+            for (Vertex vertex : v.adjacent) {
+                if (vertex.military != null && vertex.military.getPlayer() != this)
+                    canAttack = true;
+                if (vertex.getBuilding().getPlayer() != this)
+                    canAttack = true;
+            }
+            if (canAttack)
+                actions.add(GameAction.ATTACK);
         }
         if (filter) {
             for (GameAction action : actions) {
@@ -233,6 +249,12 @@ final public class Player implements java.io.Serializable {
             for (Vertex v : e.getVertices()) {
                 if (v.building.owner == this)
                     canBuild = true;
+                if (v.getBuilding().getPlayer() == null || v.getBuilding().getPlayer() == this) {
+                    for (Edge.ImmutableEdge edge : v.immutable.getEdges()) {
+                        if (edge.getOwner() == this)
+                            canBuild = true;
+                    }
+                }
             }
             if (canBuild)
                 actions.add(GameAction.BUILD_ROAD);

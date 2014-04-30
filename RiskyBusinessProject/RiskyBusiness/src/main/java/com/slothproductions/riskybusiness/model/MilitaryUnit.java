@@ -51,6 +51,8 @@ public class MilitaryUnit implements java.io.Serializable {
         return health;
     }
 
+    public int getHaveNotMoved() { return haveNotMoved;}
+
     public void reset() {
         haveNotMoved = health;
         haveMoved = 0;

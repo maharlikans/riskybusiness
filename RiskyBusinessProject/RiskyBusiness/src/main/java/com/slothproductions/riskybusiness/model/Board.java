@@ -390,12 +390,16 @@ public class Board implements java.io.Serializable {
                 Log.d(TAG, "Extra case 1 - hex 9.");
                 ret = good.get(2 - i);
             } else if (hexes.get(0).index == 7) {
+                Log.d(TAG, "Extra case 2 - hex 7.");
                 ret = good.get(i);
             } else if (hexes.get(0).index == 8) {
+                Log.d(TAG, "Extra case 3 - hex 8.");
                 ret = good.get(1 - i);
-            } else if (edges.size() == 2) {
+            } else if (good.size() == 2) {
+                Log.d(TAG, "Normal case 1 - 2 edges.");
                 ret = good.get(i);
             } else {
+                Log.d(TAG, "Normal case 2 - 3 edges.");
                 if (i == 0)
                     ret = good.get(0);
                 else if (i == 1)
@@ -447,37 +451,35 @@ public class Board implements java.io.Serializable {
                 }
             }
         }
-        
-        
-
-        /* TODO: Effect the game action */
-        /* 1. Check for player resources, if not sufficient throw an exception
-         * 2. Switch on action
-         * */
 
         if (!player.hasResources(action.resourcesNeeded))
             throw new InvalidParameterException();
         player.takeResources(action.resourcesNeeded);
 
         switch(action) {
-            case BUILD_SETTLEMENT:
-                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
+            case BUILD_SETTLEMENT: {
                 Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.SETTLEMENT, target, player);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
-            case BUILD_CITY:
-                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
-                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+            } case REPAIR_SETTLEMENT: {
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building.setHealth((int) Math.max(5, target.building.getHealth() + 2));
+                return null;
+            } case BUILD_CITY: {
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.CITY, target, player);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
-            case BUILD_ROAD:
-                /* TODO: Check whether it is feasible to build at the designated location. E.g., by calling target.build() */
+            } case REPAIR_CITY: {
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                target.building.setHealth((int) Math.max(10, target.building.getHealth() + 3));
+                return null;
+            } case BUILD_ROAD: {
                 Edge e = edges.get(((Edge.ImmutableEdge) arguments.get("edge")).getIndex());
                 e.owner = player;
                 e.road = true;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.ROAD, e.immutable);
-            case BUILD_MILITARY_UNIT:
-                target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+            } case BUILD_MILITARY_UNIT: {
+                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
                 if (target.military != null) {
                     target.military.haveNotMoved++;
                     target.military.health++;
@@ -486,7 +488,7 @@ public class Board implements java.io.Serializable {
                 }
                 target.building.numSoldiersBuilt++;
                 break;
-            case BANK_TRADE:
+            } case BANK_TRADE: {
                 Integer amount = (Integer) arguments.get("sell_amount");
                 Resource sell = (Resource) arguments.get("sell_resource_type");
                 Resource buy = (Resource) arguments.get("buy_resource_type");
@@ -497,13 +499,13 @@ public class Board implements java.io.Serializable {
                 player.takeResources(sold);
                 player.addResources(bought);
                 break;
-            case PRIVATE_TRADE:
+            } case PRIVATE_TRADE: {
                 if (player.hasResources((Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("sell_amount"))) {
                     Trade t = new Trade(player, (Player) arguments.get("partner"), (Integer) arguments.get("sell_amount"), (Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("buy_amount"), (Resource) arguments.get("buy_resource_type"));
                     return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, t);
                 }
                 break;
-            case FULFILL_PRIVATE_TRADE:
+            } case FULFILL_PRIVATE_TRADE: {
                 Trade trade = (Trade) arguments.get("trade");
                 if (trade != null && trade.isConfirmed() && trade.callee_id == player.immutable) {
                     EnumMap<Resource, Integer> traded_away = new EnumMap<Resource, Integer>(Resource.class);
@@ -511,7 +513,7 @@ public class Board implements java.io.Serializable {
                     traded_away.put(trade.sell_type, trade.sell_amount);
                     traded_in.put(trade.buy_type, trade.buy_amount);
                     /* TODO: Switch to player id */
-                    for(Player partner:players) {
+                    for (Player partner : players) {
                         if (partner.immutable == trade.partner_id) {
                             partner.takeResources(traded_in);
                             partner.addResources(traded_away);
@@ -521,13 +523,19 @@ public class Board implements java.io.Serializable {
                         }
                     }
                 }
-            case MOVE_MILITARY_UNIT:
+            } case MOVE_MILITARY_UNIT: {
                 Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
                 Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
+                if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player))
+                    return null;
                 boolean bonus = from.military.haveBonusMoved > 0;
                 if (to.military == null) {
                     to.military = new MilitaryUnit(player, to);
                     to.military.haveNotMoved--;
+                } else {
+                    if (to.military.getPlayer() != player)
+                        return null;
+                    to.military.health++;
                 }
                 if (bonus) {
                     from.military.haveBonusMoved--;
@@ -543,6 +551,20 @@ public class Board implements java.io.Serializable {
                     else
                         to.military.haveMoved++;
                 }
+                return null;
+            } case ATTACK: {
+                Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
+                Integer amount = (Integer) arguments.get("amount");
+                if (!to.isAdjacent(from)
+                        || ((to.getBuilding().getPlayer() == player || to.getBuilding().getPlayer() == null)
+                            && (to.military == null || to.military.getPlayer() == player)))
+                    return null;
+
+               if (to.getBuilding().getType() == BuildingType.EMPTY) {
+
+               }
+            }
         }
 
         return null;

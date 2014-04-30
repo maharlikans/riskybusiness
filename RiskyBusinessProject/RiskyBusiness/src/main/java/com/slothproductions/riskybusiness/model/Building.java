@@ -42,6 +42,10 @@ public class Building implements java.io.Serializable {
         return health;
     }
 
+    public Player getPlayer() {
+        return owner;
+    }
+
     public void setHealth(int h) {
         health = h;
     }
