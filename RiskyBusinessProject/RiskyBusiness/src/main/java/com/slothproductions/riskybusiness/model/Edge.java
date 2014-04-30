@@ -59,6 +59,10 @@ public class Edge implements java.io.Serializable {
         return owner;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public void setOwner(Player p) {
         owner = p;
     }

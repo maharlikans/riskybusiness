@@ -318,6 +318,7 @@ public class Board implements java.io.Serializable {
     }
 
     public void getResources(int roll) {
+        Log.d(TAG, "Rolled " + roll);
         ArrayList<Hex> rolled = diceRolls.get(roll);
         HashMap<Player, ArrayList<Resource>> gained = new HashMap<Player, ArrayList<Resource>>();
         for (Player p : players)
@@ -327,6 +328,7 @@ public class Board implements java.io.Serializable {
                 if (v.building.owner == null)
                     continue;
                 if (v.building.type == BuildingType.CITY) {
+                    Log.d(TAG, "Resource with cities");
                     gained.get(v.building.owner).add(h.type);
                     gained.get(v.building.owner).add(h.type);
                 } else if (v.building.type == BuildingType.SETTLEMENT) {
@@ -437,10 +439,10 @@ public class Board implements java.io.Serializable {
                         if (!(provided instanceof Integer) || (Integer)provided < 0) invalid = true;
                         break;
                     case EDGE:
-                        if (!(provided instanceof Edge.ImmutableEdge)) invalid = true;
+                        if (!(provided instanceof Edge)) invalid = true;
                         break;
                     case VERTEX:
-                        if (!(provided instanceof Vertex.ImmutableVertex)) invalid = true;
+                        if (!(provided instanceof Vertex)) invalid = true;
                         break;
                     case TRADE:
                         if (!(provided instanceof Trade)) invalid = true;
@@ -458,28 +460,28 @@ public class Board implements java.io.Serializable {
 
         switch(action) {
             case BUILD_SETTLEMENT: {
-                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.SETTLEMENT, target, player);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             } case REPAIR_SETTLEMENT: {
-                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building.setHealth((int) Math.max(5, target.building.getHealth() + 2));
                 return null;
             } case BUILD_CITY: {
-                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.CITY, target, player);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             } case REPAIR_CITY: {
-                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building.setHealth((int) Math.max(10, target.building.getHealth() + 3));
                 return null;
             } case BUILD_ROAD: {
-                Edge e = edges.get(((Edge.ImmutableEdge) arguments.get("edge")).getIndex());
+                Edge e = edges.get(((Edge) arguments.get("edge")).getIndex());
                 e.owner = player;
                 e.road = true;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.ROAD, e.immutable);
             } case BUILD_MILITARY_UNIT: {
-                Vertex target = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex")).getIndex());
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 if (target.military != null) {
                     target.military.haveNotMoved++;
                     target.military.health++;

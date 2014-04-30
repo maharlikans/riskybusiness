@@ -33,7 +33,7 @@ final public class Player implements java.io.Serializable {
     final String name;
     private int color;
 
-    /* TODO: Implpement to player id */
+    /* TODO: Implement to player id */
     public class ImmutablePlayer implements java.io.Serializable {
         private static final long serialVersionUID = -242346795L;
         public int resource(Resource r) {
@@ -208,9 +208,10 @@ final public class Player implements java.io.Serializable {
 
         if (v.getBuilding().getPlayer() == this) {
             Log.d(TAG, "Number of soldiers built here this turn: " + v.getBuilding().getNumSoldiersBuilt());
-            if (v.building.type == BuildingType.CITY && v.building.numSoldiersBuilt < 2)
+            Log.d(TAG, "Building type is" + v.getBuilding().getType());
+            if (v.getBuilding().getType() == BuildingType.CITY && v.getBuilding().getNumSoldiersBuilt() < 2)
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
-            else if (v.building.type == BuildingType.SETTLEMENT && v.building.numSoldiersBuilt < 1)
+            else if (v.getBuilding().getType() == BuildingType.SETTLEMENT && v.getBuilding().getNumSoldiersBuilt() < 1)
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
         }
 
@@ -237,9 +238,10 @@ final public class Player implements java.io.Serializable {
                 actions.add(GameAction.ATTACK);
         }
         if (filter) {
-            for (GameAction action : actions) {
-                if (!hasResources(action.resourcesNeeded)) {
-                    actions.remove(action);
+            for (int counter = 0; counter != actions.size(); counter++) {
+                if (!hasResources(actions.get(counter).resourcesNeeded)) {
+                    actions.remove(counter);
+                    counter--;
                 }
             }
         }
@@ -271,9 +273,10 @@ final public class Player implements java.io.Serializable {
                 actions.add(GameAction.BUILD_ROAD);
         }
         if (filter) {
-            for (GameAction action : actions) {
-                if (!hasResources(action.resourcesNeeded)) {
-                    actions.remove(action);
+            for (int counter = 0; counter != actions.size(); counter++) {
+                if (!hasResources(actions.get(counter).resourcesNeeded)) {
+                    actions.remove(counter);
+                    counter--;
                 }
             }
         }
