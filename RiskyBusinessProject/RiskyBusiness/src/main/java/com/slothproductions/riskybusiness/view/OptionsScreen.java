@@ -31,8 +31,8 @@ public class OptionsScreen extends Activity {
         final AudioManager audioManager;
 
         //Sets the initial Progress for the volume at the default
-        musicTextView.setText(String.valueOf(musicSeeker.getProgress()) + '%');   //Sets the text view to 50% by default
-        soundTextView.setText(String.valueOf(volumeSeeker.getProgress()) + '%');
+       // musicTextView.setText(String.valueOf(musicSeeker.getProgress()) + '%');   //Sets the text view to 50% by default
+        //soundTextView.setText(String.valueOf(volumeSeeker.getProgress()) + '%');
 
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -46,7 +46,7 @@ public class OptionsScreen extends Activity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser == true)
-                    musicTextView.setText(String.valueOf(progress) + '%');
+                   // musicTextView.setText(String.valueOf(progress) + '%');
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
             }
 
@@ -63,8 +63,8 @@ public class OptionsScreen extends Activity {
         volumeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser == true)
-                    soundTextView.setText(String.valueOf(progress) + '%');
+               // if(fromUser == true)
+                   // soundTextView.setText(String.valueOf(progress) + '%');
             }
 
             @Override

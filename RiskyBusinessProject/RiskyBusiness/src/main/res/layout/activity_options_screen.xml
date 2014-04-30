@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-<TableRow>
+<TableRow android:gravity="center">
            <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/music_volume"
             android:layout_centerHorizontal="true"
             android:textColor="@color/white"
+            android:textSize="@dimen/options_text_size"
+            android:layout_marginRight="5dp"
             android:text="@string/music_volume" />
         <SeekBar
             android:layout_width="250dp"
@@ -28,14 +30,16 @@
             android:id="@+id/music_volume_value"
             android:layout_toRightOf="@+id/music_volume_seekbar"/>
 </TableRow>
-    <TableRow>
+    <TableRow android:gravity="center">
         <TextView
             android:id="@+id/sound_effect_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:textSize="@dimen/options_text_size"
+            android:layout_marginRight="5dp"
             android:layout_below="@+id/music_volume"
-            android:layout_centerHorizontal="true"
+
             android:text="@string/sound_effects_volume"/>
         <SeekBar
             android:id="@+id/sound_effect_seekbar"

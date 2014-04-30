@@ -7,18 +7,19 @@
     tools:ignore="MergeRootFrame" >
 
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:orientation="vertical">
-
+<TableRow android:gravity="center">
         <ImageView
             android:id="@+id/main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="-25dp"
             android:src="@drawable/riskybusinesslogo"/>
+</TableRow>
 
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
@@ -26,8 +27,11 @@
             android:layout_height="match_parent"
             android:id="@+id/progressBar"
             android:layout_gravity="center_horizontal"
+            android:minWidth="150dp"
+            android:layout_weight="1"
             android:progress="1"/>
 
+        <TableRow android:gravity="center">
         <TextView
             android:id="@+id/tap_to_start"
             android:layout_width="wrap_content"
@@ -36,9 +40,9 @@
             android:textSize="24dp"
             android:layout_gravity="center_horizontal"
             android:padding="10dp"/>
+        </TableRow>
 
-
-    </LinearLayout>
+    </TableLayout>
 
 
 </FrameLayout>
