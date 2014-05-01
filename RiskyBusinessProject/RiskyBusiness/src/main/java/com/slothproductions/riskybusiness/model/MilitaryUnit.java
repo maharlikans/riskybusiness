@@ -37,6 +37,7 @@ public class MilitaryUnit implements java.io.Serializable {
     public MilitaryUnit(Player p, Vertex v) {
         player = p;
         location = v;
+        v.military = this;
         health = 1;
         haveNotMoved = 1;
         haveMoved = 0;

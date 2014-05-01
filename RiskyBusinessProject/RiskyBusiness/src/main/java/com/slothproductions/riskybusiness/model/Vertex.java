@@ -167,6 +167,9 @@ public class Vertex implements java.io.Serializable {
     final protected Building getBuilding() {
         return building;
     }
+    final protected MilitaryUnit getMilitary() {
+        return military;
+    }
 
     public int getIndex() {
         return index;

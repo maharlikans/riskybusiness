@@ -18,7 +18,7 @@ final public class Player implements java.io.Serializable {
     }
 
     public ImmutablePlayer immutable;
-    private int points;
+    protected int points;
     private Map<Resource, Integer> resources;
     private ArrayList<Edge.ImmutableEdge> immutableEdges;
     private ArrayList<Vertex.ImmutableVertex> immutableVertices;
@@ -176,6 +176,7 @@ final public class Player implements java.io.Serializable {
                 resources.add(h.type);
             addResources(resources);
         }
+        points++;
     }
 
     public void buildInitial(Edge e, int i) {

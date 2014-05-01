@@ -16,7 +16,7 @@ public class Building implements java.io.Serializable {
         }
     }
 
-    final protected BuildingType type;
+    protected BuildingType type;
     private int health;
     final public ImmutableBuilding immutable;
     protected int numSoldiersBuilt;
@@ -27,6 +27,7 @@ public class Building implements java.io.Serializable {
     public Building(BuildingType t, Vertex v, Player p) {
         type = t;
         vertex = v;
+        v.building = this;
         owner = p;
         if (t == BuildingType.CITY)
             health = 10;
