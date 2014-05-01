@@ -19,8 +19,10 @@ import com.slothproductions.riskybusiness.view.PlayerInfoFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by Kyle Maharlika on 4/4/2014.
@@ -37,7 +39,16 @@ public class NormalGameState implements GameState {
 
     public NormalGameState (GameLoop gameLoop) {
         mGameLoop = gameLoop;
-        mPlayerQueue = mGameLoop.getPlayerQueue();
+
+        // below is a hack-ish fix to iterating through the players backwards
+        Queue<Player> temporaryQueue = mGameLoop.getPlayerQueue();
+        Stack<Player> temporaryStack = new Stack<Player>();
+        mPlayerQueue = new LinkedList<Player>();
+        while(!temporaryQueue.isEmpty())
+            temporaryStack.push(temporaryQueue.poll());
+        while(!temporaryStack.isEmpty())
+            mPlayerQueue.offer(temporaryStack.pop());
+
         mCurrentPlayer = mPlayerQueue.poll();
         mBoardScreen = mGameLoop.getBoardScreen();
         mBoard = mBoardScreen.getBoard();
@@ -142,10 +153,12 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public boolean attack(Vertex vertex) {
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
         GameAction gameAction = GameAction.ATTACK;
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("vertex", vertex);
+        map.put("vertex_from", vertexFrom);
+        map.put("vertex_to", vertexTo);
+        map.put("amount", amount);
         boolean result = mCurrentPlayer.effect(gameAction, map);
         mPlayerInfo.updatePlayerValues();
         return result;
