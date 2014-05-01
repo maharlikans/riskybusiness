@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class PlayerInfoFragment extends Fragment {
     private ArrayList<TextView> mTotalNumberResources;
 
     private ArrayList<ImageView> mPlayerSquares;
+    private ArrayList<LinearLayout> mPlayerInfo;
 
     private ArrayList<Player> mPlayersArrayList;
 
@@ -59,6 +61,7 @@ public class PlayerInfoFragment extends Fragment {
         initializeVictoryPoints(v);
         initializeNumberResources(v); //total number available resources for each player
         initializePlayerSquares(v);
+        initializePlayerInfo(v);
 
         initializeDice(v);
 
@@ -85,6 +88,14 @@ public class PlayerInfoFragment extends Fragment {
         //now update victory points
         for (int i = 0; i < mPlayersArrayList.size(); i++) {
             mVictoryPoints.get(i).setText(Integer.toString(mPlayersArrayList.get(i).getPoints()));
+        }
+    }
+
+    public void colorBoxes() {
+        for (int i = 0; i < mPlayersArrayList.size(); i++) {
+            mPlayerSquares.get(i).setVisibility(View.VISIBLE);
+            mPlayerSquares.get(i).setColorFilter(mPlayersArrayList.get(i).getColor());
+            mPlayerInfo.get(i).setVisibility(View.VISIBLE);
         }
     }
 
@@ -162,24 +173,26 @@ public class PlayerInfoFragment extends Fragment {
         return mDice.getResults();
     }
 
-    public void colorBoxes() {
-        for (int i = 0; i < mPlayersArrayList.size(); i++) {
-            mPlayerSquares.get(i).setColorFilter(mPlayersArrayList.get(i).getColor());
-        }
-    }
-
     public void initializeDice(View v) {
         mDice = new DiceRoll();
         mFirstDice = (ImageView)v.findViewById(R.id.dice_1);
         mSecondDice = (ImageView)v.findViewById(R.id.dice_2);
     }
 
+    public void initializePlayerInfo(View v) {
+        mPlayerInfo = new ArrayList<LinearLayout>();
+        mPlayerInfo.add((LinearLayout)v.findViewById(R.id.player_1_info));
+        mPlayerInfo.add((LinearLayout)v.findViewById(R.id.player_2_info));
+        mPlayerInfo.add((LinearLayout)v.findViewById(R.id.player_3_info));
+        mPlayerInfo.add((LinearLayout)v.findViewById(R.id.player_4_info));
+    }
+
     public void initializePlayerSquares(View v) {
         mPlayerSquares = new ArrayList<ImageView>();
-        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_1_info));
-        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_2_info));
-        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_3_info));
-        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_4_info));
+        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_1_square));
+        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_2_square));
+        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_3_square));
+        mPlayerSquares.add((ImageView)v.findViewById(R.id.player_4_square));
     }
 
     public void initializeResources(View v) {

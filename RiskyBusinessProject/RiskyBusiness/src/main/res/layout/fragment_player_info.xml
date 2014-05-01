@@ -8,30 +8,32 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/player_1_info"
+        android:id="@+id/player_1_square"
         android:src="@drawable/square"
         android:layout_alignParentLeft="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/player_2_info"
+        android:id="@+id/player_2_square"
         android:src="@drawable/square"
-        android:layout_below="@+id/player_1_info"/>
+        android:layout_below="@+id/player_1_square"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/player_3_info"
+        android:id="@+id/player_3_square"
         android:src="@drawable/square"
-        android:layout_below="@+id/player_2_info"/>
+        android:visibility="invisible"
+        android:layout_below="@+id/player_2_square"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/player_4_info"
+        android:id="@+id/player_4_square"
         android:src="@drawable/square"
-        android:layout_below="@+id/player_3_info"/>
+        android:visibility="invisible"
+        android:layout_below="@+id/player_3_square"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -39,8 +41,8 @@
         android:id="@+id/dice_2"
         android:src="@drawable/dice1"
         android:visibility="invisible"
-        android:layout_alignEnd="@id/player_1_info"
-        android:layout_alignBottom="@id/player_1_info"/>
+        android:layout_alignEnd="@id/player_1_square"
+        android:layout_alignBottom="@id/player_1_square"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -54,9 +56,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/player_1_info"
-        android:layout_alignRight="@id/player_1_info"
-        android:layout_alignLeft="@id/player_1_info"
+        android:layout_alignTop="@id/player_1_square"
+        android:layout_alignRight="@id/player_1_square"
+        android:layout_alignLeft="@id/player_1_square"
+        android:id="@+id/player_1_info"
         android:orientation="vertical"
         android:paddingLeft="4dp">
 
@@ -114,9 +117,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/player_2_info"
-        android:layout_alignRight="@id/player_2_info"
-        android:layout_alignLeft="@id/player_2_info"
+        android:layout_alignTop="@id/player_2_square"
+        android:layout_alignRight="@id/player_2_square"
+        android:layout_alignLeft="@id/player_2_square"
+        android:id="@+id/player_2_info"
         android:orientation="vertical"
         android:paddingLeft="4dp">
 
@@ -174,9 +178,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/player_3_info"
-        android:layout_alignRight="@id/player_3_info"
-        android:layout_alignLeft="@id/player_3_info"
+        android:layout_alignTop="@id/player_3_square"
+        android:layout_alignRight="@id/player_3_square"
+        android:layout_alignLeft="@id/player_3_square"
+        android:id="@+id/player_3_info"
+        android:visibility="invisible"
         android:orientation="vertical"
         android:paddingLeft="4dp">
 
@@ -234,10 +240,12 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/player_4_info"
-        android:layout_alignRight="@id/player_4_info"
-        android:layout_alignLeft="@id/player_4_info"
+        android:layout_alignTop="@id/player_4_square"
+        android:layout_alignRight="@id/player_4_square"
+        android:layout_alignLeft="@id/player_4_square"
+        android:id="@+id/player_4_info"
         android:orientation="vertical"
+        android:visibility="invisible"
         android:paddingLeft="4dp">
 
         <TextView
