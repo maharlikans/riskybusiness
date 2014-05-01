@@ -676,16 +676,26 @@ public class Board implements java.io.Serializable {
                 Log.d(TAG, "....At target vertex " + to.index + ":");
                 if (to.military != null) {
                     Log.d(TAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + to.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + to.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
                 }
                 if (to.building != null) {
-                    Log.d(TAG, "........" + to.building.getType() + " owned by player " + to.military.getPlayer().getName());
+                    Log.d(TAG, "........" + to.building.getType() + " owned by player ");
+                    if (to.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
                 }
                 Log.d(TAG, "....At from vertex " + from.index + ":");
                 if (from.military != null) {
-                    Log.d(TAG, "........" + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                    Log.d(TAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + from.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + from.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
                 }
                 if (from.building != null) {
-                    Log.d(TAG, "........" + from.building.getType() + " owned by player " + from.military.getPlayer().getName());
+                    Log.d(TAG, "........" + from.building.getType() + " owned by player ");
+                    if (from.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
                 }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             }
