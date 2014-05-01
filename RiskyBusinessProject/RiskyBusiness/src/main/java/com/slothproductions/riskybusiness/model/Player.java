@@ -69,7 +69,7 @@ final public class Player implements java.io.Serializable {
         resources = new EnumMap<Resource, Integer>(Resource.class);
         // DONE BY KYLE: INITIALIZE THE RESOURCES CLASS
         for (Resource r : Resource.values()) {
-            resources.put(r, 30);
+            resources.put(r, 5);
         }
         immutableEdges = new ArrayList<Edge.ImmutableEdge>();
         immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
@@ -186,6 +186,7 @@ final public class Player implements java.io.Serializable {
     }
 
     public ArrayList<GameAction> getActions(Vertex v, boolean filter) {
+        Log.d(TAG, "Getting actions for " + name);
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
 
         if (v.building.type == BuildingType.EMPTY && (v.getMilitary() == null || v.getMilitary().getPlayer() == this)) {
@@ -238,6 +239,7 @@ final public class Player implements java.io.Serializable {
         }
 
         if (v.military != null && v.getMilitary().getPlayer() == this && v.military.haveNotMoved > 0) {
+            Log.d(TAG, "Checking for targets for: " + v.getMilitary().getPlayer());
             boolean canAttack = false;
             for (Vertex vertex : v.adjacent) {
                 if (vertex.military != null && vertex.military.getPlayer() != this) {
