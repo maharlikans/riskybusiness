@@ -548,7 +548,7 @@ public class Board implements java.io.Serializable {
                     from.military.haveNotMoved--;
                     boolean onRoad = false;
                     for (Edge edge : from.edges)
-                        if (edge.vertices.contains(to) && edge.owner == player)
+                        if (edge.vertices.contains(to) && edge.owner != null)
                             onRoad = true;
                     if (onRoad)
                         to.military.haveBonusMoved++;
