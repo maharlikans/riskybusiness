@@ -358,6 +358,9 @@ public class BoardObjectManager {
         });
         image.setAnimation(translation);
         translation.startNow();
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) image.getLayoutParams();
+        mBoardLayout.removeView(image);
+        mBoardLayout.addView(image, lp);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
