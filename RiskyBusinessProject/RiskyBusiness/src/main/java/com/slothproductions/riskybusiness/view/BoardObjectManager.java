@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -110,8 +111,8 @@ public class BoardObjectManager {
                     v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
                 }
             }
-            catch (IndexOutOfBoundsException e) {
-                mBoardButtonsFragment.createToast("", false);
+            catch (Exception e) {
+                return;
             }
             // popup menu in board buttons fragment
             mBoardButtonsFragment.showActionsMenu(c, v);
@@ -124,8 +125,8 @@ public class BoardObjectManager {
                     e = mBoardBacklog.getEdge(mAdjacentHexes, 0);
                 }
             }
-            catch (IndexOutOfBoundsException e) {
-
+            catch (Exception e) {
+                return;
             }
             mBoardButtonsFragment.showActionsMenu(c, e);
         }
@@ -159,10 +160,10 @@ public class BoardObjectManager {
             }
         }
         else if (action.getItemId() == R.id.repairsettlement) {
-            //repair settlement
+            mGameLoop.getCurrentGameState().repairSettlement(v);
         }
         else if (action.getItemId() == R.id.repaircity) {
-            //repaircity
+            mGameLoop.getCurrentGameState().repairCity(v);
         }
         else if (action.getItemId() == R.id.move) {
             setMoveSoldierState(coordinate);
@@ -242,8 +243,8 @@ public class BoardObjectManager {
         mSoldiersAttacking = findImagesFromList(mSoldiers, coordinate, num);
     }
 
-    public void attack(Coordinate c) {
-        int numAttacking = mSoldiersAttacking.size(); //number of soldiers attacking
+    public void attack(final Coordinate c) {
+        final int numAttacking = mSoldiersAttacking.size(); //number of soldiers attacking
         //get the vertex that the military is attacking
         checkCornerLocations(c);
         try {
@@ -253,23 +254,31 @@ public class BoardObjectManager {
                 v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
             }
         }
-        catch (IndexOutOfBoundsException e) {
+        catch (Exception e) {
+            return;
         }
         //attacking military unit
         MilitaryUnit militaryFromBeginning = startVertex.getImmutable().getMilitary();
         Player attacking = militaryFromBeginning.getPlayer();
+        final MilitaryUnit militaryFromEnd = startVertex.getImmutable().getMilitary();
 
         //defending military unit and building
         Building buildingToBeginning = v.getBuilding();
         MilitaryUnit militaryToBeginning = v.getImmutable().getMilitary();
-        Player defending = militaryToBeginning.getPlayer();
+        final Player defending;
+        if (militaryToBeginning != null) {
+            defending = militaryToBeginning.getPlayer();
+        }
+        else {
+            defending = buildingToBeginning.getPlayer();
+        }
 
         //get all the views at the vertex moving to, military and settlements or cities.
         ImageView buildingAtTo = findImageFromList(mSettlements, c);
         if (buildingAtTo == null) {
             buildingAtTo = findImageFromList(mCities, c);
         }
-        ArrayList<ImageView> soldiersDefending = findImagesFromList(mSoldiers, c);
+        final ArrayList<ImageView> soldiersDefending = findImagesFromList(mSoldiers, c);
 
         if (!mGameLoop.attack(startVertex, v, numAttacking)) {
             mSoldiersAttacking.removeAll(mSoldiersAttacking);
@@ -277,38 +286,62 @@ public class BoardObjectManager {
         }
 
         Building buildingToEnd = v.getBuilding();
-        MilitaryUnit militaryToEnd = v.getImmutable().getMilitary();
+        final MilitaryUnit militaryToEnd = v.getImmutable().getMilitary();
+
+        Handler handler = new Handler();
 
         if (buildingToEnd.getType() == BuildingType.EMPTY) {
             Log.d(TAG, "The building on the to vertex is null, movement will be determined by soldiers");
             if (militaryToEnd == null) {
-                Log.d(TAG, "Everybody died, move the attacking soldiers their, then delete them.");
+                Log.d(TAG, "Everybody died, move the attacking soldiers there, then delete them.");
                 translateImageList(mSoldiersAttacking, c);
-                removeSoldiers(mSoldiersAttacking, mSoldiersAttacking.size());
-                removeSoldiers(soldiersDefending, soldiersDefending.size());
+                Log.d(TAG, "Number of soldiers attacking = " + mSoldiersAttacking.size());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(mSoldiersAttacking, mSoldiersAttacking.size());
+                        removeSoldiers(soldiersDefending, soldiersDefending.size());
+                    }
+                }, 1000);
+                Log.d(TAG, "Number of soldiers alive = " + mSoldiersAttacking.size());
             }
-            if (militaryToEnd.getPlayer() == attacking) {
+            else if (militaryToEnd.getPlayer() == attacking) {
                 Log.d(TAG, "Attack Successful, move attacking army soldiers");
                 //attack was successful, move all players there, then remove the ones that died
                 translateImageList(mSoldiersAttacking, c);
-                removeSoldiers(soldiersDefending, soldiersDefending.size());
-                removeSettlement(c);
-                removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(soldiersDefending, soldiersDefending.size());
+                        removeSettlement(c);
+                        removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
+                    }
+                }, 1000);
             }
             else {
                 Log.d(TAG, "Attack was not successful, move players there and back");
                 //attack was not successful, move players there, then delete any who died, and move them back if any remain
                 //remove any units that got destroyed
                 translateImageList(mSoldiersAttacking, c);
-                removeSoldiers(soldiersDefending, soldiersDefending.size() - militaryToEnd.getHealth());
-                removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
-                translateImageList(mSoldiersAttacking, startCoordinate);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(soldiersDefending, soldiersDefending.size() - militaryToEnd.getHealth());
+                        removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                    }
+                }, 1000);
             }
 
             if (buildingToBeginning.getType() != BuildingType.EMPTY) {
                 Log.d(TAG, "A building was destroyed in the attack, remove it from the board");
                 //remove building from board
-                removeSettlement(c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSettlement(c);
+                    }
+                }, 1000);
             }
         }
         else {
@@ -317,27 +350,53 @@ public class BoardObjectManager {
                 Log.d(TAG, "attack was successful, The player destroyed a city, and now owns that settlement");
                 //should remove the city and add a settlement with the current color
                 translateImageList(mSoldiersAttacking, c);
-                removeImage(mCities, c);
-                buildItem(2, "settlement", c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeImage(mCities, c);
+                        buildItem(2, "settlement", c);
+                    }
+                }, 1000);
             }
             else if (buildingToBeginning.getType() != buildingToEnd.getType()) {
-                Log.d(TAG, "City was downgraded to a settlement, and is owned by the defending player, no soldiers were killed");
+                Log.d(TAG, "City was downgraded to a settlement, and is owned by the defending player");
                 translateImageList(mSoldiersAttacking, c);
-                translateImageList(mSoldiersAttacking, startCoordinate);
-                removeImage(mCities, c);
-                buildItem(2, "settlement", c, defending);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (soldiersDefending != null) {
+                            removeSoldiers(mSoldiersAttacking, soldiersDefending.size()/3);
+                        }
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                        removeImage(mCities, c);
+                        buildItem(2, "settlement", c, defending);
+                    }
+                }, 1000);
             }
             else {
-                Log.d(TAG, "Attack was not successful, no soldiers were killed");
+                Log.d(TAG, "Attack was not successful, ");
                 translateImageList(mSoldiersAttacking, c);
-                translateImageList(mSoldiersAttacking, startCoordinate);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (soldiersDefending != null) {
+                            removeSoldiers(mSoldiersAttacking, soldiersDefending.size()/3);
+                        }
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                    }
+                }, 1000);
             }
         }
 
-        mSoldiersAttacking.removeAll(mSoldiersAttacking);
-        startVertex = null;
-        startCoordinate = null;
-        v = null;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSoldiersAttacking.removeAll(mSoldiersAttacking);
+                startVertex = null;
+                startCoordinate = null;
+                v = null;
+            }
+        }, 1000);
     }
 
     public void removeSettlement(Coordinate coordinate) {
@@ -374,10 +433,11 @@ public class BoardObjectManager {
     public void removeSoldiers(ArrayList<ImageView> imagesToRemove, int numToRemove) {
         ArrayList<ImageView> tempList = new ArrayList<ImageView>();
         for (int i = 0; i < numToRemove; i ++) {
-            tempList.add(imagesToRemove.get(0));
-            mBoardLayout.removeView(imagesToRemove.get(0));
-            imagesToRemove.remove(0);
+            tempList.add(imagesToRemove.get(i));
+            mBoardLayout.removeView(imagesToRemove.get(i));
+            Log.d(TAG, "Soldier Removed");
         }
+        mSoldiersAttacking.removeAll(tempList);
         mSoldiers.removeAll(tempList);
     }
 
@@ -451,7 +511,7 @@ public class BoardObjectManager {
         int oldY = image.getTop();
 
         Animation translation = new TranslateAnimation(0, newX-oldX, 0, newY - oldY);
-        translation.setDuration(1000);
+        translation.setDuration(700);
         translation.setFillAfter(true);
         translation.setFillEnabled(true);
         translation.setFillBefore(false);

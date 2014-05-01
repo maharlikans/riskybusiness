@@ -69,7 +69,7 @@ final public class Player implements java.io.Serializable {
         resources = new EnumMap<Resource, Integer>(Resource.class);
         // DONE BY KYLE: INITIALIZE THE RESOURCES CLASS
         for (Resource r : Resource.values()) {
-            resources.put(r, 0);
+            resources.put(r, 30);
         }
         immutableEdges = new ArrayList<Edge.ImmutableEdge>();
         immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
@@ -188,7 +188,7 @@ final public class Player implements java.io.Serializable {
     public ArrayList<GameAction> getActions(Vertex v, boolean filter) {
         ArrayList<GameAction> actions = new ArrayList<GameAction>();
 
-        if (v.building.type == BuildingType.EMPTY) {
+        if (v.building.type == BuildingType.EMPTY && (v.getMilitary() == null || v.getMilitary().getPlayer() == this)) {
             boolean canBuild = true;
             for (Vertex vertex : v.adjacent)
                 if (vertex.building.type != BuildingType.EMPTY)
@@ -206,6 +206,13 @@ final public class Player implements java.io.Serializable {
         if (v.getBuilding().getPlayer() == this && v.building.type == BuildingType.SETTLEMENT) {
             Log.d(TAG, "Player has settlement, access to city unlocked.");
             actions.add(GameAction.BUILD_CITY);
+            if (v.getBuilding().getHealth() < 5)
+                actions.add(GameAction.REPAIR_SETTLEMENT);
+        }
+
+        if (v.getBuilding().getPlayer() == this && v.building.type == BuildingType.CITY) {
+            if (v.getBuilding().getHealth() < 10)
+                actions.add(GameAction.REPAIR_CITY);
         }
 
         if (v.getBuilding().getPlayer() == this) {
@@ -230,7 +237,7 @@ final public class Player implements java.io.Serializable {
                 actions.add(GameAction.MOVE_MILITARY_UNIT);
         }
 
-        if (v.military != null && v.military.haveNotMoved > 0) {
+        if (v.military != null && v.getMilitary().getPlayer() == this && v.military.haveNotMoved > 0) {
             boolean canAttack = false;
             for (Vertex vertex : v.adjacent) {
                 if (vertex.military != null && vertex.military.getPlayer() != this) {

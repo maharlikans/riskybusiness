@@ -628,6 +628,9 @@ public class Board implements java.io.Serializable {
                         to.getMilitary().health -= damageToUnit;
                     if (to.getBuilding().getHealth() - damageToBuilding > 0) {
                         to.getBuilding().setHealth(to.getBuilding().getHealth() - damageToBuilding);
+                        from.military.haveMoved += amount - garrison;
+                        from.military.haveNotMoved -= amount;
+                        from.military.health -= garrison;
                     } else {
                         if (to.getBuilding().getType() == BuildingType.CITY) {
                             to.getBuilding().type = BuildingType.SETTLEMENT;
@@ -684,6 +687,7 @@ public class Board implements java.io.Serializable {
                     Log.d(TAG, "........" + to.building.getType() + " owned by player ");
                     if (to.getBuilding().getPlayer() != null)
                         Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
+                    Log.d(TAG, "............Health: " + to.getBuilding().getHealth());
                 }
                 Log.d(TAG, "....At from vertex " + from.index + ":");
                 if (from.military != null) {
@@ -696,6 +700,7 @@ public class Board implements java.io.Serializable {
                     Log.d(TAG, "........" + from.building.getType() + " owned by player ");
                     if (from.getBuilding().getPlayer() != null)
                         Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
+                    Log.d(TAG, "............Health: " + from.getBuilding().getHealth());
                 }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             }
