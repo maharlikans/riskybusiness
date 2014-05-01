@@ -98,6 +98,7 @@ final public class Player implements java.io.Serializable {
         if (action == GameAction.PRIVATE_TRADE) throw new InvalidParameterException();
         GameAction.ActionWrapper wrapper = board.effect(this, action, arguments);
         if (wrapper == null) {
+            Log.d(TAG, "Null effect gotten.");
             return false;
         } else if (action == GameAction.BUILD_ROAD) {
             if (wrapper.el instanceof Edge.ImmutableEdge) {
@@ -209,7 +210,7 @@ final public class Player implements java.io.Serializable {
 
         if (v.getBuilding().getPlayer() == this) {
             Log.d(TAG, "Number of soldiers built here this turn: " + v.getBuilding().getNumSoldiersBuilt());
-            Log.d(TAG, "Building type is" + v.getBuilding().getType());
+            Log.d(TAG, "Building type is " + v.getBuilding().getType());
             if (v.getBuilding().getType() == BuildingType.CITY && v.getBuilding().getNumSoldiersBuilt() < 2)
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
             else if (v.getBuilding().getType() == BuildingType.SETTLEMENT && v.getBuilding().getNumSoldiersBuilt() < 1)
@@ -220,7 +221,9 @@ final public class Player implements java.io.Serializable {
             boolean canMove = false;
             // for (Vertex.ImmutableVertex vertex : v.immutable.getAdjacent()) {
             for (Vertex vertex : v.adjacent) {
-                if (vertex.getBuilding().getPlayer() == null || vertex.getBuilding().getPlayer() == this)
+                if ((vertex.getBuilding().getPlayer() == null || vertex.getBuilding().getPlayer() == this)
+                        && (vertex.getMilitary() == null || vertex.getMilitary().getPlayer() == this))
+
                     canMove = true;
             }
             if (canMove)
@@ -230,10 +233,13 @@ final public class Player implements java.io.Serializable {
         if (v.military != null && v.military.haveNotMoved > 0) {
             boolean canAttack = false;
             for (Vertex vertex : v.adjacent) {
-                if (vertex.military != null && vertex.military.getPlayer() != this)
+                if (vertex.military != null && vertex.military.getPlayer() != this) {
                     canAttack = true;
-                if (vertex.getBuilding().getPlayer() != this)
+                    Log.d(TAG, "Found adjacent soldier to attack.");
+                } if (vertex.getBuilding().getPlayer() != this && vertex.getBuilding().getPlayer() != null) {
                     canAttack = true;
+                    Log.d(TAG, "Found adjacent building to attack.");
+                }
             }
             if (canAttack)
                 actions.add(GameAction.ATTACK);
