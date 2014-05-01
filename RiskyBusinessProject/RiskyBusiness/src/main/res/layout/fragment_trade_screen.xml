@@ -25,7 +25,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
-        <!--<Spinner
+        <Spinner
             android:id="@+id/type_trade_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:id="@+id/player_trade_select_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"/>-->
+            android:gravity="center"/>
 
 
         </LinearLayout>
@@ -703,8 +703,8 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:src="@drawable/requesttradebutton"
-            android:layout_marginRight="4dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:layout_marginRight="4dp"/>
 
         <ImageView
             android:id="@+id/confirm_trade_button"
@@ -712,6 +712,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:src="@drawable/confirmtradebutton"
+            android:visibility="gone"
             />
 
         <ImageView
