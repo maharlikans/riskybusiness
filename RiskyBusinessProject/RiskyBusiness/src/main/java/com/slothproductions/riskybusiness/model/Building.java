@@ -53,7 +53,7 @@ public class Building implements java.io.Serializable {
         health = h;
     }
 
-    final BuildingType getType() {
+    final public BuildingType getType() {
         return type;
     }
 

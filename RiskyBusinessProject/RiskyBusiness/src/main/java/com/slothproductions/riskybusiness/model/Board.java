@@ -308,11 +308,19 @@ public class Board implements java.io.Serializable {
     }
 
     public void beginTurn(int roll) {
-        for (Player p : players) {
-            for (MilitaryUnit mu : p.getMilitaryUnit())
-                mu.reset();
-            for (Building b : p.getBuildings())
-                b.reset();
+        for (Vertex v : vertices) {
+            if (v.getBuilding().getType() != BuildingType.EMPTY) {
+                v.getBuilding().reset();
+                Log.d(TAG, "Vertex " + v.index + " has a " + v.getBuilding().getType());
+                if (v.getBuilding().getPlayer() != null)
+                    Log.d(TAG, "owned by player " + v.getBuilding().getPlayer().getName());
+            }
+            else if (v.getBuilding().getPlayer() != null)
+                Log.d(TAG, "Vertex " + v.index + " is Empty owned by player " + v.getBuilding().getPlayer().getName());
+            if (v.getMilitary() != null) {
+                Log.d(TAG, "Reset military unit at vertex " + v.index);
+                v.getMilitary().reset();
+            }
         }
         getResources(roll);
     }
@@ -445,7 +453,7 @@ public class Board implements java.io.Serializable {
                         if (!(provided instanceof Vertex)) invalid = true;
                         break;
                     case TRADE:
-                        if (!(provided instanceof Trade)) invalid = true;
+                        if (!(provided instanceof EnumMap)) invalid = true;
                         break;
                 }
                 if (invalid) {
@@ -493,13 +501,8 @@ public class Board implements java.io.Serializable {
                 target.building.numSoldiersBuilt++;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BANK_TRADE: {
-                Integer amount = (Integer) arguments.get("sell_amount");
-                Resource sell = (Resource) arguments.get("sell_resource_type");
-                Resource buy = (Resource) arguments.get("buy_resource_type");
-                EnumMap<Resource, Integer> bought = new EnumMap<Resource, Integer>(Resource.class);
-                EnumMap<Resource, Integer> sold = new EnumMap<Resource, Integer>(Resource.class);
-                sold.put(sell, amount);
-                bought.put(buy, amount / player.trades.get(sell));
+                EnumMap<Resource, Integer> bought = (EnumMap<Resource, Integer>) arguments.get("bought");
+                EnumMap<Resource, Integer> sold = (EnumMap<Resource, Integer>) arguments.get("bought");
                 player.takeResources(sold);
                 player.addResources(bought);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
@@ -510,35 +513,35 @@ public class Board implements java.io.Serializable {
                 }
                 break;
             } case FULFILL_PRIVATE_TRADE: {
-                Trade trade = (Trade) arguments.get("trade");
-                if (trade != null && trade.isConfirmed() && trade.callee_id == player.immutable) {
-                    EnumMap<Resource, Integer> traded_away = new EnumMap<Resource, Integer>(Resource.class);
-                    EnumMap<Resource, Integer> traded_in = new EnumMap<Resource, Integer>(Resource.class);
-                    traded_away.put(trade.sell_type, trade.sell_amount);
-                    traded_in.put(trade.buy_type, trade.buy_amount);
-                    /* TODO: Switch to player id */
-                    for (Player partner : players) {
-                        if (partner.immutable == trade.partner_id) {
-                            partner.takeResources(traded_in);
-                            partner.addResources(traded_away);
-                            player.takeResources(traded_away);
-                            player.addResources(traded_in);
-                            return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, new Boolean(true));
-                        }
-                    }
-                }
+                Player partner = (Player) arguments.get("player");
+                EnumMap<Resource, Integer> bought = (EnumMap<Resource, Integer>) arguments.get("bought");
+                EnumMap<Resource, Integer> sold = (EnumMap<Resource, Integer>) arguments.get("bought");
+                player.takeResources(sold);
+                player.addResources(bought);
+                partner.takeResources(bought);
+                partner.addResources(sold);
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
             } case MOVE_MILITARY_UNIT: {
+                Log.d(TAG, "Moving soldier.");
                 Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Log.d(TAG, "Target: Vertex " + to.index);
                 Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
-                if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player))
+                Log.d(TAG, "From: Vertex " + from.index);
+                if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player)) {
+                    if (!to.isAdjacent((from)))
+                        Log.d(TAG, "Unadjacent target.");
+                    Log.d(TAG, "Improper target 1.");
                     return null;
+                }
                 boolean bonus = from.military.haveBonusMoved > 0;
                 if (to.military == null) {
                     to.military = new MilitaryUnit(player, to);
                     to.military.haveNotMoved--;
                 } else {
-                    if (to.military.getPlayer() != player)
+                    if (to.military.getPlayer() != player) {
+                        Log.d(TAG, "Improper target 2.");
                         return null;
+                    }
                     to.military.health++;
                 }
                 if (bonus) {
@@ -550,15 +553,47 @@ public class Board implements java.io.Serializable {
                     for (Edge edge : from.edges)
                         if (edge.vertices.contains(to) && edge.owner != null)
                             onRoad = true;
+                    Log.d(TAG, "OnRoad: " + onRoad);
                     if (onRoad)
                         to.military.haveBonusMoved++;
                     else
                         to.military.haveMoved++;
                 }
+                from.military.health--;
+                if (from.military.health == 0)
+                    from.military = null;
+                Log.d(TAG, "After moving:");
+                Log.d(TAG, "....At target vertex " + to.index + ":");
+                if (to.military != null) {
+                    Log.d(TAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + to.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + to.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
+                }
+                if (to.building != null) {
+                    Log.d(TAG, "........" + to.building.getType() + " owned by player ");
+                    if (to.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
+                }
+                Log.d(TAG, "....At from vertex " + from.index + ":");
+                if (from.military != null) {
+                    Log.d(TAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + from.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + from.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
+                }
+                if (from.building != null) {
+                    Log.d(TAG, "........" + from.building.getType() + " owned by player ");
+                    if (from.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
+                }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             } case ATTACK: {
+                Log.d(TAG, "Attacking.");
                 Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Log.d(TAG, "Target: Vertex " + to.index);
                 Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
+                Log.d(TAG, "From: Vertex " + from.index);
                 Integer amount = (Integer) arguments.get("amount");
                 if (!to.isAdjacent(from)
                         || ((to.getBuilding().getPlayer() == player || to.getBuilding().getPlayer() == null)
@@ -578,12 +613,8 @@ public class Board implements java.io.Serializable {
                     } else {
                         to.military = null;
                     }
-                    if (amount == from.military.getHealth()) {
-                        from.military = null;
-                    } else {
-                        from.military.health -= amount;
-                        from.military.haveNotMoved -= amount;
-                    }
+                    from.military.health -= amount;
+                    from.military.haveNotMoved -= amount;
                 } else {
                     int maxGarrison = 1;
                     if (to.getBuilding().getType() == BuildingType.CITY)
@@ -597,6 +628,9 @@ public class Board implements java.io.Serializable {
                         to.getMilitary().health -= damageToUnit;
                     if (to.getBuilding().getHealth() - damageToBuilding > 0) {
                         to.getBuilding().setHealth(to.getBuilding().getHealth() - damageToBuilding);
+                        from.military.haveMoved += amount - garrison;
+                        from.military.haveNotMoved -= amount;
+                        from.military.health -= garrison;
                     } else {
                         if (to.getBuilding().getType() == BuildingType.CITY) {
                             to.getBuilding().type = BuildingType.SETTLEMENT;
@@ -610,8 +644,7 @@ public class Board implements java.io.Serializable {
                                 to.getMilitary().haveNotMoved = 0;
                                 to.getMilitary().haveBonusMoved = 0;
                                 to.getMilitary().haveMoved = amount;
-                                from.military.haveMoved += amount;
-                                from.military.haveNotMoved -= amount;
+                                from.military.haveMoved -= amount;
                                 from.military.health -= amount;
                             } else {
                                 to.getBuilding().owner.points--;
@@ -629,8 +662,7 @@ public class Board implements java.io.Serializable {
                                 to.getMilitary().haveNotMoved = 0;
                                 to.getMilitary().haveBonusMoved = 0;
                                 to.getMilitary().haveMoved = amount;
-                                from.military.haveMoved += amount;
-                                from.military.haveNotMoved -= amount;
+                                from.military.haveMoved -= amount;
                                 from.military.health -= amount;
                             } else {
                                 to.getMilitary().health -= garrison;
@@ -643,6 +675,33 @@ public class Board implements java.io.Serializable {
                 }
                 if (from.military.health == 0)
                     from.military = null;
+                Log.d(TAG, "After attacking:");
+                Log.d(TAG, "....At target vertex " + to.index + ":");
+                if (to.military != null) {
+                    Log.d(TAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + to.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + to.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
+                }
+                if (to.building != null) {
+                    Log.d(TAG, "........" + to.building.getType() + " owned by player ");
+                    if (to.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
+                    Log.d(TAG, "............Health: " + to.getBuilding().getHealth());
+                }
+                Log.d(TAG, "....At from vertex " + from.index + ":");
+                if (from.military != null) {
+                    Log.d(TAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                    Log.d(TAG, "........HaveNotMoved: " + from.military.haveNotMoved);
+                    Log.d(TAG, "........HaveMoved: " + from.military.haveMoved);
+                    Log.d(TAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
+                }
+                if (from.building != null) {
+                    Log.d(TAG, "........" + from.building.getType() + " owned by player ");
+                    if (from.getBuilding().getPlayer() != null)
+                        Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
+                    Log.d(TAG, "............Health: " + from.getBuilding().getHealth());
+                }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             }
         }

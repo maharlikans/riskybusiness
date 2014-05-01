@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
@@ -26,7 +24,7 @@ import com.View.R;
  *
  * First you need to get the intent, then fetch the following (all arrays are indexed by 1, not 0):
  *     numPlayersChosen - integer containing the number of players chosen
- *     playerType       - a String array containing the type of player for each player
+ *     playerNames       - a String array containing the type of player for each player
  *     numVictoryPoints - integer containing the number of victory points chosen
  *     variableBoard    - boolean value indicating whether or not the player wants variable board
  *                        generation or not
@@ -36,7 +34,7 @@ import com.View.R;
  *
  *     fetch each using each of these String references
  *         GameSetupScreen.NUM_PLAYERS_CHOSEN
- *         GameSetupScreen.PLAYER_TYPES
+ *         GameSetupScreen.PLAYER_NAMES
  *         GameSetupScreen.NUM_VICTORY_POINTS
  *         GameSetupScreen.VARIABLE_BOARD
  *         GameSetupScreen.ATTACKS
@@ -48,7 +46,7 @@ public class GameSetupScreen extends Activity {
     public static final String
             NUM_PLAYERS_CHOSEN = "com.slothproductions.riskybusiness.numPlayersChosen";
     public static final String
-            PLAYER_TYPES = "com.slothproductions.riskybusiness.playerTypes";
+            PLAYER_NAMES = "com.slothproductions.riskybusiness.playerTypes";
     public static final String
             NUM_VICTORY_POINTS = "com.slothproductions.riskybusiness.numVictoryPoints";
     public static final String
@@ -60,7 +58,7 @@ public class GameSetupScreen extends Activity {
 
     // View objects
     Spinner mNumPlayersSpinner;
-    RadioGroup[] mPlayerChoicesGroups;
+    EditText[] mPlayerChoicesGroups;
     LinearLayout[] mPlayerLayouts;
     Spinner mVictoryPointsSpinner;
     ToggleButton mVariableBoardToggle;
@@ -71,7 +69,7 @@ public class GameSetupScreen extends Activity {
     // Local data to be fetched from/determined by interactions with the view
     static final int NUM_PLAYERS = 4;
     int numPlayersChosen;
-    String[] playerType;
+    String[] playerNames;
     int numVictoryPoints;
     boolean variableBoard;
     boolean attacksOn;
@@ -122,29 +120,29 @@ public class GameSetupScreen extends Activity {
         });
 
         // find the player radio groups to be used
-        mPlayerChoicesGroups = new RadioGroup[NUM_PLAYERS+1];
+        mPlayerChoicesGroups = new EditText[NUM_PLAYERS+1];
 
-        mPlayerChoicesGroups[1] = (RadioGroup)findViewById(R.id.radio_group_1);
-        mPlayerChoicesGroups[2] = (RadioGroup)findViewById(R.id.radio_group_2);
-        mPlayerChoicesGroups[3] = (RadioGroup)findViewById(R.id.radio_group_3);
-        mPlayerChoicesGroups[4] = (RadioGroup)findViewById(R.id.radio_group_4);
+        mPlayerChoicesGroups[1] = (EditText)findViewById(R.id.edit_text_player1);
+        mPlayerChoicesGroups[2] = (EditText)findViewById(R.id.edit_text_player2);
+        mPlayerChoicesGroups[3] = (EditText)findViewById(R.id.edit_text_player3);
+        mPlayerChoicesGroups[4] = (EditText)findViewById(R.id.edit_text_player4);
 
         // set up the attacks toggle button and get its view
         // NOTE: this HAS to be set up before the victoryPoints spinner
         //       because the victory points spinner influences the visibility
         //       of this button
-        mAttacksLinear = (LinearLayout)findViewById(R.id.attacks_linear);
-        mAttacksToggle = (ToggleButton)findViewById(R.id.attacks_toggle);
+//        mAttacksLinear = (LinearLayout)findViewById(R.id.attacks_linear);
+//        mAttacksToggle = (ToggleButton)findViewById(R.id.attacks_toggle);
 
-        attacksOn = mAttacksToggle.isChecked();
+//        attacksOn = mAttacksToggle.isChecked();
 
-        mAttacksToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//        mAttacksToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+/*            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 attacksOn = b;
             }
         });
-
+*/
         // set up the victory points spinner
         mVictoryPointsSpinner = (Spinner)findViewById(R.id.victory_points_spinner);
 
@@ -159,10 +157,10 @@ public class GameSetupScreen extends Activity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 numVictoryPoints = Integer.parseInt((String)adapterView.getItemAtPosition(i));
                 if(numVictoryPoints == 0) {
-                    mAttacksLinear.setVisibility(View.GONE);
+//                    mAttacksLinear.setVisibility(View.GONE);
                     attacksOn = true;
                 } else {
-                    mAttacksLinear.setVisibility(View.VISIBLE);
+  //                  mAttacksLinear.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -173,17 +171,17 @@ public class GameSetupScreen extends Activity {
         });
 
         // set up the variable board toggle button
-        mVariableBoardToggle = (ToggleButton)findViewById(R.id.variable_board_toggle);
+//        mVariableBoardToggle = (ToggleButton)findViewById(R.id.variable_board_toggle);
 
-        variableBoard = mVariableBoardToggle.isChecked();
+//        variableBoard = mVariableBoardToggle.isChecked();
 
-        mVariableBoardToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+/*        mVariableBoardToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 variableBoard = b;
             }
         });
-
+*/
         // set the colors to be used for the players
         // TODO change the colors
         defaultColors = new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.BLACK};
@@ -194,17 +192,17 @@ public class GameSetupScreen extends Activity {
         mStartGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playerType = new String[numPlayersChosen+1];
+                playerNames = new String[numPlayersChosen+1];
                 // for the appropriate radio button groups
                 // find out which radio button of each of those groups were pressed down
                 for (int i = 1; i <= numPlayersChosen; i++) {
-                    int selectedButtonId = mPlayerChoicesGroups[i].getCheckedRadioButtonId();
+                    int selectedButtonId = mPlayerChoicesGroups[i].getId();
                     // Log.d("OnClickButton" + i, "Selected button ID is: " + selectedButtonId);
-                    RadioButton selectedButton = (RadioButton)findViewById(selectedButtonId);
+                    EditText selectedButton = (EditText)findViewById(selectedButtonId);
                     /*if (selectedButton == null)
                         Log.d("OnClickButton" + i, "this shit is null");*/
-                    playerType[i] = (String)selectedButton.getText();
-//                    Log.d("OnClick", playerType[i]);
+                    playerNames[i] = selectedButton.getEditableText().toString();
+//                    Log.d("OnClick", playerNames[i]);
                 }
 
 //                Log.d("OnClick", "Num victory points is: " + numVictoryPoints);
@@ -214,7 +212,7 @@ public class GameSetupScreen extends Activity {
                 // pass all the required data to the next activity and call the activity
                 Intent intent = new Intent(GameSetupScreen.this,BoardScreen.class);
                 intent.putExtra(NUM_PLAYERS_CHOSEN, numPlayersChosen);
-                intent.putExtra(PLAYER_TYPES, playerType);
+                intent.putExtra(PLAYER_NAMES, playerNames);
                 intent.putExtra(NUM_VICTORY_POINTS, numVictoryPoints);
                 intent.putExtra(VARIABLE_BOARD, variableBoard);
                 intent.putExtra(ATTACKS, attacksOn);

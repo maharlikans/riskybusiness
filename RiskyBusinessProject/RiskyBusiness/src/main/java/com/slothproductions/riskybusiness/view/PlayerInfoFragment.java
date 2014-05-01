@@ -18,6 +18,8 @@ import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Resource;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class PlayerInfoFragment extends Fragment {
 
     private ArrayList<ImageView> mPlayerSquares;
     private ArrayList<LinearLayout> mPlayerInfo;
-
+    private ArrayList<LinearLayout> mPlayerName;
     private ArrayList<Player> mPlayersArrayList;
 
     private DiceRoll mDice;
@@ -62,7 +64,7 @@ public class PlayerInfoFragment extends Fragment {
         initializeNumberResources(v); //total number available resources for each player
         initializePlayerSquares(v);
         initializePlayerInfo(v);
-
+        initializePlayerName(v);
         initializeDice(v);
 
         colorBoxes();
@@ -173,11 +175,35 @@ public class PlayerInfoFragment extends Fragment {
         return mDice.getResults();
     }
 
+    public void initializePlayerName(View v){
+        switch(mPlayersArrayList.size()) {
+            case 1:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                break;
+            case 2:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                break;
+            case 3:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                ((TextView) v.findViewById(R.id.player_3_name)).setText(mPlayersArrayList.get(2).getName());
+                break;
+            case 4:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                ((TextView) v.findViewById(R.id.player_3_name)).setText(mPlayersArrayList.get(2).getName());
+                ((TextView) v.findViewById(R.id.player_4_name)).setText(mPlayersArrayList.get(3).getName());
+        }
+        }
+
+
     public void initializeDice(View v) {
         mDice = new DiceRoll();
         mFirstDice = (ImageView)v.findViewById(R.id.dice_1);
         mSecondDice = (ImageView)v.findViewById(R.id.dice_2);
     }
+
 
     public void initializePlayerInfo(View v) {
         mPlayerInfo = new ArrayList<LinearLayout>();

@@ -59,7 +59,7 @@ public class BackwardBeginningGameState implements GameState {
         ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
         endTurnButton.setVisibility(View.GONE);
 
-        mBoardButtonsFragment.createToast("Now in BackwardBeginningGameState", false);
+//        mBoardButtonsFragment.createToast("Now in BackwardBeginningGameState", false);
     }
 
     @Override

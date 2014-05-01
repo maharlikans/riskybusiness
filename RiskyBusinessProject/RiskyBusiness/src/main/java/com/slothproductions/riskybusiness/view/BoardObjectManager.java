@@ -2,6 +2,7 @@ package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -15,11 +16,13 @@ import android.widget.RelativeLayout;
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.Building;
+import com.slothproductions.riskybusiness.model.BuildingType;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
 import com.slothproductions.riskybusiness.model.MilitaryUnit;
+import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
@@ -54,6 +57,7 @@ public class BoardObjectManager {
 
     //for soldier movement
     private Vertex startVertex;
+    private Coordinate startCoordinate;
     private ImageView mSoldierMoving;
     private ArrayList<ImageView> mSoldiersAttacking;
 
@@ -79,6 +83,53 @@ public class BoardObjectManager {
 
         mAdjacentHexes = new ArrayList<Hex>();
         mSoldiersAttacking = new ArrayList<ImageView>();
+    }
+
+    //Creates the appropriate menu for the screen based on the tap event
+    //This will call the popup menu in the BoardButtons class
+    public void findMenu(MotionEvent event) {
+        Coordinate c = new Coordinate(event.getX(), event.getY());
+        Log.d(TAG, "Checking if solider is null");
+        if (mSoldierMoving != null) {
+            Log.d(TAG, "Soldier is not null");
+            moveSoldier(c);
+            return;
+        }
+        if (mSoldiersAttacking.size() > 0) {
+            attack(c);
+            return;
+        }
+
+        //scan through hex corners to see if tap location matches a corner
+        v = null;
+        e = null;
+        if (checkCornerLocations(c)) {
+            try {
+                if (mAdjacentHexes.size() == 1) {
+                    assignVertexFromIndex();
+                } else {
+                    v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+                }
+            }
+            catch (Exception e) {
+                return;
+            }
+            // popup menu in board buttons fragment
+            mBoardButtonsFragment.showActionsMenu(c, v);
+        }
+        else if (checkEdgeLocations(c)) {
+            try {
+                if (mAdjacentHexes.size() == 1) {
+                    assignEdgeFromIndex();
+                } else {
+                    e = mBoardBacklog.getEdge(mAdjacentHexes, 0);
+                }
+            }
+            catch (Exception e) {
+                return;
+            }
+            mBoardButtonsFragment.showActionsMenu(c, e);
+        }
     }
 
     //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
@@ -109,10 +160,10 @@ public class BoardObjectManager {
             }
         }
         else if (action.getItemId() == R.id.repairsettlement) {
-            //repair settlement
+            mGameLoop.getCurrentGameState().repairSettlement(v);
         }
         else if (action.getItemId() == R.id.repaircity) {
-            //repaircity
+            mGameLoop.getCurrentGameState().repairCity(v);
         }
         else if (action.getItemId() == R.id.move) {
             setMoveSoldierState(coordinate);
@@ -161,29 +212,20 @@ public class BoardObjectManager {
     //prepare a soldier to be moved
     public void setMoveSoldierState(Coordinate coordinate) {
         startVertex = v;
-        ImageView tempSoldier;
-        float x;
-        float y;
-        for (int i = 0; i < mSoldiers.size(); i ++) {
-            tempSoldier = mSoldiers.get(i);
-            int topLeftx = (int) tempSoldier.getX();
-            int topLeftY = (int) tempSoldier.getY();
-            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
-            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
-            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
-                mSoldierMoving = tempSoldier;
-                return;
-            }
-        }
+        mSoldierMoving = findImageFromList(mSoldiers, coordinate);
     }
 
     public void moveSoldier(Coordinate c) {
         checkCornerLocations(c);
-        if (mAdjacentHexes.size() == 1) {
-            assignVertexFromIndex();
+        try {
+            if (mAdjacentHexes.size() == 1) {
+                assignVertexFromIndex();
+            } else {
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            }
         }
-        else {
-            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+        catch (IndexOutOfBoundsException e) {
+            mBoardButtonsFragment.createToast("", false);
         }
         if (!mGameLoop.moveSoldier(startVertex, v)) {
             Log.d(TAG, "Soldier could not be moved");
@@ -197,66 +239,168 @@ public class BoardObjectManager {
 
     public void setNumberAttacking(Coordinate coordinate, int num) {
         startVertex = v;
-        ImageView tempSoldier;
-        for (int i = 0; i < mSoldiers.size(); i ++) {
-            tempSoldier = mSoldiers.get(i);
-            int topLeftx = (int) tempSoldier.getX();
-            int topLeftY = (int) tempSoldier.getY();
-            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
-            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
-            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
-                mSoldiersAttacking.add(tempSoldier);
-                if (mSoldiersAttacking.size() >= num) {
-                    return;
-                }
-            }
-        }
+        startCoordinate = coordinate;
+        mSoldiersAttacking = findImagesFromList(mSoldiers, coordinate, num);
     }
 
-    public void attack(Coordinate c) {
-        int numAttacking = mSoldiersAttacking.size();
+    public void attack(final Coordinate c) {
+        final int numAttacking = mSoldiersAttacking.size(); //number of soldiers attacking
+        //get the vertex that the military is attacking
         checkCornerLocations(c);
-        if (mAdjacentHexes.size() == 1) {
-            assignVertexFromIndex();
+        try {
+            if (mAdjacentHexes.size() == 1) {
+                assignVertexFromIndex();
+            } else {
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            }
+        }
+        catch (Exception e) {
+            return;
+        }
+        //attacking military unit
+        MilitaryUnit militaryFromBeginning = startVertex.getImmutable().getMilitary();
+        Player attacking = militaryFromBeginning.getPlayer();
+        final MilitaryUnit militaryFromEnd = startVertex.getImmutable().getMilitary();
+
+        //defending military unit and building
+        Building buildingToBeginning = v.getBuilding();
+        MilitaryUnit militaryToBeginning = v.getImmutable().getMilitary();
+        final Player defending;
+        if (militaryToBeginning != null) {
+            defending = militaryToBeginning.getPlayer();
         }
         else {
-            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            defending = buildingToBeginning.getPlayer();
         }
-        /*
-        Building b1 = v.getBuilding();
-        MilitaryUnit m1 = v.getImmutable().getMilitary();
-        if (!mGameLoop.attackWithSoldier(startVertex, v, numAttacking)) {
-            mSoldiersAttacking.removeAll(mSoldiersAttacking);
-            return;
-        }
-        Building b2 = v.getBuilding();
-        MilitaryUnit m2 = v.getImmutable().getMilitary();
 
-        //if the owner of the building at the vertex is equal to the owner of the building after attacking,
-        // then the attack did not destroy the building, and we return;
-        if (b1.getPlayer() == b2.getPlayer()) {
+        //get all the views at the vertex moving to, military and settlements or cities.
+        ImageView buildingAtTo = findImageFromList(mSettlements, c);
+        if (buildingAtTo == null) {
+            buildingAtTo = findImageFromList(mCities, c);
+        }
+        final ArrayList<ImageView> soldiersDefending = findImagesFromList(mSoldiers, c);
+
+        if (!mGameLoop.attack(startVertex, v, numAttacking)) {
             mSoldiersAttacking.removeAll(mSoldiersAttacking);
             return;
         }
-        //if the second soldier is null, and the first soldier is not,
-        if (m2 == null) {
-            if (m1 != null)
+
+        Building buildingToEnd = v.getBuilding();
+        final MilitaryUnit militaryToEnd = v.getImmutable().getMilitary();
+
+        Handler handler = new Handler();
+
+        if (buildingToEnd.getType() == BuildingType.EMPTY) {
+            Log.d(TAG, "The building on the to vertex is null, movement will be determined by soldiers");
+            if (militaryToEnd == null) {
+                Log.d(TAG, "Everybody died, move the attacking soldiers there, then delete them.");
+                translateImageList(mSoldiersAttacking, c);
+                Log.d(TAG, "Number of soldiers attacking = " + mSoldiersAttacking.size());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(mSoldiersAttacking, mSoldiersAttacking.size());
+                        removeSoldiers(soldiersDefending, soldiersDefending.size());
+                    }
+                }, 1000);
+                Log.d(TAG, "Number of soldiers alive = " + mSoldiersAttacking.size());
+            }
+            else if (militaryToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "Attack Successful, move attacking army soldiers");
+                //attack was successful, move all players there, then remove the ones that died
+                translateImageList(mSoldiersAttacking, c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(soldiersDefending, soldiersDefending.size());
+                        removeSettlement(c);
+                        removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
+                    }
+                }, 1000);
+            }
+            else {
+                Log.d(TAG, "Attack was not successful, move players there and back");
+                //attack was not successful, move players there, then delete any who died, and move them back if any remain
+                //remove any units that got destroyed
+                translateImageList(mSoldiersAttacking, c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSoldiers(soldiersDefending, soldiersDefending.size() - militaryToEnd.getHealth());
+                        removeSoldiers(mSoldiersAttacking, numAttacking - militaryToEnd.getHealth());
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                    }
+                }, 1000);
+            }
+
+            if (buildingToBeginning.getType() != BuildingType.EMPTY) {
+                Log.d(TAG, "A building was destroyed in the attack, remove it from the board");
+                //remove building from board
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeSettlement(c);
+                    }
+                }, 1000);
+            }
+        }
+        else {
+            Log.d(TAG, "Their is a building on the to vertex, movement will occur if the building's owner is the attacking player");
+            if (buildingToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "attack was successful, The player destroyed a city, and now owns that settlement");
+                //should remove the city and add a settlement with the current color
+                translateImageList(mSoldiersAttacking, c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        removeImage(mCities, c);
+                        buildItem(2, "settlement", c);
+                    }
+                }, 1000);
+            }
+            else if (buildingToBeginning.getType() != buildingToEnd.getType()) {
+                Log.d(TAG, "City was downgraded to a settlement, and is owned by the defending player");
+                translateImageList(mSoldiersAttacking, c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (soldiersDefending != null) {
+                            removeSoldiers(mSoldiersAttacking, soldiersDefending.size()/3);
+                        }
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                        removeImage(mCities, c);
+                        buildItem(2, "settlement", c, defending);
+                    }
+                }, 1000);
+            }
+            else {
+                Log.d(TAG, "Attack was not successful, ");
+                translateImageList(mSoldiersAttacking, c);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (soldiersDefending != null) {
+                            removeSoldiers(mSoldiersAttacking, soldiersDefending.size()/3);
+                        }
+                        translateImageList(mSoldiersAttacking, startCoordinate);
+                    }
+                }, 1000);
+            }
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 mSoldiersAttacking.removeAll(mSoldiersAttacking);
-        }
-
-        //attack with soldiers
-        //if attack was successful, move all the soldiers to the new location;
-        for (ImageView soldier : mSoldiersAttacking) {
-            translateImage((int)c.getX(), (int)c.getY(), soldier);
-        }
-        mSoldiersAttacking.removeAll(mSoldiersAttacking);
-        */
+                startVertex = null;
+                startCoordinate = null;
+                v = null;
+            }
+        }, 1000);
     }
 
     public void removeSettlement(Coordinate coordinate) {
         ImageView tempSettlement;
-        float x;
-        float y;
         for (int i = 0; i < mSettlements.size(); i ++) {
             tempSettlement = mSettlements.get(i);
             int topLeftx = (int) tempSettlement.getX();
@@ -271,43 +415,77 @@ public class BoardObjectManager {
         }
     }
 
-    //Creates the appropriate menu for the screen based on the tap event
-    //This will call the popup menu in the BoardButtons class
-    public void findMenu(MotionEvent event) {
-        Coordinate c = new Coordinate(event.getX(), event.getY());
-        Log.d(TAG, "Checking if solider is null");
-        if (mSoldierMoving != null) {
-            Log.d(TAG, "Soldier is not null");
-            moveSoldier(c);
-            return;
+    public void removeImage(ArrayList<ImageView> list, Coordinate coordinate) {
+        for (int i = 0; i < list.size(); i ++) {
+            ImageView tempImage = list.get(i);
+            int topLeftx = (int) tempImage.getX();
+            int topLeftY = (int) tempImage.getY();
+            int bottomRightx = topLeftx + tempImage.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempImage.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mBoardLayout.removeView(tempImage);
+                list.remove(i);
+                return;
+            }
         }
-        if (mSoldiersAttacking.size() > 0) {
-            attack(c);
-            return;
-        }
+    }
 
-        //scan through hex corners to see if tap location matches a corner
-        v = null;
-        e = null;
-        if (checkCornerLocations(c)) {
-            if (mAdjacentHexes.size() == 1) {
-                assignVertexFromIndex();
-            }
-            else {
-                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
-            }
-            // popup menu in board buttons fragment
-            mBoardButtonsFragment.showActionsMenu(c, v);
+    public void removeSoldiers(ArrayList<ImageView> imagesToRemove, int numToRemove) {
+        ArrayList<ImageView> tempList = new ArrayList<ImageView>();
+        for (int i = 0; i < numToRemove; i ++) {
+            tempList.add(imagesToRemove.get(i));
+            mBoardLayout.removeView(imagesToRemove.get(i));
+            Log.d(TAG, "Soldier Removed");
         }
-        else if (checkEdgeLocations(c)) {
-            if (mAdjacentHexes.size() == 1) {
-                assignEdgeFromIndex();
+        mSoldiersAttacking.removeAll(tempList);
+        mSoldiers.removeAll(tempList);
+    }
+
+    public ImageView findImageFromList(ArrayList<ImageView> list, Coordinate coordinate) {
+        for (int i = 0; i < list.size(); i ++) {
+            ImageView tempItem = list.get(i);
+            int topLeftx = (int) tempItem.getX();
+            int topLeftY = (int) tempItem.getY();
+            int bottomRightx = topLeftx + tempItem.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempItem.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                return tempItem;
             }
-            else {
-                e = mBoardBacklog.getEdge(mAdjacentHexes, 0);
-            }
-            mBoardButtonsFragment.showActionsMenu(c, e);
         }
+        return null;
+    }
+
+    public ArrayList<ImageView> findImagesFromList(ArrayList<ImageView> fromList, Coordinate coordinate, int max) {
+        ArrayList<ImageView> toList = new ArrayList<ImageView>();
+        for (int i = 0; i < fromList.size(); i ++) {
+            ImageView item = fromList.get(i);
+            int topLeftx = (int) item.getX();
+            int topLeftY = (int) item.getY();
+            int bottomRightx = topLeftx + item.getMeasuredWidth();
+            int bottomRighty = topLeftY + item.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                toList.add(item);
+                if (toList.size() >= max) {
+                    return toList;
+                }
+            }
+        }
+        return toList;
+    }
+
+    public ArrayList<ImageView> findImagesFromList(ArrayList<ImageView> fromList, Coordinate coordinate) {
+        ArrayList<ImageView> toList = new ArrayList<ImageView>();
+        for (int i = 0; i < fromList.size(); i ++) {
+            ImageView item = fromList.get(i);
+            int topLeftx = (int) item.getX();
+            int topLeftY = (int) item.getY();
+            int bottomRightx = topLeftx + item.getMeasuredWidth();
+            int bottomRighty = topLeftY + item.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                toList.add(item);
+            }
+        }
+        return toList;
     }
 
     /**places given image centered at the specified x and y coordinates
@@ -333,7 +511,7 @@ public class BoardObjectManager {
         int oldY = image.getTop();
 
         Animation translation = new TranslateAnimation(0, newX-oldX, 0, newY - oldY);
-        translation.setDuration(1000);
+        translation.setDuration(700);
         translation.setFillAfter(true);
         translation.setFillEnabled(true);
         translation.setFillBefore(false);
@@ -356,11 +534,51 @@ public class BoardObjectManager {
 
             }
         });
-        image.setAnimation(translation);
-        translation.startNow();
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) image.getLayoutParams();
         mBoardLayout.removeView(image);
+        image.setAnimation(translation);
+        translation.startNow();
         mBoardLayout.addView(image, lp);
+    }
+
+    public void translateImageList(ArrayList<ImageView> images, Coordinate c) {
+        for (ImageView image : images) {
+           translateImage((int)c.getX(), (int)c.getY(), image);
+        }
+    }
+
+    public void buildItem(int identifier, String name, Coordinate coordinate, Player p) {
+        //add Item to the appropriate vertex/edge
+
+        //create the visible image and place it on the screen
+        ImageView item = new ImageView(mGameBoardActivity);
+        item.setId((int)System.currentTimeMillis());
+        item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
+        item.setRotation(coordinate.getRotation());
+
+        item.setColorFilter(p.getColor());
+
+        //places the image on the screen
+        placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
+
+        //this should be unnecessary, should be able to do this elsewhere.
+        switch(identifier) {
+            case 0:
+                mRoads.add(item);
+                break;
+            case 1:
+                mSoldiers.add(item);
+                break;
+            case 2:
+                mSettlements.add(item);
+                break;
+            case 3:
+                mCities.add(item);
+                break;
+        }
+
+        //this makes sure that all the objects are placed at the proper z index
+        normalizeLevels();
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
