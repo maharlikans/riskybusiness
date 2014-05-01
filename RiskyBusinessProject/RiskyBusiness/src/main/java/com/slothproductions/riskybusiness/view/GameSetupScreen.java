@@ -98,7 +98,7 @@ public class GameSetupScreen extends Activity {
             }
         });
 
-        // find the player radio groups to be used
+        // find the player radio groups to be used - shouldn't matter atm though
         mPlayerChoicesGroups = new RadioGroup[NUM_PLAYERS+1];
 
         mPlayerChoicesGroups[1] = (RadioGroup)findViewById(R.id.radio_group_1);
