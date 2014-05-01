@@ -116,7 +116,7 @@ public class BoardScreen extends FragmentActivity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
         alertDialog.setTitle("Exiting Game");
-        alertDialog.setMessage("All unsaved progess will be lost. Are you sure you want to exit the game?");
+        alertDialog.setMessage("All progess will be lost. Are you sure you want to exit the game?");
 
         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
