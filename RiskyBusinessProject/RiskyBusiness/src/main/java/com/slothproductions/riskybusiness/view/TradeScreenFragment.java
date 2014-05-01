@@ -129,11 +129,11 @@ public class TradeScreenFragment extends Fragment {
         mResourceToTradeButtonOut.put(Resource.ORE,
                 (ImageView)v.findViewById(R.id.trade_in_ore));
         mResourceToTradeButtonOut.put(Resource.WOOL,
-                (ImageView)v.findViewById(R.id.trade_out_sheep));
+                (ImageView)v.findViewById(R.id.trade_in_sheep));
         mResourceToTradeButtonOut.put(Resource.GRAIN,
-                (ImageView)v.findViewById(R.id.trade_out_wheat));
+                (ImageView)v.findViewById(R.id.trade_in_wheat));
         mResourceToTradeButtonOut.put(Resource.LUMBER,
-                (ImageView)v.findViewById(R.id.trade_out_wood));
+                (ImageView)v.findViewById(R.id.trade_in_wood));
         HashMap<Resource, Integer> mResourcesOut;
         HashMap<Resource, Integer> mCurrentResources;
         HashMap<Resource, Integer> mResourcesIn;

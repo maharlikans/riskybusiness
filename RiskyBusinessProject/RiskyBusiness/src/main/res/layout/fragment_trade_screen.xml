@@ -223,7 +223,7 @@
                 android:visibility="gone"/>
 
             <ImageView
-                android:id="@+id/trade_in_ore"
+                android:id="@+id/trade_in_gold"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/plusbutton"
