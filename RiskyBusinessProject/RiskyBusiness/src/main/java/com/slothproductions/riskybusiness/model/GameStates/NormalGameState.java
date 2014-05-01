@@ -64,7 +64,7 @@ public class NormalGameState implements GameState {
         ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
         endTurnButton.setVisibility(View.VISIBLE);
 
-        mBoardButtonsFragment.createToast("Now in NormalGameState", false);
+//        mBoardButtonsFragment.createToast("Now in NormalGameState", false);
         startTurn();
     }
 

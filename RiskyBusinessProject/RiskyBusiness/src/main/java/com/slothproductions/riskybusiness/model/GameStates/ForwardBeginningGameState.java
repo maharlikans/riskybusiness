@@ -61,7 +61,7 @@ public class ForwardBeginningGameState implements GameState{
         ImageView endTurnButton = (ImageView)v.findViewById(R.id.endTurnButton);
         endTurnButton.setVisibility(View.GONE);
 
-        mBoardButtonsFragment.createToast("Now in ForwardBeginningGameState", false);
+//        mBoardButtonsFragment.createToast("Now in ForwardBeginningGameState", false);
     }
 
     @Override
