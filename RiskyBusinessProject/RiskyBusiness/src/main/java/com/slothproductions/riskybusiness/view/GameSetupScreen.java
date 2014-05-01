@@ -131,18 +131,18 @@ public class GameSetupScreen extends Activity {
         // NOTE: this HAS to be set up before the victoryPoints spinner
         //       because the victory points spinner influences the visibility
         //       of this button
-        mAttacksLinear = (LinearLayout)findViewById(R.id.attacks_linear);
-        mAttacksToggle = (ToggleButton)findViewById(R.id.attacks_toggle);
+//        mAttacksLinear = (LinearLayout)findViewById(R.id.attacks_linear);
+//        mAttacksToggle = (ToggleButton)findViewById(R.id.attacks_toggle);
 
-        attacksOn = mAttacksToggle.isChecked();
+//        attacksOn = mAttacksToggle.isChecked();
 
-        mAttacksToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//        mAttacksToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+/*            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 attacksOn = b;
             }
         });
-
+*/
         // set up the victory points spinner
         mVictoryPointsSpinner = (Spinner)findViewById(R.id.victory_points_spinner);
 
@@ -157,10 +157,10 @@ public class GameSetupScreen extends Activity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 numVictoryPoints = Integer.parseInt((String)adapterView.getItemAtPosition(i));
                 if(numVictoryPoints == 0) {
-                    mAttacksLinear.setVisibility(View.GONE);
+//                    mAttacksLinear.setVisibility(View.GONE);
                     attacksOn = true;
                 } else {
-                    mAttacksLinear.setVisibility(View.VISIBLE);
+  //                  mAttacksLinear.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -171,17 +171,17 @@ public class GameSetupScreen extends Activity {
         });
 
         // set up the variable board toggle button
-        mVariableBoardToggle = (ToggleButton)findViewById(R.id.variable_board_toggle);
+//        mVariableBoardToggle = (ToggleButton)findViewById(R.id.variable_board_toggle);
 
-        variableBoard = mVariableBoardToggle.isChecked();
+//        variableBoard = mVariableBoardToggle.isChecked();
 
-        mVariableBoardToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+/*        mVariableBoardToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 variableBoard = b;
             }
         });
-
+*/
         // set the colors to be used for the players
         // TODO change the colors
         defaultColors = new int[]{Color.RED, Color.GREEN, Color.BLUE, Color.BLACK};

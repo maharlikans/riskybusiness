@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/player_1"
-                android:maxLength="7"
+                android:maxLength="8"
                 android:textSize="24dp"
                 android:checked="true"
                   />
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/player_2"
-                android:maxLength="7"
+                android:maxLength="8"
                 android:textSize="24dp"
                 android:checked="true"
                   />
@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/player_3"
-                android:maxLength="7"
+                android:maxLength="8"
                 android:textSize="24dp"
                 android:checked="true" />
 
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/player_4"
                 android:textSize="24dp"
-                android:maxLength="7"
+                android:maxLength="8"
                 android:checked="true"
                   />
 
@@ -159,46 +159,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/variable_board_generation"
-            android:textSize="24dp"
-            android:textColor="@color/white"/>
 
-        <ToggleButton
-            android:id="@+id/variable_board_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"/>
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/attacks_linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/attacks"
-            android:textSize="24dp"
-            android:textColor="@color/white"/>
-
-        <ToggleButton
-            android:id="@+id/attacks_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"/>
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"

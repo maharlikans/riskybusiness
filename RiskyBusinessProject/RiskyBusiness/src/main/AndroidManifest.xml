@@ -45,6 +45,7 @@
         <activity
             android:name="com.slothproductions.riskybusiness.view.GameSetupScreen"
             android:label="@string/title_game_setup_screen"
+            android:theme="@style/BoardTheme"
             android:screenOrientation="sensorLandscape">
         </activity>
         <activity
@@ -56,6 +57,7 @@
         <activity
             android:name="com.slothproductions.riskybusiness.view.SettingsScreen"
             android:label="Options"
+            android:theme="@style/BoardTheme"
             android:screenOrientation="sensorLandscape" >
         </activity>
     </application>
