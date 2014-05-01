@@ -217,7 +217,7 @@ final public class Player implements java.io.Serializable {
                 actions.add(GameAction.BUILD_MILITARY_UNIT);
         }
 
-        if (v.military != null && v.military.haveBonusMoved + v.military.haveNotMoved > 0) {
+        if (v.military != null && v.military.getPlayer() == this && v.military.haveBonusMoved + v.military.haveNotMoved > 0) {
             boolean canMove = false;
             // for (Vertex.ImmutableVertex vertex : v.immutable.getAdjacent()) {
             for (Vertex vertex : v.adjacent) {
