@@ -14,10 +14,12 @@ import android.widget.RelativeLayout;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Building;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
+import com.slothproductions.riskybusiness.model.MilitaryUnit;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
@@ -180,6 +182,9 @@ public class BoardObjectManager {
         if (mAdjacentHexes.size() == 1) {
             assignVertexFromIndex();
         }
+        else {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+        }
         if (!mGameLoop.moveSoldier(startVertex, v)) {
             return;
         }
@@ -189,6 +194,7 @@ public class BoardObjectManager {
     }
 
     public void setNumberAttacking(Coordinate coordinate, int num) {
+        startVertex = v;
         ImageView tempSoldier;
         for (int i = 0; i < mSoldiers.size(); i ++) {
             tempSoldier = mSoldiers.get(i);
@@ -207,11 +213,42 @@ public class BoardObjectManager {
 
     public void attack(Coordinate c) {
         int numAttacking = mSoldiersAttacking.size();
+        checkCornerLocations(c);
+        if (mAdjacentHexes.size() == 1) {
+            assignVertexFromIndex();
+        }
+        else {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+        }
+        /*
+        Building b1 = v.getBuilding();
+        MilitaryUnit m1 = v.getImmutable().getMilitary();
+        if (!mGameLoop.attackWithSoldier(startVertex, v, numAttacking)) {
+            mSoldiersAttacking.removeAll(mSoldiersAttacking);
+            return;
+        }
+        Building b2 = v.getBuilding();
+        MilitaryUnit m2 = v.getImmutable().getMilitary();
+
+        //if the owner of the building at the vertex is equal to the owner of the building after attacking,
+        // then the attack did not destroy the building, and we return;
+        if (b1.getPlayer() == b2.getPlayer()) {
+            mSoldiersAttacking.removeAll(mSoldiersAttacking);
+            return;
+        }
+        //if the second soldier is null, and the first soldier is not,
+        if (m2 == null) {
+            if (m1 != null)
+                mSoldiersAttacking.removeAll(mSoldiersAttacking);
+        }
+
         //attack with soldiers
         //if attack was successful, move all the soldiers to the new location;
         for (ImageView soldier : mSoldiersAttacking) {
             translateImage((int)c.getX(), (int)c.getY(), soldier);
         }
+        mSoldiersAttacking.removeAll(mSoldiersAttacking);
+        */
     }
 
     public void removeSettlement(Coordinate coordinate) {
@@ -236,7 +273,6 @@ public class BoardObjectManager {
     //This will call the popup menu in the BoardButtons class
     public void findMenu(MotionEvent event) {
         Coordinate c = new Coordinate(event.getX(), event.getY());
-
         if (mSoldierMoving != null) {
             moveSoldier(c);
             return;

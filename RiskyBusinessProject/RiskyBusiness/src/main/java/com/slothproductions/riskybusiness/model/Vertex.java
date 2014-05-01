@@ -164,7 +164,7 @@ public class Vertex implements java.io.Serializable {
         return valid;
     }
 
-    final protected Building getBuilding() {
+    public Building getBuilding() {
         return building;
     }
 
