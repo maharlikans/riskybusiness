@@ -1,37 +1,30 @@
 package com.slothproductions.riskybusiness.view;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.PopupWindow;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
+import com.slothproductions.riskybusiness.model.Building;
 import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.Edge;
+import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
 import com.slothproductions.riskybusiness.model.MilitaryUnit;
+import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
 
-//TODO: update all the methods to work with the new way of placing objects
 //This includes adding functionality to work with roads, and adjusting the method signatures as appropriate.
 
 /**
@@ -45,6 +38,7 @@ public class BoardObjectManager {
 
     private Board mBoardBacklog;             //Model board class
     private ZoomableLayout mBoardLayout;     //Board Layout
+    private GameLoop mGameLoop;
     private Activity mGameBoardActivity;
     private BoardScreenMainFragment mManagingFragment;
     private BoardButtonsFragment mBoardButtonsFragment;
@@ -54,6 +48,21 @@ public class BoardObjectManager {
     private ArrayList<ImageView> mSettlements;
     private ArrayList<ImageView> mCities;
     private ArrayList<ImageView> mRoads;
+
+    //used for determining which edge and vertex to use for object placement
+    private Vertex v;
+    private Edge e;
+
+    //for soldier movement
+    private Vertex startVertex;
+    private ImageView mSoldierMoving;
+    private ArrayList<ImageView> mSoldiersAttacking;
+
+    private ArrayList<Hex> mAdjacentHexes;
+
+    int vertexIndexAdded;
+    int edgeIndexAdded;
+    int hexIndexAdded;
 
     public BoardObjectManager(Board boardData, ZoomableLayout layout, Activity activity, BoardScreenMainFragment manager) {
         //initialize main variables
@@ -69,28 +78,48 @@ public class BoardObjectManager {
         mCities = new ArrayList<ImageView>();
         mRoads = new ArrayList<ImageView>();
 
+        mAdjacentHexes = new ArrayList<Hex>();
+        mSoldiersAttacking = new ArrayList<ImageView>();
     }
 
     //This method is called from the board buttons class. Based on the menu item selected, it will call the appropriate action
     //Note: to make this work with the model, it may need to take an edge or vertex
     public void callActionFromMenuSelection(MenuItem action, Coordinate coordinate) {
+        if (mGameLoop == null) {
+            mGameLoop = ((BoardScreen) mGameBoardActivity).getGameLoop();
+        }
         if (action.getItemId() == R.id.road) {
-            //call build road from game loop
-            buildItem(0, "road", coordinate);
+            if (mGameLoop.buildRoad(e)) {
+                buildItem(0, "road", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.soldier) {
-            buildItem(1, "soldier", coordinate);
+            if (mGameLoop.buildMilitaryUnit(v)) {
+                buildItem(1, "soldier", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.settlement) {
-            buildItem(2, "settlement", coordinate);
+            if (mGameLoop.buildSettlement(v)) {
+                buildItem(2, "settlement", coordinate);
+            }
         }
         else if (action.getItemId() == R.id.city) {
-            //remove settlement at coordinate
-            buildItem(3, "city", coordinate);
+            if (mGameLoop.buildCity(v)) {
+                removeSettlement(coordinate);
+                buildItem(3, "city", coordinate);
+            }
         }
-        else {
-            //TODO: Implement the move soldier method
-            //move soldier
+        else if (action.getItemId() == R.id.repairsettlement) {
+            //repair settlement
+        }
+        else if (action.getItemId() == R.id.repaircity) {
+            //repaircity
+        }
+        else if (action.getItemId() == R.id.move) {
+            setMoveSoldierState(coordinate);
+        }
+        else if (action.getItemId() == R.id.attack) {
+            mBoardButtonsFragment.setMilitaryNumberPicker(coordinate, v);
         }
     }
 
@@ -104,6 +133,8 @@ public class BoardObjectManager {
         item.setId((int)System.currentTimeMillis());
         item.setImageResource(mGameBoardActivity.getResources().getIdentifier(name, "drawable", mGameBoardActivity.getPackageName()));
         item.setRotation(coordinate.getRotation());
+
+        item.setColorFilter(mGameLoop.getCurrentGameState().getCurrentPlayer().getColor());
 
         //places the image on the screen
         placeImage((int) coordinate.getX(), (int) coordinate.getY(), item);
@@ -128,22 +159,181 @@ public class BoardObjectManager {
         normalizeLevels();
     }
 
+    //prepare a soldier to be moved
+    public void setMoveSoldierState(Coordinate coordinate) {
+        startVertex = v;
+        ImageView tempSoldier;
+        float x;
+        float y;
+        for (int i = 0; i < mSoldiers.size(); i ++) {
+            tempSoldier = mSoldiers.get(i);
+            int topLeftx = (int) tempSoldier.getX();
+            int topLeftY = (int) tempSoldier.getY();
+            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mSoldierMoving = tempSoldier;
+                return;
+            }
+        }
+    }
+
+    public void moveSoldier(Coordinate c) {
+        checkCornerLocations(c);
+        if (mAdjacentHexes.size() == 1) {
+            assignVertexFromIndex();
+        }
+        else {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+        }
+        if (!mGameLoop.moveSoldier(startVertex, v)) {
+            Log.d(TAG, "Soldier could not be moved");
+            mSoldierMoving = null;
+            return;
+        }
+        //should only translate if it could move
+        translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
+        mSoldierMoving = null;
+    }
+
+    public void setNumberAttacking(Coordinate coordinate, int num) {
+        startVertex = v;
+        ImageView tempSoldier;
+        for (int i = 0; i < mSoldiers.size(); i ++) {
+            tempSoldier = mSoldiers.get(i);
+            int topLeftx = (int) tempSoldier.getX();
+            int topLeftY = (int) tempSoldier.getY();
+            int bottomRightx = topLeftx + tempSoldier.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSoldier.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mSoldiersAttacking.add(tempSoldier);
+                if (mSoldiersAttacking.size() >= num) {
+                    return;
+                }
+            }
+        }
+    }
+
+    public void attack(Coordinate c) {
+        int numAttacking = mSoldiersAttacking.size(); //number of soldiers attacking
+        //get the vertex that the military is attacking
+        checkCornerLocations(c);
+        if (mAdjacentHexes.size() == 1) {
+            assignVertexFromIndex();
+        }
+        else {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+        }
+        //attacking military unit
+        MilitaryUnit militaryFromBeginning = startVertex.getImmutable().getMilitary();
+        Player attacking = militaryFromBeginning.getPlayer();
+
+        //defending military unit and building
+        Building buildingToBeginning = v.getBuilding();
+        MilitaryUnit militaryToBeginning = v.getImmutable().getMilitary();
+        Player defending = militaryToBeginning.getPlayer();
+
+        //get all the views at the vertex moving to, military and settlements or cities.
+        /*
+        if (!mGameLoop.attackWithSoldier(startVertex, v, numAttacking)) {
+            mSoldiersAttacking.removeAll(mSoldiersAttacking);
+            return;
+        }*/
+
+        Building buildingToEnd = v.getBuilding();
+        MilitaryUnit militaryToEnd = v.getImmutable().getMilitary();
+
+        if (buildingToEnd == null) {
+            Log.d(TAG, "The building on the to vertex is null, movement will be determined by soldiers");
+            if (militaryToEnd == null) {
+                Log.d(TAG, "Everybody died, move the attacking soldiers their, then delete them.");
+            }
+            if (militaryToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "Attack Successful, move attacking army soldiers");
+                //attack was successful, move all players there, then remove the ones that died
+            }
+            else {
+                Log.d(TAG, "Attack was not successful, move players there and back");
+                //attack was not successful, move players there, then delete any who died, and move them back if any remain
+            }
+
+            if (buildingToBeginning != null) {
+                Log.d(TAG, "A building was destroyed in the attack, remove it from the board");
+                //remove building from board
+            }
+        }
+        else {
+            Log.d(TAG, "Their is a building on the to vertex, movement will occur if the building's owner is the attacking player");
+            if (buildingToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "attack was successful, The player destroyed a city, and now owns that settlement");
+                //should remove the city and add a settlement with the current color
+            }
+        }
+
+        //attack with soldiers
+        //if attack was successful, move all the soldiers to the new location;
+        for (ImageView soldier : mSoldiersAttacking) {
+            translateImage((int)c.getX(), (int)c.getY(), soldier);
+        }
+        mSoldiersAttacking.removeAll(mSoldiersAttacking);
+        startVertex = null;
+        v = null;
+    }
+
+    public void removeSettlement(Coordinate coordinate) {
+        ImageView tempSettlement;
+        float x;
+        float y;
+        for (int i = 0; i < mSettlements.size(); i ++) {
+            tempSettlement = mSettlements.get(i);
+            int topLeftx = (int) tempSettlement.getX();
+            int topLeftY = (int) tempSettlement.getY();
+            int bottomRightx = topLeftx + tempSettlement.getMeasuredWidth();
+            int bottomRighty = topLeftY + tempSettlement.getMeasuredHeight();
+            if (coordinate.getX() >= topLeftx && coordinate.getX() <= bottomRightx && coordinate.getY() >= topLeftY && coordinate.getY() <= bottomRighty) {
+                mBoardLayout.removeView(tempSettlement);
+                mSettlements.remove(i);
+                return;
+            }
+        }
+    }
+
     //Creates the appropriate menu for the screen based on the tap event
     //This will call the popup menu in the BoardButtons class
     public void findMenu(MotionEvent event) {
+        Coordinate c = new Coordinate(event.getX(), event.getY());
+        Log.d(TAG, "Checking if solider is null");
+        if (mSoldierMoving != null) {
+            Log.d(TAG, "Soldier is not null");
+            moveSoldier(c);
+            return;
+        }
+        if (mSoldiersAttacking.size() > 0) {
+            attack(c);
+            return;
+        }
 
         //scan through hex corners to see if tap location matches a corner
-        Coordinate c = new Coordinate(event.getX(), event.getY());
-        Vertex v = null;
-        Edge e = null;
-        if (checkCornerLocations(c, v)) {
-            //if this is true, then the coordinate is reassigned to the exact vertex location, and v is assigned to the vertex the object is being placed
-            //we are now calling the show popup menu in board buttons fragment
-            mBoardButtonsFragment.showPopUp(c, v);
+        v = null;
+        e = null;
+        if (checkCornerLocations(c)) {
+            if (mAdjacentHexes.size() == 1) {
+                assignVertexFromIndex();
+            }
+            else {
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            }
+            // popup menu in board buttons fragment
+            mBoardButtonsFragment.showActionsMenu(c, v);
         }
-        else if (checkEdgeLocations(c, e)) {
-            //need to apply right rotation at some point...
-            mBoardButtonsFragment.showPopUp(c, e);
+        else if (checkEdgeLocations(c)) {
+            if (mAdjacentHexes.size() == 1) {
+                assignEdgeFromIndex();
+            }
+            else {
+                e = mBoardBacklog.getEdge(mAdjacentHexes, 0);
+            }
+            mBoardButtonsFragment.showActionsMenu(c, e);
         }
     }
 
@@ -157,103 +347,233 @@ public class BoardObjectManager {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         //center object on location with margins
-        lp.leftMargin = x-(image.getWidth()/2) - image.getDrawable().getIntrinsicWidth()/2;
-        lp.topMargin = y-(image.getHeight()/2) - image.getDrawable().getIntrinsicHeight()/2;
+        lp.leftMargin = x-image.getDrawable().getIntrinsicWidth()/2;
+        lp.topMargin = y-image.getDrawable().getIntrinsicHeight()/2;
 
         mBoardLayout.addView(image, lp);
     }
 
+    public void translateImage(final int x, final int y, final ImageView image) {
+        int newX= x-image.getDrawable().getIntrinsicWidth()/2;
+        int newY = y-image.getDrawable().getIntrinsicHeight()/2;
+        int oldX = image.getLeft();
+        int oldY = image.getTop();
 
-    /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
-     * also checks to see if a location is available for an item to be placed.
-     */
-    public boolean checkEdgeLocations(Coordinate coordinate, Edge e) {
-        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i = 0; i < mBoardBacklog.hexes.size(); i++) {
-            Hex temp = mBoardBacklog.hexes.get(i);
+        Animation translation = new TranslateAnimation(0, newX-oldX, 0, newY - oldY);
+        translation.setDuration(1000);
+        translation.setFillAfter(true);
+        translation.setFillEnabled(true);
+        translation.setFillBefore(false);
+        translation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Log.d(TAG, "Animation Started");
+            }
 
-            //grabbing the tile
-            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i + 1); // i+1 because background image is at i = 0;
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Log.d(TAG, "Animation Ended");
+                mBoardLayout.removeView(image);
+                placeImage(x, y, image);
+                Log.d(TAG, "Image Swapped");
+            }
 
-            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftEdge(coordinate, mTile)) {
-                //assign vertex v to index 0 of the hex temp's list
-                return true;
-            }
-            if (addTopRightEdge(coordinate, mTile)) {
-                //assign vertex v to index 1 of the hex temp's list
-                return true;
-            }
-            if (addTopEdge(coordinate, mTile)) {
-                //assign vertex v to index 2 of the hex temp's list
-                return true;
-            }
-            if (addBottomLeftEdge(coordinate, mTile)) {
-                //assign vertex v to index 3 of the hex temp's list
-                return true;
-            }
-            if (addBottomRightEdge(coordinate, mTile)) {
-                //assign vertex v to index 4 of the hex temp's list
-                return true;
-            }
-            if (addBottomEdge(coordinate, mTile)) {
-                //assign vertex v to index 5 of the hex temp's list
-                return true;
-            }
-        }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
-        //object can't be placed, make toast
-        mManagingFragment.createToast("Select the corner or edge of a tile for available actions", false);
-        return false;
+            }
+        });
+        image.setAnimation(translation);
+        translation.startNow();
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) image.getLayoutParams();
+        mBoardLayout.removeView(image);
+        mBoardLayout.addView(image, lp);
     }
 
     /**Iterate through Hexes, and hex vertices, checking vertex locations, and seeing if tap location is a match
      * if it is, then it return the vertex where the location is a match, the coordinate of the vertex, and true;
      */
-    public boolean checkCornerLocations(Coordinate coordinate, Vertex v) {
+    public boolean checkCornerLocations(Coordinate coordinate) {
+        mAdjacentHexes.removeAll(mAdjacentHexes);
+        vertexIndexAdded = -1;
+        hexIndexAdded = -1;
+
         //adjust the given coordinate for zoom/pan
         coordinate.mapZoomCoordinates(mBoardLayout);
 
         //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
-        for (int i =0; i < mBoardBacklog.hexes.size(); i++) {
-            Hex temp = mBoardBacklog.hexes.get(i);
+        for (int i =0; i < mBoardBacklog.getHexesSize(); i++) {
+            Hex tempHex = mBoardBacklog.getHex(i);
 
             //grabbing the tile
             ImageView mTile = (ImageView) mBoardLayout.getChildAt(i+1); // i+1 because background image is at i = 0;
 
             //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
-            if (addTopLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 0 of the hex temp's list
-                return true;
-            }
             if (addTopRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 1 of the hex temp's list
-                return true;
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 0;
+                hexIndexAdded = i;
+                continue;
             }
-            if (addTopRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 2 of the hex temp's list
-                return true;
+            else if (addMidRightCorner(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 1;
+                hexIndexAdded = i;
+                continue;
             }
-            if (addMidRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 3 of the hex temp's list
-                return true;
+            else if (addBottomRightCorner(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 2;
+                hexIndexAdded = i;
+                continue;
             }
-            if (addBottomRightCorner(coordinate, mTile)) {
-                //assign vertex v to index 4 of the hex temp's list
-                return true;
+            else if (addBottomLeftCorner(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 3;
+                hexIndexAdded = i;
+                continue;
             }
-            if (addBottomLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 5 of the hex temp's list
-                return true;
+            else if (addMidLeftCorner(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 4;
+                hexIndexAdded = i;
+                continue;
             }
-            if (addMidLeftCorner(coordinate, mTile)) {
-                //assign vertex v to index 6 of the hex temp's list
-                return true;
+            else if (addTopLeftCorner(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                vertexIndexAdded = 5;
+                hexIndexAdded = i;
             }
         }
 
-        //Now corner location found for menu
+        if (mAdjacentHexes.size()!= 0) {
+            return true;
+        }
         return false;
+    }
+
+    /**Iterate through Hexes, and hex edges, checking edge locations, and seeing if tap location is a match
+     * also checks to see if a location is available for an item to be placed.
+     */
+    public boolean checkEdgeLocations(Coordinate coordinate) {
+        mAdjacentHexes.removeAll(mAdjacentHexes);
+        edgeIndexAdded = -1;
+        hexIndexAdded = -1;
+
+        //for all of the hexes, check to see if the location tapped is equal to the location of any of their corners
+        for (int i = 0; i < mBoardBacklog.getHexesSize(); i++) {
+            Hex tempHex = mBoardBacklog.getHex(i);
+
+            //grabbing the tile
+            ImageView mTile = (ImageView) mBoardLayout.getChildAt(i + 1); // i+1 because background image is at i = 0;
+
+            //tries adding to each of the corners, if it is a valid location, returns true, otherwise checks the rest of the corners and continues
+            if (addTopRightEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                hexIndexAdded = i;
+                edgeIndexAdded = 0;
+                continue;
+            }
+            if (addBottomRightEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 1;
+                hexIndexAdded = i;
+                continue;
+            }
+            if (addBottomEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 2;
+                hexIndexAdded = i;
+                continue;
+            }
+            if (addBottomLeftEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 3;
+                hexIndexAdded = i;
+                continue;
+            }
+            if (addTopLeftEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 4;
+                hexIndexAdded = i;
+                continue;
+            }
+            if (addTopEdge(coordinate, mTile)) {
+                mAdjacentHexes.add(tempHex);
+                edgeIndexAdded = 5;
+                hexIndexAdded = i;
+            }
+        }
+
+        if (mAdjacentHexes.size() > 0) {
+            return true;
+        }
+        //object can't be placed, make toast
+        mManagingFragment.createToast("Select the corner or edge of a tile for available actions", false);
+        return false;
+    }
+
+    public void assignVertexFromIndex() {
+        if (hexIndexAdded % 2 == 0) {
+            v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+            return;
+        }
+        if (hexIndexAdded == 7) {
+            if (vertexIndexAdded == 0) {
+                v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+                return;
+            }
+        }
+        //runs through each of the hex indices that could have a floating vertex. if the vertexadded is equal to the counter, than v is the first vertex
+        int j = 0;
+        for (int i = 9; i <=17; i+=2) {
+            if (hexIndexAdded == i) {
+                if (vertexIndexAdded == j) {
+                    v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
+                    return;
+                }
+            }
+            j++;
+        }
+        v = mBoardBacklog.getVertex(mAdjacentHexes, 1);
+    }
+
+    public void assignEdgeFromIndex() {
+        int edgeParameter = 2;
+        if (hexIndexAdded == 7) {
+            if (edgeIndexAdded == 0) {
+                edgeParameter = 0;
+            }
+            else if (edgeIndexAdded == 4) {
+                edgeParameter = 1;
+            }
+        }
+        else if (hexIndexAdded == 8) {
+            if (edgeIndexAdded == 0) {
+                edgeParameter = 0;
+            }
+            else {
+                edgeParameter = 1;
+            }
+        }
+        else {
+            int j = 0;
+            for (int i = 9; i <= 18; i++) {
+                if (hexIndexAdded == i) {
+                    if (edgeIndexAdded == j) {
+                        edgeParameter = 0;
+                        break;
+                    } else if (edgeIndexAdded == j + 1) {
+                        edgeParameter = 1;
+                        break;
+                    }
+                }
+                if (i >= 11 && i % 2 != 0) {
+                    j++;
+                }
+            }
+        }
+        e = mBoardBacklog.getEdge(mAdjacentHexes, edgeParameter);
     }
 
     /**
@@ -274,7 +594,6 @@ public class BoardObjectManager {
             images.get(i).bringToFront();
         }
     }
-
 
     /**Places a specified object at the top left corner of a specified tile if the tap location
      * is close enough to the corner of the object

@@ -59,6 +59,22 @@ public class BoardScreenMainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // TODO pass this data into the board initialization when the Board class
+        // is modified properly
+        Bundle bundle = getArguments();
+        int numPlayersChosen = bundle.getInt(GameSetupScreen.NUM_PLAYERS_CHOSEN);
+        String[] playerTypes = bundle.getStringArray(GameSetupScreen.PLAYER_TYPES);
+        int numVictoryPoints = bundle.getInt(GameSetupScreen.NUM_VICTORY_POINTS);
+        boolean variableBoard = bundle.getBoolean(GameSetupScreen.VARIABLE_BOARD);
+        boolean attacksOn = bundle.getBoolean(GameSetupScreen.ATTACKS);
+        int[] colors = bundle.getIntArray(GameSetupScreen.COLORS);
+
+        // ****************TEST******************
+        Log.d("TAG", "number of players"+numPlayersChosen);
+
+        //Initializing non view elements
+        mBoardData = new Board(new String[]{"Player1", "Player2", "Player3", "Player4"});
         Log.d("TAG", "onCreate completed");
     }
 
@@ -106,7 +122,6 @@ public class BoardScreenMainFragment extends Fragment {
             public boolean onSingleTapConfirmed(MotionEvent e) {
                 Log.d(TAG, "Single Tap Detected");
                 mBoardObjectManager.findMenu(e);
-                Log.d(TAG, "Item Built");
                 return super.onSingleTapConfirmed(e);
             }
 
@@ -147,9 +162,9 @@ public class BoardScreenMainFragment extends Fragment {
 
     //loop through indices, check which resource in board, color appropriately using code similar to below
     void addResourcesToBoard() {
-        for (int i = 0; i < mBoardData.hexes.size(); i++) {
+        for (int i = 0; i < mBoardData.getHexesSize(); i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i+1);
-            switch(mBoardData.hexes.get(i).type) {
+            switch(mBoardData.getHex(i).type) {
                 case LUMBER:
                     iv.setImageResource(getResources().getIdentifier("forestresource", "drawable", mActivity.getPackageName()));
                     break;
@@ -180,7 +195,7 @@ public class BoardScreenMainFragment extends Fragment {
      *
      */
     void addNumbersToBoard() {
-        int l = mBoardData.hexes.size();
+        int l = mBoardData.getHexesSize();
         for (int i = 0; i < l; i++) {
             ImageView iv = (ImageView)mHexParent.getChildAt(i+1);
             TextView tv = new TextView(mActivity);
@@ -198,7 +213,7 @@ public class BoardScreenMainFragment extends Fragment {
 
             placeImage(x,y,textBackground);
 
-            tv.setText(Integer.toString(mBoardData.hexes.get(i).roll));
+            tv.setText(Integer.toString(mBoardData.getHex(i).getRoll()));
             tv.setTextSize(20);
             tv.setTypeface(null, Typeface.BOLD);
             tv.setTextColor(getResources().getColor(R.color.blue_background));
@@ -260,5 +275,11 @@ public class BoardScreenMainFragment extends Fragment {
     BoardObjectManager getBoardObjectManager() {
         return mBoardObjectManager;
     }
+
+    public Board getBoardData() {
+        return mBoardData;
+    }
+
+
 }
 
