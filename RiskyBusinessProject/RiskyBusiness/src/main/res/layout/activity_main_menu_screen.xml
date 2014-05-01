@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/start_new"
         android:src="@drawable/startnew"
+
         android:padding="8dp"/>
 
     <ImageView

@@ -26,6 +26,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/start_new"
         android:src="@drawable/startnew"
         android:padding="8dp"/>
@@ -33,6 +34,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/load_saved"
         android:src="@drawable/loadsaved"
         android:padding="8dp"/>
@@ -40,6 +42,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/high_scores"
         android:src="@drawable/gamerules"
         android:padding="8dp"/>
@@ -47,6 +50,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/options"
         android:src="@drawable/options"
         android:padding="8dp"/>
@@ -54,6 +58,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/exit"
         android:src="@drawable/exit"
         android:padding="8dp"/>
