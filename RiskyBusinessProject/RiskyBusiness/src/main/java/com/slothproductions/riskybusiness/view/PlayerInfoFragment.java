@@ -64,6 +64,7 @@ public class PlayerInfoFragment extends Fragment {
         initializeNumberResources(v); //total number available resources for each player
         initializePlayerSquares(v);
         initializePlayerInfo(v);
+        initializePlayerName(v);
         initializeDice(v);
 
         colorBoxes();
@@ -175,11 +176,27 @@ public class PlayerInfoFragment extends Fragment {
     }
 
     public void initializePlayerName(View v){
-        ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).toString());
-        ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).toString());
-        ((TextView) v.findViewById(R.id.player_3_name)).setText(mPlayersArrayList.get(2).toString());
-        ((TextView) v.findViewById(R.id.player_4_name)).setText(mPlayersArrayList.get(3).toString());
-    }
+        switch(mPlayersArrayList.size()) {
+            case 1:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                break;
+            case 2:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                break;
+            case 3:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                ((TextView) v.findViewById(R.id.player_3_name)).setText(mPlayersArrayList.get(2).getName());
+                break;
+            case 4:
+                ((TextView) v.findViewById(R.id.player_1_name)).setText(mPlayersArrayList.get(0).getName());
+                ((TextView) v.findViewById(R.id.player_2_name)).setText(mPlayersArrayList.get(1).getName());
+                ((TextView) v.findViewById(R.id.player_3_name)).setText(mPlayersArrayList.get(2).getName());
+                ((TextView) v.findViewById(R.id.player_4_name)).setText(mPlayersArrayList.get(3).getName());
+        }
+        }
+
 
     public void initializeDice(View v) {
         mDice = new DiceRoll();
