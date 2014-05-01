@@ -6,9 +6,8 @@ public class Hex implements java.io.Serializable {
     private static final long serialVersionUID = 286476240L;
 	final public Resource type;
 	final public int index;
-    //temporarily made public for access
-	public int roll;
 
+	protected int roll;
 	protected List<Vertex> vertices;
 	protected List<Edge> edges;
 	protected List<Hex> adjacent;
@@ -54,7 +53,7 @@ public class Hex implements java.io.Serializable {
         }
     }
 
-    final protected int getRoll() {
+    final public int getRoll() {
         return roll;
     }
 
@@ -71,6 +70,14 @@ public class Hex implements java.io.Serializable {
         vertices = Collections.unmodifiableList(vertices);
         edges = Collections.unmodifiableList(edges);
         adjacent = Collections.unmodifiableList(adjacent);
+    }
+
+    public Vertex getVertex(int index) {
+        return vertices.get(index);
+    }
+
+    public Edge getEdge(int index) {
+        return edges.get(index);
     }
 }
 

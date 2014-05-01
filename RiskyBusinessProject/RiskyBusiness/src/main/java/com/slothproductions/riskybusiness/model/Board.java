@@ -18,6 +18,7 @@ import java.util.*;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+// TODO can you provide a getPlayers method so I can have access to the list of players? Thanks!
 public class Board implements java.io.Serializable {
     private static final long serialVersionUID = -915315565L;
 
@@ -26,7 +27,7 @@ public class Board implements java.io.Serializable {
     final private Random prng;
 
     //hexes was changed to public because i need to access it somehow
-    public List<Hex> hexes;
+    protected List<Hex> hexes;
     protected List<Vertex> vertices;
     protected List<MilitaryUnit> militaryUnits;
     protected List<Edge> edges;
@@ -37,19 +38,25 @@ public class Board implements java.io.Serializable {
         return ring * (ring + 1) * 3;
     }
 
-    public Board (String [] playerNames) {
+    public Board (String[] playerNames) {
+        Log.d(TAG, "Generating board");
         prng = new SecureRandom();
         vertices = new ArrayList<Vertex>();
         edges = new ArrayList<Edge>();
         militaryUnits = new ArrayList<MilitaryUnit>();
         players = new ArrayList<Player>();
         hexes = new ArrayList<Hex>();
+        diceRolls = new ArrayList<ArrayList<Hex>>();
 
         // This is hard coded for now. It is the number of concentric rings of
         // hexes that make up the board.
         int radius = 3;
 
         Resource[] resources = generateResources(radius);
+        int goldIndex = 0;
+        for (int counter = 0; counter < resources.length; counter++)
+            if (resources[counter] == Resource.GOLD)
+                goldIndex = counter;
 
         // Initializing values for the innermost ring with a single hex. This
         // is done manually as there is no pattern for this one.
@@ -87,7 +94,7 @@ public class Board implements java.io.Serializable {
         int elements = hexes.size();
 
         Log.d(TAG, "Generating Rolls");
-        int[] rolls = generateRolls();
+        int[] rolls = generateRolls(goldIndex);
         Log.d(TAG, "Finished Generating Rolls");
         for (int counter = 0; counter < elements; counter++)
             hexes.get(counter).setRoll(rolls[counter]);
@@ -105,6 +112,7 @@ public class Board implements java.io.Serializable {
                 }
             }
         }
+
         for (int i1 = 0; i1 < elements; i1++) {
             for (int i2 = 0; i2 < i1; i2++) {
                 Hex h1 = hexes.get(i1);
@@ -133,7 +141,20 @@ public class Board implements java.io.Serializable {
                 vertices.add(new Vertex(vertices.size(), h1, null, null));
             }
         }
+        for (Vertex v1 : vertices)
+            for (Vertex v2 : vertices)
+                if (v1.index < v2.index && v1.isAdjacent(v2)) {
+                    v1.addAdjacent(v2);
+                    v2.addAdjacent(v1);
+                }
         Log.d(TAG, "Finished Generating Vertices");
+        for (Vertex v : vertices) {
+            Log.d(TAG, "Vertex " + v.index);
+            for (Hex h : v.hexagons)
+                Log.d(TAG, "Adjacent to hex " + h.index);
+            for (Vertex vertex : v.adjacent)
+                Log.d(TAG, "Adjacent to vertex " + vertex.index);
+        }
 
         Log.d(TAG, "Generating Edges");
         for (int i1 = 0; i1 < vertices.size(); i1++) {
@@ -146,12 +167,24 @@ public class Board implements java.io.Serializable {
                         if (v2.hexagons.contains(h))
                             shared.add(h);
                     }
-                    edges.add(new Edge(edges.size(), shared.get(0), shared.get(1), v1, v2));
+                    if (shared.size() == 2)
+                        edges.add(new Edge(edges.size(), shared.get(0), shared.get(1), v1, v2));
+                    else
+                        edges.add(new Edge(edges.size(), shared.get(0), null, v1, v2));
                 }
             }
         }
 
         Log.d(TAG, "Finished Generating Edges");
+        for (Edge e : edges) {
+            Log.d(TAG, "Edge " + e.index);
+            for (Hex h : e.hexagons)
+                if (h != null)
+                    Log.d(TAG, "Adjacent to hex " + h.index);
+            for (Vertex v : e.vertices)
+                if (v != null)
+                    Log.d(TAG, "Adjacent to vertex " + v.index);
+        }
 
         Log.d(TAG, "Locking Board Elements");
 
@@ -171,9 +204,18 @@ public class Board implements java.io.Serializable {
 
         Log.d(TAG, "Generating Players");
         for(String name: playerNames) {
+            Log.d(TAG, "This player is: " + name);
             players.add(new Player(this, name));
         }
         Log.d(TAG, "Finished Generating Players");
+
+        Log.d(TAG, "Constructing diceRolls");
+        for (int counter = 0; counter <= 12; counter++)
+            diceRolls.add(new ArrayList<Hex>());
+        for (Hex h : hexes)
+            diceRolls.get(h.roll).add(h);
+        Log.d(TAG, "Finished Generating diceRolls");
+
     }
 
     private void shuffleArray(Object[] array) {
@@ -220,58 +262,32 @@ public class Board implements java.io.Serializable {
         return resources;
     }
 
-    private int[] generateRolls() {
-        int[] rollsArray = {
-                8, 9, 10, 2, 5, 3, 9, 10, 12, 11, 8, 4, 11, 3, 6, 4, 6, 5
-        };
-
-        ArrayList<Integer> rolls = new ArrayList<Integer>();
-        for (int i : rollsArray)
-            rolls.add(i);
-        Collections.shuffle(rolls);
-        rolls.add(0, 7);
-
-        for (int i = 0; i <19; i ++) {
-            if (hexes.get(i).type == Resource.GOLD){
-                int temp = rolls.get(i);
-                rolls.set(0, temp);
-                rolls.set(i, 7);
-                Log.d(TAG, "Gold Roll Value Added");
-            }
-        }
-
-        int[] rollsArr = new int[19];
-
-        //move shuffled rolls arraylist to a rollsArr[] int for returning
-        for (int i = 0; i < 19; i++) {
-            rollsArr[i] = rolls.get(i);
-        }
-
-        return rollsArr;
-
-        /* the code that doesnt work
+    private int[] generateRolls(int goldIndex) {
         int[] rollsArray = {
                 2, 3, 3, 4, 4, 5, 5, 9, 9, 10, 10, 11, 11, 12
         };
 
         int elements = hexes.size();
+        Log.d(TAG, "Generating " + elements + " die rolls.");
 
         HashSet<Integer> invalid = new HashSet<Integer>();
+        invalid.add(goldIndex);
         ArrayList<Integer> sixOrEight = new ArrayList<Integer>();
         for (int counter = 0; counter < 4; counter++) {
             int index = prng.nextInt(elements);
             while (invalid.contains(index)) {
                 index = prng.nextInt(elements);
             }
-            invalid.add(index);
+            sixOrEight.add(index);
             for (Hex h : hexes.get(index).adjacent)
                 invalid.add(h.index);
+            invalid.add(index);
         }
 
-        int goldIndex = 0;
-        for (Hex h : hexes)
-            if (h.type == Resource.GOLD)
-                goldIndex = h.index;
+        Log.d(TAG, "Locations of six or 8:");
+        for (int i : sixOrEight)
+            Log.d(TAG, "Hex " + i + " is a 6 or 8");
+        Log.d(TAG, "Gold is located at hex " + goldIndex);
 
 
         int ret[] = new int[elements];
@@ -289,7 +305,114 @@ public class Board implements java.io.Serializable {
         }
 
         return ret;
-        */
+    }
+
+    public void beginTurn(int roll) {
+        for (Player p : players) {
+            for (MilitaryUnit mu : p.getMilitaryUnit())
+                mu.reset();
+            for (Building b : p.getBuildings())
+                b.reset();
+        }
+        getResources(roll);
+    }
+
+    public void getResources(int roll) {
+        Log.d(TAG, "Rolled " + roll);
+        ArrayList<Hex> rolled = diceRolls.get(roll);
+        HashMap<Player, ArrayList<Resource>> gained = new HashMap<Player, ArrayList<Resource>>();
+        for (Player p : players)
+            gained.put(p, new ArrayList<Resource>());
+        for (Hex h : rolled) {
+            for (Vertex v : h.vertices) {
+                if (v.building.owner == null)
+                    continue;
+                if (v.building.type == BuildingType.CITY) {
+                    Log.d(TAG, "Resource with cities");
+                    gained.get(v.building.owner).add(h.type);
+                    gained.get(v.building.owner).add(h.type);
+                } else if (v.building.type == BuildingType.SETTLEMENT) {
+                    gained.get(v.building.owner).add(h.type);
+                }
+            }
+        }
+        for (Player p : players)
+            p.addResources(gained.get(p));
+    }
+
+    public Vertex getVertex(ArrayList<Hex> hexes, int i) {
+        Log.d(TAG, "Getting vertex.");
+        for (Hex hex : hexes)
+            Log.d(TAG, "Given hex " + hex.index);
+        Log.d(TAG, "Given i = " + i);
+        if (hexes.size() != 1) {
+            List<Vertex> vertices = hexes.get(0).vertices;
+            for (Vertex vertex : vertices) {
+                boolean isGood = vertex.hexagons.size() == hexes.size();
+                for (Hex hex : hexes)
+                    if (!vertex.hexagons.contains(hex))
+                        isGood = false;
+                if (isGood) {
+                    Log.d(TAG, "Got vertex " + vertex.index);
+                    return vertex;
+                }
+            }
+        } else {
+            List<Vertex> vertices = hexes.get(0).vertices;
+            ArrayList<Vertex> good = new ArrayList<Vertex>();
+            for (Vertex vertex : vertices)
+                if (vertex.hexagons.size() == 1)
+                    good.add(vertex);
+            Log.d(TAG, "Got vertex " + good.get(i).index);
+            return good.get(i);
+        }
+        throw new InvalidParameterException("Bad hex list for getVertex.");
+    }
+
+    public Edge getEdge(ArrayList<Hex> hexes, int i) {
+        Log.d(TAG, "Getting edge.");
+        for (Hex hex : hexes)
+            Log.d(TAG, "Given hex " + hex.index);
+        Log.d(TAG, "Given i = " + i);
+        if (hexes.size() > 1) {
+            List<Edge> edges = hexes.get(0).edges;
+            for (Edge edge : edges)
+                if (edge.hexagons.contains(hexes.get(1))) {
+                    Log.d(TAG, "Got edge " + edge.index);
+                    return edge;
+                }
+        } else {
+            List<Edge> edges = hexes.get(0).edges;
+            ArrayList<Edge> good = new ArrayList<Edge>();
+            Edge ret;
+            for (Edge edge : edges)
+                if (edge.hexagons.size() == 1)
+                    good.add(edge);
+            if (hexes.get(0).index == 9) {
+                Log.d(TAG, "Extra case 1 - hex 9.");
+                ret = good.get(2 - i);
+            } else if (hexes.get(0).index == 7) {
+                Log.d(TAG, "Extra case 2 - hex 7.");
+                ret = good.get(i);
+            } else if (hexes.get(0).index == 8) {
+                Log.d(TAG, "Extra case 3 - hex 8.");
+                ret = good.get(1 - i);
+            } else if (good.size() == 2) {
+                Log.d(TAG, "Normal case 1 - 2 edges.");
+                ret = good.get(i);
+            } else {
+                Log.d(TAG, "Normal case 2 - 3 edges.");
+                if (i == 0)
+                    ret = good.get(0);
+                else if (i == 1)
+                    ret = good.get(2);
+                else
+                    ret = good.get(1);
+            }
+            Log.d(TAG, "Got edge " + ret.index);
+            return ret;
+        }
+        throw new InvalidParameterException("Bad hex list for getEdge.");
     }
 
     protected GameAction.ActionWrapper effect(Player player, GameAction action, Map<String, Object> arguments) {
@@ -316,10 +439,13 @@ public class Board implements java.io.Serializable {
                         if (!(provided instanceof Integer) || (Integer)provided < 0) invalid = true;
                         break;
                     case EDGE:
-                        if (!(provided instanceof Edge.ImmutableEdge)) invalid = true;
+                        if (!(provided instanceof Edge)) invalid = true;
                         break;
                     case VERTEX:
-                        if (!(provided instanceof Vertex.ImmutableVertex)) invalid = true;
+                        if (!(provided instanceof Vertex)) invalid = true;
+                        break;
+                    case TRADE:
+                        if (!(provided instanceof Trade)) invalid = true;
                         break;
                 }
                 if (invalid) {
@@ -327,13 +453,199 @@ public class Board implements java.io.Serializable {
                 }
             }
         }
-        
-        
 
-        /* TODO: Effect the game action */
-        /* 1. Check for player resources, if not sufficient throw an exception
-         * 2. Switch on action
-         * */
+        if (!player.hasResources(action.resourcesNeeded))
+            throw new InvalidParameterException();
+        player.takeResources(action.resourcesNeeded);
+
+        switch(action) {
+            case BUILD_SETTLEMENT: {
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.SETTLEMENT, target, player);
+                player.points++;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
+            } case REPAIR_SETTLEMENT: {
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
+                target.building.setHealth(Math.max(5, target.building.getHealth() + 2));
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
+            } case BUILD_CITY: {
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
+                target.building = new Building(BuildingType.CITY, target, player);
+                player.points++;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
+            } case REPAIR_CITY: {
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
+                target.building.setHealth(Math.max(10, target.building.getHealth() + 3));
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
+            } case BUILD_ROAD: {
+                Edge e = edges.get(((Edge) arguments.get("edge")).getIndex());
+                e.owner = player;
+                e.road = true;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.ROAD, e.immutable);
+            } case BUILD_MILITARY_UNIT: {
+                Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
+                if (target.military != null) {
+                    target.military.haveNotMoved++;
+                    target.military.health++;
+                } else {
+                    target.military = new MilitaryUnit(player, target);
+                }
+                target.building.numSoldiersBuilt++;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
+            } case BANK_TRADE: {
+                Integer amount = (Integer) arguments.get("sell_amount");
+                Resource sell = (Resource) arguments.get("sell_resource_type");
+                Resource buy = (Resource) arguments.get("buy_resource_type");
+                EnumMap<Resource, Integer> bought = new EnumMap<Resource, Integer>(Resource.class);
+                EnumMap<Resource, Integer> sold = new EnumMap<Resource, Integer>(Resource.class);
+                sold.put(sell, amount);
+                bought.put(buy, amount / player.trades.get(sell));
+                player.takeResources(sold);
+                player.addResources(bought);
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
+            } case PRIVATE_TRADE: {
+                if (player.hasResources((Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("sell_amount"))) {
+                    Trade t = new Trade(player, (Player) arguments.get("partner"), (Integer) arguments.get("sell_amount"), (Resource) arguments.get("sell_resource_type"), (Integer) arguments.get("buy_amount"), (Resource) arguments.get("buy_resource_type"));
+                    return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, t);
+                }
+                break;
+            } case FULFILL_PRIVATE_TRADE: {
+                Trade trade = (Trade) arguments.get("trade");
+                if (trade != null && trade.isConfirmed() && trade.callee_id == player.immutable) {
+                    EnumMap<Resource, Integer> traded_away = new EnumMap<Resource, Integer>(Resource.class);
+                    EnumMap<Resource, Integer> traded_in = new EnumMap<Resource, Integer>(Resource.class);
+                    traded_away.put(trade.sell_type, trade.sell_amount);
+                    traded_in.put(trade.buy_type, trade.buy_amount);
+                    /* TODO: Switch to player id */
+                    for (Player partner : players) {
+                        if (partner.immutable == trade.partner_id) {
+                            partner.takeResources(traded_in);
+                            partner.addResources(traded_away);
+                            player.takeResources(traded_away);
+                            player.addResources(traded_in);
+                            return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, new Boolean(true));
+                        }
+                    }
+                }
+            } case MOVE_MILITARY_UNIT: {
+                Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
+                if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player))
+                    return null;
+                boolean bonus = from.military.haveBonusMoved > 0;
+                if (to.military == null) {
+                    to.military = new MilitaryUnit(player, to);
+                    to.military.haveNotMoved--;
+                } else {
+                    if (to.military.getPlayer() != player)
+                        return null;
+                    to.military.health++;
+                }
+                if (bonus) {
+                    from.military.haveBonusMoved--;
+                    to.military.haveMoved++;
+                } else {
+                    from.military.haveNotMoved--;
+                    boolean onRoad = false;
+                    for (Edge edge : from.edges)
+                        if (edge.vertices.contains(to) && edge.owner != null)
+                            onRoad = true;
+                    if (onRoad)
+                        to.military.haveBonusMoved++;
+                    else
+                        to.military.haveMoved++;
+                }
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
+            } case ATTACK: {
+                Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
+                Integer amount = (Integer) arguments.get("amount");
+                if (!to.isAdjacent(from)
+                        || ((to.getBuilding().getPlayer() == player || to.getBuilding().getPlayer() == null)
+                            && (to.military == null || to.military.getPlayer() == player)))
+                    return null;
+
+                if (to.getBuilding().getType() == BuildingType.EMPTY) {
+                    int opposing = to.military.getHealth();
+                    if (opposing > amount) {
+                        to.military.health -= amount;
+                    } else if (amount > opposing) {
+                        to.military = new MilitaryUnit(player, to);
+                        to.military.health = amount - opposing;
+                        to.military.haveMoved = to.military.health;
+                        to.military.haveBonusMoved = 0;
+                        to.military.haveNotMoved = 0;
+                    } else {
+                        to.military = null;
+                    }
+                    if (amount == from.military.getHealth()) {
+                        from.military = null;
+                    } else {
+                        from.military.health -= amount;
+                        from.military.haveNotMoved -= amount;
+                    }
+                } else {
+                    int maxGarrison = 1;
+                    if (to.getBuilding().getType() == BuildingType.CITY)
+                        maxGarrison = 2;
+                    int garrison = 0;
+                    if (to.getMilitary() != null)
+                        garrison = Math.min(to.getMilitary().getHealth() / 3, maxGarrison);
+                    int damageToBuilding = Math.max(0, amount - garrison);
+                    int damageToUnit = Math.min(amount, garrison);
+                    if (damageToUnit != 0)
+                        to.getMilitary().health -= damageToUnit;
+                    if (to.getBuilding().getHealth() - damageToBuilding > 0) {
+                        to.getBuilding().setHealth(to.getBuilding().getHealth() - damageToBuilding);
+                    } else {
+                        if (to.getBuilding().getType() == BuildingType.CITY) {
+                            to.getBuilding().type = BuildingType.SETTLEMENT;
+                            to.getBuilding().setHealth(3);
+                            if (to.getMilitary() == null) {
+                                to.getBuilding().owner.points -= 2;
+                                player.points++;
+                                to.getBuilding().owner = player;
+                                to.setMilitary(new MilitaryUnit(player, to));
+                                to.getMilitary().health = amount;
+                                to.getMilitary().haveNotMoved = 0;
+                                to.getMilitary().haveBonusMoved = 0;
+                                to.getMilitary().haveMoved = amount;
+                                from.military.haveMoved += amount;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= amount;
+                            } else {
+                                to.getBuilding().owner.points--;
+                                to.getMilitary().health -= garrison;
+                                from.military.haveMoved += amount - garrison;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= garrison;
+                            }
+                        } else {
+                            to.getBuilding().getPlayer().points -= 1;
+                            to.building = new Building(BuildingType.EMPTY, to, null);
+                            if (to.getMilitary() == null) {
+                                to.setMilitary(new MilitaryUnit(player, to));
+                                to.getMilitary().health = amount;
+                                to.getMilitary().haveNotMoved = 0;
+                                to.getMilitary().haveBonusMoved = 0;
+                                to.getMilitary().haveMoved = amount;
+                                from.military.haveMoved += amount;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= amount;
+                            } else {
+                                to.getMilitary().health -= garrison;
+                                from.military.haveMoved += amount - garrison;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= garrison;
+                            }
+                        }
+                    }
+                }
+                if (from.military.health == 0)
+                    from.military = null;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
+            }
+        }
 
         return null;
     }
@@ -390,4 +702,13 @@ public class Board implements java.io.Serializable {
         }
         return null;
     }
+
+    // TODO temporary getter methods
+    public List<Player> getPlayers() {
+        return players;
+    }
+    public Hex getHex(int index) {
+        return hexes.get(index);
+    }
+    public int getHexesSize() { return hexes.size(); }
 }

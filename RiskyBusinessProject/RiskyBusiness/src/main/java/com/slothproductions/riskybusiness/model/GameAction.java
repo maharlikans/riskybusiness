@@ -36,13 +36,25 @@ public enum GameAction {
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    UPGRADE_SETTLEMENT_TO_CITY(new EnumMap<Resource, Integer>(Resource.class){{
+    REPAIR_SETTLEMENT(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.BRICK, 1);
+        put(Resource.LUMBER, 1);
+    }}, new HashMap<String, ArgumentType>(){{
+        put("vertex", ArgumentType.VERTEX);
+    }}),
+    BUILD_CITY(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 2);
         put(Resource.GRAIN, 2);
     }}, new HashMap<String, ArgumentType>(){{
         put("vertex", ArgumentType.VERTEX);
     }}),
-    ESTABLISH_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
+    REPAIR_CITY(new EnumMap<Resource, Integer>(Resource.class){{
+        put(Resource.BRICK, 1);
+        put(Resource.ORE, 1);
+    }}, new HashMap<String, ArgumentType>(){{
+        put("vertex", ArgumentType.VERTEX);
+    }}),
+    BUILD_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class){{
         put(Resource.ORE, 1);
         put(Resource.WOOL, 1);
         put(Resource.GRAIN, 1);
@@ -51,10 +63,12 @@ public enum GameAction {
     }}),
     MOVE_MILITARY_UNIT(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("vertex_from", ArgumentType.VERTEX);
-        put("edge_across", ArgumentType.EDGE);
+        put("vertex_to", ArgumentType.VERTEX);
     }}),
     ATTACK(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
-        put("vertex", ArgumentType.VERTEX);
+        put("vertex_from", ArgumentType.VERTEX);
+        put("vertex_to", ArgumentType.VERTEX);
+        put("amount", ArgumentType.MILITARY_QUANTITY);
     }}),
     PUBLIC_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
@@ -68,6 +82,9 @@ public enum GameAction {
         put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
         put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
         put("buy_amount", ArgumentType.RESOURCE_TYPE);
+    }}),
+    FULFILL_PRIVATE_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
+        put("trade", ArgumentType.TRADE);
     }}),
     BANK_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
         put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
@@ -86,7 +103,8 @@ public enum GameAction {
         RESOURCE_QUANTITY,
         MILITARY_QUANTITY,
         EDGE,
-        VERTEX;
+        VERTEX,
+        TRADE;
     }
 
     /* Used for returning the result of an action */
@@ -95,7 +113,7 @@ public enum GameAction {
             BUILDING,
             MILITARY_UNIT,
             ROAD,
-            RESOURCE;
+            TRADE;
         }
 
         final public AssetType type;

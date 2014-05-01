@@ -45,6 +45,15 @@
     <string name="vp">VP: </string>
     <string name="num_resources">R: </string>
 
+    <!--Popup Menu Item Titles-->
+    <string name="build_road">Build Road</string>
+    <string name="build_settlement">Build Settlement</string>
+    <string name="upgrade_city">Upgrade to City</string>
+    <string name="repair_settlement">Repair Settlement</string>
+    <string name="repair_city">Repair City</string>
+    <string name="train_soldier">Train Army Unit</string>
+    <string name="move_soldier">Move Army Unit</string>
+    <string name="attack">Attack</string>
 
     <string-array name="player_names">
         <item>@string/player_1</item>
@@ -54,7 +63,6 @@
     </string-array>
 
     <string-array name="num_players_array">
-        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
@@ -75,7 +83,5 @@
         <item>12</item>
         <item>13</item>
     </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
