@@ -453,7 +453,7 @@ public class Board implements java.io.Serializable {
                         if (!(provided instanceof Vertex)) invalid = true;
                         break;
                     case TRADE:
-                        if (!(provided instanceof Trade)) invalid = true;
+                        if (!(provided instanceof EnumMap)) invalid = true;
                         break;
                 }
                 if (invalid) {
@@ -501,13 +501,8 @@ public class Board implements java.io.Serializable {
                 target.building.numSoldiersBuilt++;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BANK_TRADE: {
-                Integer amount = (Integer) arguments.get("sell_amount");
-                Resource sell = (Resource) arguments.get("sell_resource_type");
-                Resource buy = (Resource) arguments.get("buy_resource_type");
-                EnumMap<Resource, Integer> bought = new EnumMap<Resource, Integer>(Resource.class);
-                EnumMap<Resource, Integer> sold = new EnumMap<Resource, Integer>(Resource.class);
-                sold.put(sell, amount);
-                bought.put(buy, amount / player.trades.get(sell));
+                EnumMap<Resource, Integer> bought = (EnumMap<Resource, Integer>) arguments.get("bought");
+                EnumMap<Resource, Integer> sold = (EnumMap<Resource, Integer>) arguments.get("bought");
                 player.takeResources(sold);
                 player.addResources(bought);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
@@ -518,23 +513,14 @@ public class Board implements java.io.Serializable {
                 }
                 break;
             } case FULFILL_PRIVATE_TRADE: {
-                Trade trade = (Trade) arguments.get("trade");
-                if (trade != null && trade.isConfirmed() && trade.callee_id == player.immutable) {
-                    EnumMap<Resource, Integer> traded_away = new EnumMap<Resource, Integer>(Resource.class);
-                    EnumMap<Resource, Integer> traded_in = new EnumMap<Resource, Integer>(Resource.class);
-                    traded_away.put(trade.sell_type, trade.sell_amount);
-                    traded_in.put(trade.buy_type, trade.buy_amount);
-                    /* TODO: Switch to player id */
-                    for (Player partner : players) {
-                        if (partner.immutable == trade.partner_id) {
-                            partner.takeResources(traded_in);
-                            partner.addResources(traded_away);
-                            player.takeResources(traded_away);
-                            player.addResources(traded_in);
-                            return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, new Boolean(true));
-                        }
-                    }
-                }
+                Player partner = (Player) arguments.get("player");
+                EnumMap<Resource, Integer> bought = (EnumMap<Resource, Integer>) arguments.get("bought");
+                EnumMap<Resource, Integer> sold = (EnumMap<Resource, Integer>) arguments.get("bought");
+                player.takeResources(sold);
+                player.addResources(bought);
+                partner.takeResources(bought);
+                partner.addResources(sold);
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
             } case MOVE_MILITARY_UNIT: {
                 Log.d(TAG, "Moving soldier.");
                 Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
@@ -627,12 +613,8 @@ public class Board implements java.io.Serializable {
                     } else {
                         to.military = null;
                     }
-                    if (amount == from.military.getHealth()) {
-                        from.military = null;
-                    } else {
-                        from.military.health -= amount;
-                        from.military.haveNotMoved -= amount;
-                    }
+                    from.military.health -= amount;
+                    from.military.haveNotMoved -= amount;
                 } else {
                     int maxGarrison = 1;
                     if (to.getBuilding().getType() == BuildingType.CITY)
@@ -659,8 +641,7 @@ public class Board implements java.io.Serializable {
                                 to.getMilitary().haveNotMoved = 0;
                                 to.getMilitary().haveBonusMoved = 0;
                                 to.getMilitary().haveMoved = amount;
-                                from.military.haveMoved += amount;
-                                from.military.haveNotMoved -= amount;
+                                from.military.haveMoved -= amount;
                                 from.military.health -= amount;
                             } else {
                                 to.getBuilding().owner.points--;
@@ -678,8 +659,7 @@ public class Board implements java.io.Serializable {
                                 to.getMilitary().haveNotMoved = 0;
                                 to.getMilitary().haveBonusMoved = 0;
                                 to.getMilitary().haveMoved = amount;
-                                from.military.haveMoved += amount;
-                                from.military.haveNotMoved -= amount;
+                                from.military.haveMoved -= amount;
                                 from.military.health -= amount;
                             } else {
                                 to.getMilitary().health -= garrison;

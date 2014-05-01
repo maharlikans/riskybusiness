@@ -84,12 +84,13 @@ public enum GameAction {
         put("buy_amount", ArgumentType.RESOURCE_TYPE);
     }}),
     FULFILL_PRIVATE_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
-        put("trade", ArgumentType.TRADE);
+        put("player", ArgumentType.TRADE);
+        put("sold", ArgumentType.TRADE);
+        put("bought", ArgumentType.TRADE);
     }}),
     BANK_TRADE(new EnumMap<Resource, Integer>(Resource.class), new HashMap<String, ArgumentType>(){{
-        put("sell_resource_type", ArgumentType.RESOURCE_TYPE);
-        put("sell_amount", ArgumentType.RESOURCE_QUANTITY);
-        put("buy_resource_type", ArgumentType.RESOURCE_TYPE);
+        put("sold", ArgumentType.TRADE);
+        put("bought", ArgumentType.TRADE);
     }})
     ;
 
