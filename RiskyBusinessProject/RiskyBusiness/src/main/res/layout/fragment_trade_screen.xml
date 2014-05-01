@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:id="@+id/tradeback">
+    android:id="@+id/tradeback"
+    android:background="@color/blue_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
@@ -22,22 +23,62 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/bricktradeicon"
+                    android:id="@+id/bricktradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/brick_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/bricktradeicon_tradeout"
+                    android:layout_alignRight="@id/bricktradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
-                android:id="@+id/left_side_res1"
+                android:id="@+id/trade_out_brick"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/bricktradeicon"
-                android:id="@+id/bricktradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/bricktradeicon"
+                    android:id="@+id/bricktradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/brick_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/bricktradeicon"
+                    android:layout_alignRight="@id/bricktradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -49,11 +90,36 @@
                 android:visibility="gone"/>
 
             <ImageView
-                android:id="@+id/right_side_res1"
+                android:id="@+id/trade_in_brick"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/bricktradeicon"
+                    android:id="@+id/bricktradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/brick_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/bricktradeicon_tradein"
+                    android:layout_alignRight="@id/bricktradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -65,6 +131,31 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/goldtradeicon"
+                    android:id="@+id/goldtradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/gold_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/goldtradeicon_tradeout"
+                    android:layout_alignRight="@id/goldtradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/left_side_res2"
                 android:layout_width="45dp"
@@ -72,15 +163,30 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/goldtradeicon"
-                android:id="@+id/goldtradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/goldtradeicon"
+                    android:id="@+id/goldtradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/gold_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/goldtradeicon"
+                    android:layout_alignRight="@id/goldtradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -98,6 +204,31 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/goldtradeicon"
+                    android:id="@+id/goldtradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/gold_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/goldtradeicon_tradein"
+                    android:layout_alignRight="@id/goldtradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -108,6 +239,31 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/oretradeicon"
+                    android:id="@+id/oretradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/ore_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/oretradeicon_tradeout"
+                    android:layout_alignRight="@id/oretradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/left_side_res3"
                 android:layout_width="45dp"
@@ -115,14 +271,30 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/oretradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/oretradeicon"
+                    android:id="@+id/oretradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/ore_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/oretradeicon"
+                    android:layout_alignRight="@id/oretradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -140,6 +312,31 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/oretradeicon"
+                    android:id="@+id/oretradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/ore_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/oretradeicon_tradein"
+                    android:layout_alignRight="@id/oretradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -150,6 +347,31 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/sheeptradeicon"
+                    android:id="@+id/sheeptradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/sheep_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/sheeptradeicon_tradeout"
+                    android:layout_alignRight="@id/sheeptradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/left_side_res4"
                 android:layout_width="45dp"
@@ -157,14 +379,30 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/sheeptradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/sheeptradeicon"
+                    android:id="@+id/sheeptradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/sheep_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/sheeptradeicon"
+                    android:layout_alignRight="@id/sheeptradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -182,6 +420,31 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/sheeptradeicon"
+                    android:id="@+id/sheeptradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/sheep_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/sheeptradeicon_tradein"
+                    android:layout_alignRight="@id/sheeptradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -192,6 +455,31 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/wheattradeicon"
+                    android:id="@+id/wheattradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wheat_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/wheattradeicon_tradeout"
+                    android:layout_alignRight="@id/wheattradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/left_side_res5"
                 android:layout_width="45dp"
@@ -199,14 +487,30 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/wheattradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/wheattradeicon"
+                    android:id="@+id/wheattradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wheat_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/wheattradeicon"
+                    android:layout_alignRight="@id/wheattradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -224,6 +528,31 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/wheattradeicon"
+                    android:id="@+id/wheattradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wheat_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/wheattradeicon_tradein"
+                    android:layout_alignRight="@id/wheattradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -234,6 +563,31 @@
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/woodtradeicon"
+                    android:id="@+id/woodtradeicon_tradeout"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wood_tradeout_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/woodtradeicon_tradeout"
+                    android:layout_alignRight="@id/woodtradeicon_tradeout"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/left_side_res6"
                 android:layout_width="45dp"
@@ -241,14 +595,30 @@
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
 
-            <ImageView
-                android:src="@drawable/woodtradeicon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:minHeight="50dp"
-                android:minWidth="100dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/woodtradeicon"
+                    android:id="@+id/woodtradeicon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wood_current_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/woodtradeicon"
+                    android:layout_alignRight="@id/woodtradeicon"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:layout_marginLeft="24dp"
@@ -265,6 +635,31 @@
                 android:layout_height="45dp"
                 android:src="@drawable/plusbutton"
                 android:textSize="@dimen/trade_text_size"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/woodtradeicon"
+                    android:id="@+id/woodtradeicon_tradein"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:minHeight="50dp"
+                    android:minWidth="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/wood_tradein_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:layout_alignBottom="@id/woodtradeicon_tradein"
+                    android:layout_alignRight="@id/woodtradeicon_tradein"
+                    android:background="@color/white"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -298,8 +693,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:src="@drawable/canceltradebutton"
-            android:visibility="gone"/>
+            android:src="@drawable/canceltradebutton"/>
 
     </TableRow>
 
