@@ -62,6 +62,7 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
+        mActionToMenuItemIdMap.put(GameAction.ATTACK, R.id.attack);
 
         /*Log.d("TAG", "The String ID for the BUILD_CITY item is: " + R.string.upgrade_city);*/
 
@@ -73,6 +74,7 @@ public class GameLoop {
         mActionToMenuItemStringMap.put(GameAction.MOVE_MILITARY_UNIT, R.string.move_soldier);
         mActionToMenuItemStringMap.put(GameAction.REPAIR_CITY, R.string.repair_city);
         mActionToMenuItemStringMap.put(GameAction.REPAIR_SETTLEMENT, R.string.repair_settlement);
+        mActionToMenuItemStringMap.put(GameAction.ATTACK, R.string.attack);
 
        /* Log.d("TAG", "The ID for BUILDCITY is " +
                 mActionToMenuItemIdMap.get(GameAction.BUILD_CITY));
