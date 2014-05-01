@@ -37,7 +37,7 @@ public class PlayerInfoFragment extends Fragment {
 
     private ArrayList<ImageView> mPlayerSquares;
     private ArrayList<LinearLayout> mPlayerInfo;
-
+    private ArrayList<LinearLayout> mPlayerName;
     private ArrayList<Player> mPlayersArrayList;
 
     private DiceRoll mDice;

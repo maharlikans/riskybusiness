@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -18,7 +17,9 @@ import android.view.MenuItem;
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
 import com.slothproductions.riskybusiness.model.GameLoop;
+import com.slothproductions.riskybusiness.model.Player;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class BoardScreen extends FragmentActivity {
@@ -53,12 +54,9 @@ public class BoardScreen extends FragmentActivity {
         nextSong = 0;
         startNextSong();
 
-        String[] Players = new String [getIntent().getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0)];
-        String[] defaultPlayers = getResources().getStringArray(R.array.player_names);
-        for (int i = 0; i < Players.length; i++) {
-                Log.d("TAG", "This player is: " + defaultPlayers[i]);
-                Players[i] = defaultPlayers[i];
-        }
+//        String[] Players = new String [getIntent().getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0)];
+        String[] defaultPlayers = getIntent().getStringArrayExtra(GameSetupScreen.PLAYER_NAMES);
+        String[] Players = Arrays.copyOfRange(defaultPlayers, 1, defaultPlayers.length);
 
         mBoardData = new Board(Players);
 
@@ -81,7 +79,7 @@ public class BoardScreen extends FragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.board_screen, menu);
         return true;
@@ -183,22 +181,22 @@ public class BoardScreen extends FragmentActivity {
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         int numPlayersChosen = intent.getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0);
-        String[] playerTypes = intent.getStringArrayExtra(GameSetupScreen.PLAYER_TYPES);
+        String[] playerNames = intent.getStringArrayExtra(GameSetupScreen.PLAYER_NAMES);
         int numVictoryPoints = intent.getIntExtra(GameSetupScreen.NUM_VICTORY_POINTS, 0);
         boolean variableBoard = intent.getBooleanExtra(GameSetupScreen.VARIABLE_BOARD, false);
         boolean attacksOn = intent.getBooleanExtra(GameSetupScreen.ATTACKS, false);
         int[] colors = intent.getIntArrayExtra(GameSetupScreen.COLORS);
         Log.d("TAG", "Number of players is: " + numPlayersChosen);
-        for (int i = 0; i < playerTypes.length; i++) {
-            Log.d("TAG", "Player " + i + " is of type " + playerTypes[i]);
+        for (int i = 0; i < playerNames.length; i++) {
+            Log.d("TAG", "Player name is " + playerNames[i]);
         }
         Log.d("TAG", "The number of victory points is: " + numVictoryPoints);
         Log.d("TAG", "Board generation is variable: " + variableBoard);
         Log.d("TAG", "Attacks are on: " + attacksOn);
         bundle.putInt(GameSetupScreen.NUM_PLAYERS_CHOSEN,
                 intent.getIntExtra(GameSetupScreen.NUM_PLAYERS_CHOSEN, 0));
-        bundle.putStringArray(GameSetupScreen.PLAYER_TYPES,
-                intent.getStringArrayExtra(GameSetupScreen.PLAYER_TYPES));
+        bundle.putStringArray(GameSetupScreen.PLAYER_NAMES,
+                intent.getStringArrayExtra(GameSetupScreen.PLAYER_NAMES));
         bundle.putInt(GameSetupScreen.NUM_VICTORY_POINTS,
                 intent.getIntExtra(GameSetupScreen.NUM_VICTORY_POINTS, 0));
         bundle.putBoolean(GameSetupScreen.VARIABLE_BOARD,
