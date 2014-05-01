@@ -62,6 +62,11 @@
         <item>@string/player_4</item>
     </string-array>
 
+    <string-array name="type_trade_array">
+        <item>Bank Trade</item>
+        <item>Player Trade</item>
+    </string-array>
+
     <string-array name="num_players_array">
         <item>2</item>
         <item>3</item>
