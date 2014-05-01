@@ -2,9 +2,6 @@ package com.slothproductions.riskybusiness.view;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,24 +10,18 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnTouchListener;
-import android.view.View.OnClickListener;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.Board;
-import com.slothproductions.riskybusiness.model.DiceRoll;
 
 public class BoardScreenMainFragment extends Fragment {
 
@@ -64,7 +55,7 @@ public class BoardScreenMainFragment extends Fragment {
         // is modified properly
         Bundle bundle = getArguments();
         int numPlayersChosen = bundle.getInt(GameSetupScreen.NUM_PLAYERS_CHOSEN);
-        String[] playerTypes = bundle.getStringArray(GameSetupScreen.PLAYER_TYPES);
+        String[] playerNames = bundle.getStringArray(GameSetupScreen.PLAYER_NAMES);
         int numVictoryPoints = bundle.getInt(GameSetupScreen.NUM_VICTORY_POINTS);
         boolean variableBoard = bundle.getBoolean(GameSetupScreen.VARIABLE_BOARD);
         boolean attacksOn = bundle.getBoolean(GameSetupScreen.ATTACKS);
@@ -74,7 +65,7 @@ public class BoardScreenMainFragment extends Fragment {
         Log.d("TAG", "number of players"+numPlayersChosen);
 
         //Initializing non view elements
-        mBoardData = new Board(new String[]{"Player1", "Player2", "Player3", "Player4"});
+        mBoardData = new Board(playerNames);
         Log.d("TAG", "onCreate completed");
     }
 

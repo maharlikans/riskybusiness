@@ -41,29 +41,17 @@
             android:textSize="24dp"
             android:textColor="@color/white"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group_1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_human_1"
+
+            <EditText
+                android:id="@+id/edit_text_player1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/human"
+                android:text="@string/player_1"
+                android:maxLength="10"
                 android:textSize="24dp"
                 android:checked="true"
                   />
-
-            <RadioButton
-                android:id="@+id/radio_computer_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/computer"
-                android:textSize="24dp"
-                  />
-        </RadioGroup>
 
     </LinearLayout>
 
@@ -81,29 +69,18 @@
             android:textSize="24dp"
             android:textColor="@color/white"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group_2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_human_2"
+            <EditText
+                android:id="@+id/edit_text_player2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/human"
+                android:text="@string/player_2"
+                android:maxLength="10"
                 android:textSize="24dp"
                 android:checked="true"
                   />
 
-            <RadioButton
-                android:id="@+id/radio_computer_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/computer"
-                android:textSize="24dp"
-                  />
-        </RadioGroup>
+
 
     </LinearLayout>
 
@@ -121,27 +98,17 @@
             android:textSize="24dp"
             android:textColor="@color/white"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group_3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_human_3"
+
+            <EditText
+                android:id="@+id/edit_text_player3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/human"
+                android:text="@string/player_3"
+                android:maxLength="10"
                 android:textSize="24dp"
                 android:checked="true" />
 
-            <RadioButton
-                android:id="@+id/radio_computer_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/computer"
-                android:textSize="24dp" />
-        </RadioGroup>
 
     </LinearLayout>
 
@@ -159,29 +126,17 @@
             android:textSize="24dp"
             android:textColor="@color/white"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group_4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_human_4"
+
+            <EditText
+                android:id="@+id/edit_text_player4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/human"
+                android:text="@string/player_4"
                 android:textSize="24dp"
+                android:maxLength="10"
                 android:checked="true"
                   />
-
-            <RadioButton
-                android:id="@+id/radio_computer_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/computer"
-                android:textSize="24dp"
-                  />
-        </RadioGroup>
 
     </LinearLayout>
 
