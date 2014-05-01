@@ -1,7 +1,6 @@
 package com.slothproductions.riskybusiness.model;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.PopupMenu;
 
 import com.View.R;
@@ -11,7 +10,6 @@ import com.slothproductions.riskybusiness.view.BoardScreen;
 
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -62,6 +60,7 @@ public class GameLoop {
         mActionToMenuItemIdMap.put(GameAction.MOVE_MILITARY_UNIT, R.id.move);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_CITY, R.id.repaircity);
         mActionToMenuItemIdMap.put(GameAction.REPAIR_SETTLEMENT, R.id.repairsettlement);
+        mActionToMenuItemIdMap.put(GameAction.ATTACK, R.id.attack);
 
         /*Log.d("TAG", "The String ID for the BUILD_CITY item is: " + R.string.upgrade_city);*/
 
@@ -73,6 +72,7 @@ public class GameLoop {
         mActionToMenuItemStringMap.put(GameAction.MOVE_MILITARY_UNIT, R.string.move_soldier);
         mActionToMenuItemStringMap.put(GameAction.REPAIR_CITY, R.string.repair_city);
         mActionToMenuItemStringMap.put(GameAction.REPAIR_SETTLEMENT, R.string.repair_settlement);
+        mActionToMenuItemStringMap.put(GameAction.ATTACK, R.string.attack);
 
        /* Log.d("TAG", "The ID for BUILDCITY is " +
                 mActionToMenuItemIdMap.get(GameAction.BUILD_CITY));
@@ -125,8 +125,8 @@ public class GameLoop {
         return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
 
-    public boolean attackWithSoldier(Vertex vertex) {
-        return mCurrentGameState.attack(vertex);
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
+        return mCurrentGameState.attack(vertexFrom, vertexTo, amount);
     }
 
     public void endTurn(/*some arguments*/) {

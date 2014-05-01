@@ -462,18 +462,20 @@ public class Board implements java.io.Serializable {
             case BUILD_SETTLEMENT: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.SETTLEMENT, target, player);
+                player.points++;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             } case REPAIR_SETTLEMENT: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
-                target.building.setHealth((int) Math.max(5, target.building.getHealth() + 2));
+                target.building.setHealth(Math.max(5, target.building.getHealth() + 2));
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BUILD_CITY: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
                 target.building = new Building(BuildingType.CITY, target, player);
+                player.points++;
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target.building);
             } case REPAIR_CITY: {
                 Vertex target = vertices.get(((Vertex) arguments.get("vertex")).getIndex());
-                target.building.setHealth((int) Math.max(10, target.building.getHealth() + 3));
+                target.building.setHealth(Math.max(10, target.building.getHealth() + 3));
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.BUILDING, target);
             } case BUILD_ROAD: {
                 Edge e = edges.get(((Edge) arguments.get("edge")).getIndex());
@@ -546,7 +548,7 @@ public class Board implements java.io.Serializable {
                     from.military.haveNotMoved--;
                     boolean onRoad = false;
                     for (Edge edge : from.edges)
-                        if (edge.vertices.contains(to) && edge.owner == player)
+                        if (edge.vertices.contains(to) && edge.owner != null)
                             onRoad = true;
                     if (onRoad)
                         to.military.haveBonusMoved++;
@@ -555,17 +557,93 @@ public class Board implements java.io.Serializable {
                 }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             } case ATTACK: {
-                Vertex to = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_to")).getIndex());
-                Vertex from = vertices.get(((Vertex.ImmutableVertex) arguments.get("vertex_from")).getIndex());
+                Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
+                Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
                 Integer amount = (Integer) arguments.get("amount");
                 if (!to.isAdjacent(from)
                         || ((to.getBuilding().getPlayer() == player || to.getBuilding().getPlayer() == null)
                             && (to.military == null || to.military.getPlayer() == player)))
                     return null;
 
-               if (to.getBuilding().getType() == BuildingType.EMPTY) {
-
-               }
+                if (to.getBuilding().getType() == BuildingType.EMPTY) {
+                    int opposing = to.military.getHealth();
+                    if (opposing > amount) {
+                        to.military.health -= amount;
+                    } else if (amount > opposing) {
+                        to.military = new MilitaryUnit(player, to);
+                        to.military.health = amount - opposing;
+                        to.military.haveMoved = to.military.health;
+                        to.military.haveBonusMoved = 0;
+                        to.military.haveNotMoved = 0;
+                    } else {
+                        to.military = null;
+                    }
+                    if (amount == from.military.getHealth()) {
+                        from.military = null;
+                    } else {
+                        from.military.health -= amount;
+                        from.military.haveNotMoved -= amount;
+                    }
+                } else {
+                    int maxGarrison = 1;
+                    if (to.getBuilding().getType() == BuildingType.CITY)
+                        maxGarrison = 2;
+                    int garrison = 0;
+                    if (to.getMilitary() != null)
+                        garrison = Math.min(to.getMilitary().getHealth() / 3, maxGarrison);
+                    int damageToBuilding = Math.max(0, amount - garrison);
+                    int damageToUnit = Math.min(amount, garrison);
+                    if (damageToUnit != 0)
+                        to.getMilitary().health -= damageToUnit;
+                    if (to.getBuilding().getHealth() - damageToBuilding > 0) {
+                        to.getBuilding().setHealth(to.getBuilding().getHealth() - damageToBuilding);
+                    } else {
+                        if (to.getBuilding().getType() == BuildingType.CITY) {
+                            to.getBuilding().type = BuildingType.SETTLEMENT;
+                            to.getBuilding().setHealth(3);
+                            if (to.getMilitary() == null) {
+                                to.getBuilding().owner.points -= 2;
+                                player.points++;
+                                to.getBuilding().owner = player;
+                                to.setMilitary(new MilitaryUnit(player, to));
+                                to.getMilitary().health = amount;
+                                to.getMilitary().haveNotMoved = 0;
+                                to.getMilitary().haveBonusMoved = 0;
+                                to.getMilitary().haveMoved = amount;
+                                from.military.haveMoved += amount;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= amount;
+                            } else {
+                                to.getBuilding().owner.points--;
+                                to.getMilitary().health -= garrison;
+                                from.military.haveMoved += amount - garrison;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= garrison;
+                            }
+                        } else {
+                            to.getBuilding().getPlayer().points -= 1;
+                            to.building = new Building(BuildingType.EMPTY, to, null);
+                            if (to.getMilitary() == null) {
+                                to.setMilitary(new MilitaryUnit(player, to));
+                                to.getMilitary().health = amount;
+                                to.getMilitary().haveNotMoved = 0;
+                                to.getMilitary().haveBonusMoved = 0;
+                                to.getMilitary().haveMoved = amount;
+                                from.military.haveMoved += amount;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= amount;
+                            } else {
+                                to.getMilitary().health -= garrison;
+                                from.military.haveMoved += amount - garrison;
+                                from.military.haveNotMoved -= amount;
+                                from.military.health -= garrison;
+                            }
+                        }
+                    }
+                }
+                if (from.military.health == 0)
+                    from.military = null;
+                return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             }
         }
 

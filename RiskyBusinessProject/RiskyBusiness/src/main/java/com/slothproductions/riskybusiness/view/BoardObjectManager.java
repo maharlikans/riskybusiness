@@ -186,6 +186,8 @@ public class BoardObjectManager {
             v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
         }
         if (!mGameLoop.moveSoldier(startVertex, v)) {
+            Log.d(TAG, "Soldier could not be moved");
+            mSoldierMoving = null;
             return;
         }
         //should only translate if it could move
@@ -273,7 +275,9 @@ public class BoardObjectManager {
     //This will call the popup menu in the BoardButtons class
     public void findMenu(MotionEvent event) {
         Coordinate c = new Coordinate(event.getX(), event.getY());
+        Log.d(TAG, "Checking if solider is null");
         if (mSoldierMoving != null) {
+            Log.d(TAG, "Soldier is not null");
             moveSoldier(c);
             return;
         }

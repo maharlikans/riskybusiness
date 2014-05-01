@@ -76,47 +76,25 @@ public class ForwardBeginningGameState implements GameState{
 
     @Override
     public boolean buildRoad(Edge edge) {
-        if (mPlayerBuiltSettlement) {
-            if (mCurrentPlayer.canBuildInitial(edge, 1)) { // 1 means the first
-                mCurrentPlayer.buildInitial(edge, 1);
-                mPlayerBuiltRoad = true;
+        mCurrentPlayer.buildInitial(edge, 1);
+        mPlayerBuiltRoad = true;
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        endTurn();
-                    }
-                }, 200);
-
-                return true;
-            } else {
-                mBoardButtonsFragment.createToast("You can't build a road here.", false);
-                return false;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                endTurn();
             }
-        } else {
-            mBoardButtonsFragment.createToast("Please build a settlement first.", false);
-            return false;
-        }
+        }, 200);
+
+        return true;
     }
 
     @Override
     public boolean buildSettlement(Vertex vertex) {
-        if (!mPlayerBuiltSettlement) {
-            if (mCurrentPlayer.canBuildInitial(vertex, 1)) {
-                mCurrentPlayer.buildInitial(vertex, 1);
-                mPlayerBuiltSettlement = true;
-                return true;
-            } else {
-                mBoardButtonsFragment.createToast("You can't build a settlement here.", false);
-                return false;
-            }
-        } else {
-            mBoardButtonsFragment.createToast(
-                    "You already built a settlement, you can't build another",
-                    false);
-            return false;
-        }
+        mCurrentPlayer.buildInitial(vertex, 1);
+        mPlayerBuiltSettlement = true;
+        return true;
     }
 
     @Override
@@ -143,7 +121,7 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public boolean attack(Vertex vertex) {
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
         // DO NOTHING
         return false;
     }
@@ -189,6 +167,9 @@ public class ForwardBeginningGameState implements GameState{
         Menu menu = popupMenu.getMenu();
 
         menu.add(0, R.id.road, 0, R.string.build_road);
+        if (mPlayerBuiltRoad || !mPlayerBuiltSettlement || !mCurrentPlayer.canBuildInitial(edge, 1)) {
+            menu.findItem(R.id.road).setEnabled(false);
+        }
 
         Log.d("TAG", "found Edge Actions");
     }
@@ -200,6 +181,10 @@ public class ForwardBeginningGameState implements GameState{
         Menu menu = popupMenu.getMenu();
 
         menu.add(0, R.id.settlement, 0, R.string.build_settlement);
+
+        if (mPlayerBuiltSettlement || !mCurrentPlayer.canBuildInitial(vertex, 1)) {
+            menu.findItem(R.id.settlement).setEnabled(false);
+        }
         Log.d("TAG", "found Vertex Actions");
     }
 }
