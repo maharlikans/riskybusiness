@@ -15,7 +15,7 @@ public class MainMenuScreen extends Activity {
 
     private ImageView mExit;
     private ImageView mGameRules;
-    private ImageView mLoadSaved;
+
     private ImageView mOptions;
     private ImageView mStartNew;
     MediaPlayer song;

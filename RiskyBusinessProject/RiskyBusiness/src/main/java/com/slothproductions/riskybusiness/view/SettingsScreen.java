@@ -17,7 +17,7 @@ public class SettingsScreen extends Activity {
     private Toast mLastToast;
 
     // View objects
-    Button options, htp, save;
+    Button options, htp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,6 @@ public class SettingsScreen extends Activity {
         // get options button and set behavior
         options = (Button)findViewById(R.id.optionsButton);
         htp = (Button)findViewById(R.id.htpButton);
-        save = (Button)findViewById(R.id.saveButton);
 
         options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,13 +43,6 @@ public class SettingsScreen extends Activity {
                 Intent i = new Intent(SettingsScreen.this, GameRules.class);
                 startActivity(i);
 
-            }
-        });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createToast("Game Saved!", false);
             }
         });
 

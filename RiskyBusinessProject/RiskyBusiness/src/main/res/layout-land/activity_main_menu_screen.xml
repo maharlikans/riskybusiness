@@ -35,14 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/load_saved"
-        android:src="@drawable/loadsaved"
-        android:padding="8dp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:id="@+id/high_scores"
         android:src="@drawable/gamerules"
         android:padding="8dp"/>
