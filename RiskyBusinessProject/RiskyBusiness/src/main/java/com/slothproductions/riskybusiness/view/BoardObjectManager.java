@@ -20,6 +20,7 @@ import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Hex;
 import com.slothproductions.riskybusiness.model.MilitaryUnit;
+import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 import java.util.ArrayList;
@@ -214,7 +215,8 @@ public class BoardObjectManager {
     }
 
     public void attack(Coordinate c) {
-        int numAttacking = mSoldiersAttacking.size();
+        int numAttacking = mSoldiersAttacking.size(); //number of soldiers attacking
+        //get the vertex that the military is attacking
         checkCornerLocations(c);
         if (mAdjacentHexes.size() == 1) {
             assignVertexFromIndex();
@@ -222,26 +224,50 @@ public class BoardObjectManager {
         else {
             v = mBoardBacklog.getVertex(mAdjacentHexes, 0);
         }
+        //attacking military unit
+        MilitaryUnit militaryFromBeginning = startVertex.getImmutable().getMilitary();
+        Player attacking = militaryFromBeginning.getPlayer();
+
+        //defending military unit and building
+        Building buildingToBeginning = v.getBuilding();
+        MilitaryUnit militaryToBeginning = v.getImmutable().getMilitary();
+        Player defending = militaryToBeginning.getPlayer();
+
+        //get all the views at the vertex moving to, military and settlements or cities.
         /*
-        Building b1 = v.getBuilding();
-        MilitaryUnit m1 = v.getImmutable().getMilitary();
         if (!mGameLoop.attackWithSoldier(startVertex, v, numAttacking)) {
             mSoldiersAttacking.removeAll(mSoldiersAttacking);
             return;
-        }
-        Building b2 = v.getBuilding();
-        MilitaryUnit m2 = v.getImmutable().getMilitary();
+        }*/
 
-        //if the owner of the building at the vertex is equal to the owner of the building after attacking,
-        // then the attack did not destroy the building, and we return;
-        if (b1.getPlayer() == b2.getPlayer()) {
-            mSoldiersAttacking.removeAll(mSoldiersAttacking);
-            return;
+        Building buildingToEnd = v.getBuilding();
+        MilitaryUnit militaryToEnd = v.getImmutable().getMilitary();
+
+        if (buildingToEnd == null) {
+            Log.d(TAG, "The building on the to vertex is null, movement will be determined by soldiers");
+            if (militaryToEnd == null) {
+                Log.d(TAG, "Everybody died, move the attacking soldiers their, then delete them.");
+            }
+            if (militaryToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "Attack Successful, move attacking army soldiers");
+                //attack was successful, move all players there, then remove the ones that died
+            }
+            else {
+                Log.d(TAG, "Attack was not successful, move players there and back");
+                //attack was not successful, move players there, then delete any who died, and move them back if any remain
+            }
+
+            if (buildingToBeginning != null) {
+                Log.d(TAG, "A building was destroyed in the attack, remove it from the board");
+                //remove building from board
+            }
         }
-        //if the second soldier is null, and the first soldier is not,
-        if (m2 == null) {
-            if (m1 != null)
-                mSoldiersAttacking.removeAll(mSoldiersAttacking);
+        else {
+            Log.d(TAG, "Their is a building on the to vertex, movement will occur if the building's owner is the attacking player");
+            if (buildingToEnd.getPlayer() == attacking) {
+                Log.d(TAG, "attack was successful, The player destroyed a city, and now owns that settlement");
+                //should remove the city and add a settlement with the current color
+            }
         }
 
         //attack with soldiers
@@ -250,7 +276,8 @@ public class BoardObjectManager {
             translateImage((int)c.getX(), (int)c.getY(), soldier);
         }
         mSoldiersAttacking.removeAll(mSoldiersAttacking);
-        */
+        startVertex = null;
+        v = null;
     }
 
     public void removeSettlement(Coordinate coordinate) {
