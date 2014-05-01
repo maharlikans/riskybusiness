@@ -40,7 +40,7 @@ public class MainMenuScreen extends Activity {
 
         LinearLayout buttonParent = (LinearLayout)mStartNew.getParent();
 
-        mGameRules = (ImageView)buttonParent.getChildAt(2);
+        mGameRules = (ImageView)buttonParent.getChildAt(1);
         mGameRules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +52,7 @@ public class MainMenuScreen extends Activity {
         });
 
         //Deals with the Options Button
-        mOptions = (ImageView)buttonParent.getChildAt(3);
+        mOptions = (ImageView)buttonParent.getChildAt(2);
         mOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

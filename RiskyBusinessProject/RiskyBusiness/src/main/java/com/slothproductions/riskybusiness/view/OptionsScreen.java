@@ -21,11 +21,11 @@ public class OptionsScreen extends Activity {
 
         //Points to the Seekbars in the OptionsScreen.xml file, so that it will work
         final SeekBar musicSeeker = (SeekBar)findViewById(R.id.music_volume_seekbar);
-        final SeekBar volumeSeeker = (SeekBar) findViewById(R.id.sound_effect_seekbar);
+//        final SeekBar volumeSeeker = (SeekBar) findViewById(R.id.sound_effect_seekbar);
 
         //Points to the TextViews so that the percentage volume can be displayed
         final TextView musicTextView = (TextView) findViewById(R.id.music_volume_value);
-        final TextView soundTextView = (TextView) findViewById(R.id.sound_effect_value);
+//        final TextView soundTextView = (TextView) findViewById(R.id.sound_effect_value);
 
         MediaPlayer mediaPlayer;
         final AudioManager audioManager;
@@ -60,7 +60,7 @@ public class OptionsScreen extends Activity {
 
             }
         });
-        volumeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+/*        volumeSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                // if(fromUser == true)
@@ -76,7 +76,7 @@ public class OptionsScreen extends Activity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
-        });
+        });*/
     }
 
 
