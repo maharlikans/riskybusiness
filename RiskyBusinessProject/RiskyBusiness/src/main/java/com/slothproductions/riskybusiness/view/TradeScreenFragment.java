@@ -12,12 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.View.R;
 import com.slothproductions.riskybusiness.model.GameLoop;
 import com.slothproductions.riskybusiness.model.Player;
 import com.slothproductions.riskybusiness.model.Resource;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 /**
@@ -33,6 +35,9 @@ public class TradeScreenFragment extends Fragment {
     BoardScreen mBoardScreen;
     GameLoop mGameLoop;
     Player mCurrentPlayer;
+    HashMap<Resource, TextView> mResourceToTradeOutTextView;
+    HashMap<Resource, TextView> mResourceToCurrentResourceTextView;
+    HashMap<Resource, TextView> mResourceToTradeInTextView;
     HashMap<Resource, ImageView> mResourceToTradeButtonOut;
     HashMap<Resource, ImageView> mResourceToCenterButton;
     HashMap<Resource, ImageView> mResourceToTradeButtonIn;
@@ -128,12 +133,57 @@ public class TradeScreenFragment extends Fragment {
         mConfirmTradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO actually implement the confirmTradeButton
+                if (mTradeState == TradeState.BANK_TRADE) {
+                    // TODO call the GameLoop's trade function
+                }
             }
         });
 
         // Initialize the tradeButtons into the map
         // TODO REFACTOR ALL THE RESOURCE NAMES TO BE UNIFORM
+
+        mResourceToTradeOutTextView = new HashMap<Resource, TextView>();
+        mResourceToTradeOutTextView.put(Resource.BRICK,
+                (TextView)v.findViewById(R.id.brick_tradeout_number));
+        mResourceToTradeOutTextView.put(Resource.GOLD,
+                (TextView)v.findViewById(R.id.gold_tradeout_number));
+        mResourceToTradeOutTextView.put(Resource.ORE,
+                (TextView)v.findViewById(R.id.ore_tradeout_number));
+        mResourceToTradeOutTextView.put(Resource.WOOL,
+                (TextView)v.findViewById(R.id.sheep_tradeout_number));
+        mResourceToTradeOutTextView.put(Resource.GRAIN,
+                (TextView)v.findViewById(R.id.wheat_tradeout_number));
+        mResourceToTradeOutTextView.put(Resource.LUMBER,
+                (TextView)v.findViewById(R.id.wood_tradeout_number));
+
+        mResourceToCurrentResourceTextView = new HashMap<Resource, TextView>();
+        mResourceToCurrentResourceTextView.put(Resource.BRICK,
+                (TextView)v.findViewById(R.id.brick_current_number));
+        mResourceToCurrentResourceTextView.put(Resource.GOLD,
+                (TextView)v.findViewById(R.id.gold_current_number));
+        mResourceToCurrentResourceTextView.put(Resource.ORE,
+                (TextView)v.findViewById(R.id.ore_current_number));
+        mResourceToCurrentResourceTextView.put(Resource.WOOL,
+                (TextView)v.findViewById(R.id.sheep_current_number));
+        mResourceToCurrentResourceTextView.put(Resource.GRAIN,
+                (TextView)v.findViewById(R.id.wheat_current_number));
+        mResourceToCurrentResourceTextView.put(Resource.LUMBER,
+                (TextView)v.findViewById(R.id.wood_current_number));
+
+
+        mResourceToTradeInTextView = new HashMap<Resource, TextView>();
+        mResourceToTradeInTextView.put(Resource.BRICK,
+                (TextView)v.findViewById(R.id.brick_tradein_number));
+        mResourceToTradeInTextView.put(Resource.GOLD,
+                (TextView)v.findViewById(R.id.gold_tradein_number));
+        mResourceToTradeInTextView.put(Resource.ORE,
+                (TextView)v.findViewById(R.id.ore_tradein_number));
+        mResourceToTradeInTextView.put(Resource.WOOL,
+                (TextView)v.findViewById(R.id.sheep_tradein_number));
+        mResourceToTradeInTextView.put(Resource.GRAIN,
+                (TextView)v.findViewById(R.id.wheat_tradein_number));
+        mResourceToTradeInTextView.put(Resource.LUMBER,
+                (TextView)v.findViewById(R.id.wood_tradein_number));
 
         mResourceToTradeButtonOut = new HashMap<Resource, ImageView>();
         mResourceToTradeButtonOut.put(Resource.BRICK,
@@ -202,6 +252,39 @@ public class TradeScreenFragment extends Fragment {
         mResourcesIn.put(Resource.WOOL, 0);
         mResourcesIn.put(Resource.GRAIN, 0);
         mResourcesIn.put(Resource.LUMBER, 0);
+
+        // EDITING THE FUNCTIONALITY OF THE TRADE OUT BUTTONS
+        for (Resource r : Resource.values()) {
+            final Resource tempResource = r;
+            mResourceToTradeButtonOut.get(r).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mTradeState == TradeState.BANK_TRADE) {
+                        int amountNeeded = mCurrentPlayer.trades.get(tempResource);
+                        if (mCurrentResources.get(tempResource) >= amountNeeded) {
+                            // detract from the current resources, update the view for the detracted
+                            mCurrentResources.put(tempResource,
+                                    mCurrentResources.get(tempResource) - amountNeeded);
+                            mResourceToCurrentResourceTextView.get(tempResource)
+                                    .setText(String.valueOf(mCurrentResources.get(tempResource)));
+
+                            // add to the trade out resources, update the view for the added
+                            mResourcesOut.put(tempResource,
+                                    mResourcesOut.get(tempResource) + amountNeeded);
+                            mResourceToTradeOutTextView.get(tempResource)
+                                    .setText(String.valueOf(mResourcesOut.get(tempResource)));
+
+                            // the player can now actually trade in an item...
+                            mNumItemsAllowedIn++;
+
+                        } else {
+                            ((BoardButtonsFragment)mBoardScreen.getButtonsFragment())
+                                    .createToast("You don't have enough resources for that", false);
+                        }
+                    }
+                }
+            });
+        }
 
         return v;
     }

@@ -28,7 +28,7 @@ final public class Player implements java.io.Serializable {
     private ArrayList<MilitaryUnit> militaryUnits;
     private ArrayList<Building> buildings;
     /* End of list */
-    protected Map<Resource, Integer> trades;
+    public Map<Resource, Integer> trades;
     final Board board;
     final String name;
     private int color;

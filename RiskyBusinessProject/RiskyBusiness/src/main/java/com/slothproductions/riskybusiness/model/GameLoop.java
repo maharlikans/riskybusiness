@@ -121,6 +121,10 @@ public class GameLoop {
         mCurrentGameState.trade(/*some arguments*/);
     }
 
+    public void bankTrade(/*some arguments*/) {
+        mCurrentGameState.trade(/*some arguments*/);
+    }
+
     public boolean moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
         return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
@@ -169,4 +173,6 @@ public class GameLoop {
     public Player getCurrentPlayer() {
         return mCurrentPlayer;
     }
+
+
 }
