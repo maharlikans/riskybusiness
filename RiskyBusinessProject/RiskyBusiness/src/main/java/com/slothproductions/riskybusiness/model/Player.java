@@ -69,7 +69,7 @@ final public class Player implements java.io.Serializable {
         resources = new EnumMap<Resource, Integer>(Resource.class);
         // DONE BY KYLE: INITIALIZE THE RESOURCES CLASS
         for (Resource r : Resource.values()) {
-            resources.put(r, 5);
+            resources.put(r, 3);
         }
         immutableEdges = new ArrayList<Edge.ImmutableEdge>();
         immutableVertices = new ArrayList<Vertex.ImmutableVertex>();
