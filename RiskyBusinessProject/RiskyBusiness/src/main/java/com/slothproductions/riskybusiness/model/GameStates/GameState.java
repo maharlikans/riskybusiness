@@ -19,7 +19,7 @@ public interface GameState {
     boolean buildMilitaryUnit(Vertex vertex);
     void trade(); // TODO change the parameters for trade
     boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo);
-    boolean attack(Vertex vertex);
+    boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount);
     boolean repairCity(Vertex vertex);
     boolean repairSettlement(Vertex vertex);
     void endTurn();

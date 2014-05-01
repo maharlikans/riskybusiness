@@ -64,7 +64,7 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public boolean attack(Vertex vertex) {
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
         return false;
     }
 

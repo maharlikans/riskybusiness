@@ -1,7 +1,6 @@
 package com.slothproductions.riskybusiness.model;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.PopupMenu;
 
 import com.View.R;
@@ -11,7 +10,6 @@ import com.slothproductions.riskybusiness.view.BoardScreen;
 
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -127,8 +125,8 @@ public class GameLoop {
         return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
     }
 
-    public boolean attackWithSoldier(Vertex vertex) {
-        return mCurrentGameState.attack(vertex);
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
+        return mCurrentGameState.attack(vertexFrom, vertexTo, amount);
     }
 
     public void endTurn(/*some arguments*/) {

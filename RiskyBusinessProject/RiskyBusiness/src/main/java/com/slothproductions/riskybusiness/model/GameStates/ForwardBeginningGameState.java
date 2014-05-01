@@ -143,7 +143,7 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public boolean attack(Vertex vertex) {
+    public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {
         // DO NOTHING
         return false;
     }
