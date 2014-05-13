@@ -18,7 +18,7 @@ public interface GameState {
     boolean buildCity(Vertex vertex);
     boolean buildMilitaryUnit(Vertex vertex);
     void trade(); // TODO change the parameters for trade
-    boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo);
+    boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo, Integer numMoving);
     boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount);
     boolean repairCity(Vertex vertex);
     boolean repairSettlement(Vertex vertex);

@@ -121,8 +121,8 @@ public class GameLoop {
         mCurrentGameState.trade(/*some arguments*/);
     }
 
-    public boolean moveSoldier(Vertex vertexFrom, Vertex vertexTo) {
-        return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo);
+    public boolean moveSoldier(Vertex vertexFrom, Vertex vertexTo, int numMoving) {
+        return mCurrentGameState.moveMilitaryUnit(vertexFrom, vertexTo, numMoving);
     }
 
     public boolean attack(Vertex vertexFrom, Vertex vertexTo, Integer amount) {

@@ -115,7 +115,7 @@ public class ForwardBeginningGameState implements GameState{
     }
 
     @Override
-    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo, Integer numMoving) {
         // DO NOTHING
         return false;
     }

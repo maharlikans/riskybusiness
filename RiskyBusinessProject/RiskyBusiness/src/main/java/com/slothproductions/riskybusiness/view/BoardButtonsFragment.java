@@ -27,6 +27,7 @@ import com.slothproductions.riskybusiness.model.Coordinate;
 import com.slothproductions.riskybusiness.model.DiceRoll;
 import com.slothproductions.riskybusiness.model.Edge;
 import com.slothproductions.riskybusiness.model.GameLoop;
+import com.slothproductions.riskybusiness.model.MilitaryUnit;
 import com.slothproductions.riskybusiness.model.Vertex;
 
 public class BoardButtonsFragment extends Fragment {
@@ -232,8 +233,16 @@ public class BoardButtonsFragment extends Fragment {
         popup.show();//showing popup menu
     }
 
-    public void setMilitaryNumberPicker(final Coordinate c, Vertex v) {
-        int maxNumberMilitary = Math.min(5, v.getImmutable().getMilitary().getHaveNotMoved());
+    public void setMilitaryNumberPicker(final Coordinate c, Vertex v, final Boolean isMoving) {
+        //TODO: Make useable for military movement
+        int maxNumberMilitary;
+        MilitaryUnit military = v.getImmutable().getMilitary();
+        if (isMoving) {
+            maxNumberMilitary = Math.min(military.getHealth(), military.getHaveNotMoved()+military.getHaveBonusMoved());
+        }
+        else {
+            maxNumberMilitary = Math.min(5, military.getHaveNotMoved());
+        }
 
         //an anchor for the popup menu to be placed on. It needs this for whatever reason..
         ImageView anchor = new ImageView(mActivity);
@@ -255,7 +264,12 @@ public class BoardButtonsFragment extends Fragment {
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                mBoardObjectManager.setNumberAttacking(c, Integer.parseInt(item.getTitle().toString()));
+                if (isMoving) {
+                    mBoardObjectManager.setNumberMoving(c, Integer.parseInt(item.getTitle().toString()));
+                }
+                else {
+                    mBoardObjectManager.setNumberAttacking(c, Integer.parseInt(item.getTitle().toString()));
+                }
                 return true;
             }
         });

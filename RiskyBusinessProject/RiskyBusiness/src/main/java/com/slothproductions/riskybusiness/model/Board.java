@@ -23,6 +23,8 @@ public class Board implements java.io.Serializable {
     private static final long serialVersionUID = -915315565L;
 
     private final String TAG = "BOARDDATA";
+    private final String ATTACKTAG = "Attacking Info";
+    private final String MOVETAG = "Move Info";
 
     final private Random prng;
 
@@ -522,78 +524,82 @@ public class Board implements java.io.Serializable {
                 partner.addResources(sold);
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.TRADE, sold);
             } case MOVE_MILITARY_UNIT: {
-                Log.d(TAG, "Moving soldier.");
+                Log.d(MOVETAG, "Moving soldier.");
                 Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
-                Log.d(TAG, "Target: Vertex " + to.index);
+                Log.d(MOVETAG, "Target: Vertex " + to.index);
                 Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
-                Log.d(TAG, "From: Vertex " + from.index);
+                Log.d(MOVETAG, "From: Vertex " + from.index);
                 if (!to.isAdjacent(from) || (to.getBuilding().getPlayer() != null && to.getBuilding().getPlayer() != player)) {
                     if (!to.isAdjacent((from)))
-                        Log.d(TAG, "Unadjacent target.");
-                    Log.d(TAG, "Improper target 1.");
+                        Log.d(MOVETAG, "Unadjacent target.");
+                    Log.d(MOVETAG, "Improper target 1.");
                     return null;
                 }
-                boolean bonus = from.military.haveBonusMoved > 0;
-                if (to.military == null) {
-                    to.military = new MilitaryUnit(player, to);
-                    to.military.haveNotMoved--;
-                } else {
-                    if (to.military.getPlayer() != player) {
-                        Log.d(TAG, "Improper target 2.");
-                        return null;
+                int numMoving = (Integer) arguments.get("amount");
+                for (int i = 0; i < numMoving; i++) {
+                    Log.d(MOVETAG, "Number of Soldiers Moving: " + numMoving);
+                    boolean bonus = from.military.haveBonusMoved > 0;
+                    if (to.military == null) {
+                        to.military = new MilitaryUnit(player, to);
+                        to.military.haveNotMoved--;
+                    } else {
+                        if (to.military.getPlayer() != player) {
+                            Log.d(TAG, "Improper target 2.");
+                            return null;
+                        }
+                        to.military.health++;
                     }
-                    to.military.health++;
-                }
-                if (bonus) {
-                    from.military.haveBonusMoved--;
-                    to.military.haveMoved++;
-                } else {
-                    from.military.haveNotMoved--;
-                    boolean onRoad = false;
-                    for (Edge edge : from.edges)
-                        if (edge.vertices.contains(to) && edge.owner != null)
-                            onRoad = true;
-                    Log.d(TAG, "OnRoad: " + onRoad);
-                    if (onRoad)
-                        to.military.haveBonusMoved++;
-                    else
+                    if (bonus) {
+                        from.military.haveBonusMoved--;
                         to.military.haveMoved++;
-                }
-                from.military.health--;
-                if (from.military.health == 0)
-                    from.military = null;
-                Log.d(TAG, "After moving:");
-                Log.d(TAG, "....At target vertex " + to.index + ":");
-                if (to.military != null) {
-                    Log.d(TAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
-                    Log.d(TAG, "........HaveNotMoved: " + to.military.haveNotMoved);
-                    Log.d(TAG, "........HaveMoved: " + to.military.haveMoved);
-                    Log.d(TAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
-                }
-                if (to.building != null) {
-                    Log.d(TAG, "........" + to.building.getType() + " owned by player ");
-                    if (to.getBuilding().getPlayer() != null)
-                        Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
-                }
-                Log.d(TAG, "....At from vertex " + from.index + ":");
-                if (from.military != null) {
-                    Log.d(TAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
-                    Log.d(TAG, "........HaveNotMoved: " + from.military.haveNotMoved);
-                    Log.d(TAG, "........HaveMoved: " + from.military.haveMoved);
-                    Log.d(TAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
-                }
-                if (from.building != null) {
-                    Log.d(TAG, "........" + from.building.getType() + " owned by player ");
-                    if (from.getBuilding().getPlayer() != null)
-                        Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
+                    } else {
+                        from.military.haveNotMoved--;
+                        boolean onRoad = false;
+                        for (Edge edge : from.edges)
+                            if (edge.vertices.contains(to) && edge.owner != null)
+                                onRoad = true;
+                        Log.d(TAG, "OnRoad: " + onRoad);
+                        if (onRoad)
+                            to.military.haveBonusMoved++;
+                        else
+                            to.military.haveMoved++;
+                    }
+                    from.military.health--;
+                    if (from.military.health == 0)
+                        from.military = null;
+                    Log.d(MOVETAG, "After moving:");
+                    Log.d(MOVETAG, "....At target vertex " + to.index + ":");
+                    if (to.military != null) {
+                        Log.d(MOVETAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
+                        Log.d(MOVETAG, "........HaveNotMoved: " + to.military.haveNotMoved);
+                        Log.d(MOVETAG, "........HaveMoved: " + to.military.haveMoved);
+                        Log.d(MOVETAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
+                    }
+                    if (to.building != null) {
+                        Log.d(MOVETAG, "........" + to.building.getType() + " owned by player ");
+                        if (to.getBuilding().getPlayer() != null)
+                            Log.d(MOVETAG, "............Player " + to.getBuilding().getPlayer().getName());
+                    }
+                    Log.d(TAG, "....At from vertex " + from.index + ":");
+                    if (from.military != null) {
+                        Log.d(MOVETAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                        Log.d(MOVETAG, "........HaveNotMoved: " + from.military.haveNotMoved);
+                        Log.d(MOVETAG, "........HaveMoved: " + from.military.haveMoved);
+                        Log.d(MOVETAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
+                    }
+                    if (from.building != null) {
+                        Log.d(MOVETAG, "........" + from.building.getType() + " owned by player ");
+                        if (from.getBuilding().getPlayer() != null)
+                            Log.d(MOVETAG, "............Player " + from.getBuilding().getPlayer().getName());
+                    }
                 }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             } case ATTACK: {
-                Log.d(TAG, "Attacking.");
+                Log.d(ATTACKTAG, "Attacking.");
                 Vertex to = vertices.get(((Vertex) arguments.get("vertex_to")).getIndex());
-                Log.d(TAG, "Target: Vertex " + to.index);
+                Log.d(ATTACKTAG, "Target: Vertex " + to.index);
                 Vertex from = vertices.get(((Vertex) arguments.get("vertex_from")).getIndex());
-                Log.d(TAG, "From: Vertex " + from.index);
+                Log.d(ATTACKTAG, "From: Vertex " + from.index);
                 Integer amount = (Integer) arguments.get("amount");
                 if (!to.isAdjacent(from)
                         || ((to.getBuilding().getPlayer() == player || to.getBuilding().getPlayer() == null)
@@ -675,32 +681,32 @@ public class Board implements java.io.Serializable {
                 }
                 if (from.military.health == 0)
                     from.military = null;
-                Log.d(TAG, "After attacking:");
-                Log.d(TAG, "....At target vertex " + to.index + ":");
+                Log.d(ATTACKTAG, "After attacking:");
+                Log.d(ATTACKTAG, "....At target vertex " + to.index + ":");
                 if (to.military != null) {
-                    Log.d(TAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
-                    Log.d(TAG, "........HaveNotMoved: " + to.military.haveNotMoved);
-                    Log.d(TAG, "........HaveMoved: " + to.military.haveMoved);
-                    Log.d(TAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
+                    Log.d(ATTACKTAG, "........" + to.military.getHealth() + " soldiers owned by player " + to.military.getPlayer().getName());
+                    Log.d(ATTACKTAG, "........HaveNotMoved: " + to.military.haveNotMoved);
+                    Log.d(ATTACKTAG, "........HaveMoved: " + to.military.haveMoved);
+                    Log.d(ATTACKTAG, "........HaveBonusMoved: " + to.military.haveBonusMoved);
                 }
                 if (to.building != null) {
-                    Log.d(TAG, "........" + to.building.getType() + " owned by player ");
+                    Log.d(ATTACKTAG, "........" + to.building.getType() + " owned by player ");
                     if (to.getBuilding().getPlayer() != null)
-                        Log.d(TAG, "............Player " + to.getBuilding().getPlayer().getName());
-                    Log.d(TAG, "............Health: " + to.getBuilding().getHealth());
+                        Log.d(ATTACKTAG, "............Player " + to.getBuilding().getPlayer().getName());
+                    Log.d(ATTACKTAG, "............Health: " + to.getBuilding().getHealth());
                 }
-                Log.d(TAG, "....At from vertex " + from.index + ":");
+                Log.d(ATTACKTAG, "....At from vertex " + from.index + ":");
                 if (from.military != null) {
-                    Log.d(TAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
-                    Log.d(TAG, "........HaveNotMoved: " + from.military.haveNotMoved);
-                    Log.d(TAG, "........HaveMoved: " + from.military.haveMoved);
-                    Log.d(TAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
+                    Log.d(ATTACKTAG, "...." + from.military.getHealth() + " soldiers owned by player " + from.military.getPlayer().getName());
+                    Log.d(ATTACKTAG, "........HaveNotMoved: " + from.military.haveNotMoved);
+                    Log.d(ATTACKTAG, "........HaveMoved: " + from.military.haveMoved);
+                    Log.d(ATTACKTAG, "........HaveBonusMoved: " + from.military.haveBonusMoved);
                 }
                 if (from.building != null) {
-                    Log.d(TAG, "........" + from.building.getType() + " owned by player ");
+                    Log.d(ATTACKTAG, "........" + from.building.getType() + " owned by player ");
                     if (from.getBuilding().getPlayer() != null)
-                        Log.d(TAG, "............Player " + from.getBuilding().getPlayer().getName());
-                    Log.d(TAG, "............Health: " + from.getBuilding().getHealth());
+                        Log.d(ATTACKTAG, "............Player " + from.getBuilding().getPlayer().getName());
+                    Log.d(ATTACKTAG, "............Health: " + from.getBuilding().getHealth());
                 }
                 return new GameAction.ActionWrapper(GameAction.ActionWrapper.AssetType.MILITARY_UNIT, to);
             }

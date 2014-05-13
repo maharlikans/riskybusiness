@@ -5,7 +5,7 @@ package com.slothproductions.riskybusiness.model;
  */
 public class MilitaryUnit implements java.io.Serializable {
     private static final long serialVersionUID = -967850348L;
-    final class ImmutableMilitaryUnit {
+    public final class ImmutableMilitaryUnit {
         public Player getPlayer() {
             return player;
         }
@@ -53,6 +53,14 @@ public class MilitaryUnit implements java.io.Serializable {
     }
 
     public int getHaveNotMoved() { return haveNotMoved;}
+
+    public int getHaveBonusMoved() {
+        return haveBonusMoved;
+    }
+
+    public int getHaveMoved() {
+        return haveMoved;
+    }
 
     public void reset() {
         haveNotMoved = health;

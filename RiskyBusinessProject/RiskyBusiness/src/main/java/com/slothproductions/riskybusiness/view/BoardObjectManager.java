@@ -1,16 +1,13 @@
 package com.slothproductions.riskybusiness.view;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 
 import com.View.R;
@@ -58,7 +55,7 @@ public class BoardObjectManager {
     //for soldier movement
     private Vertex startVertex;
     private Coordinate startCoordinate;
-    private ImageView mSoldierMoving;
+    private ArrayList<ImageView> mSoldiersMoving;
     private ArrayList<ImageView> mSoldiersAttacking;
 
     private ArrayList<Hex> mAdjacentHexes;
@@ -83,6 +80,7 @@ public class BoardObjectManager {
 
         mAdjacentHexes = new ArrayList<Hex>();
         mSoldiersAttacking = new ArrayList<ImageView>();
+        mSoldiersMoving = new ArrayList<ImageView>();
     }
 
     //Creates the appropriate menu for the screen based on the tap event
@@ -90,8 +88,8 @@ public class BoardObjectManager {
     public void findMenu(MotionEvent event) {
         Coordinate c = new Coordinate(event.getX(), event.getY());
         Log.d(TAG, "Checking if solider is null");
-        if (mSoldierMoving != null) {
-            Log.d(TAG, "Soldier is not null");
+        if (mSoldiersMoving.size()>0) {
+            Log.d(TAG, "Soldiers are selected to move, move them");
             moveSoldier(c);
             return;
         }
@@ -166,10 +164,10 @@ public class BoardObjectManager {
             mGameLoop.getCurrentGameState().repairCity(v);
         }
         else if (action.getItemId() == R.id.move) {
-            setMoveSoldierState(coordinate);
+            mBoardButtonsFragment.setMilitaryNumberPicker(coordinate, v, true);
         }
         else if (action.getItemId() == R.id.attack) {
-            mBoardButtonsFragment.setMilitaryNumberPicker(coordinate, v);
+            mBoardButtonsFragment.setMilitaryNumberPicker(coordinate, v, false);
         }
     }
 
@@ -210,9 +208,9 @@ public class BoardObjectManager {
     }
 
     //prepare a soldier to be moved
-    public void setMoveSoldierState(Coordinate coordinate) {
+    public void setNumberMoving(Coordinate coordinate, int numMoving) {
         startVertex = v;
-        mSoldierMoving = findImageFromList(mSoldiers, coordinate);
+        mSoldiersMoving = findImagesFromList(mSoldiers, coordinate, numMoving);
     }
 
     public void moveSoldier(Coordinate c) {
@@ -227,14 +225,14 @@ public class BoardObjectManager {
         catch (IndexOutOfBoundsException e) {
             mBoardButtonsFragment.createToast("", false);
         }
-        if (!mGameLoop.moveSoldier(startVertex, v)) {
+        if (!mGameLoop.moveSoldier(startVertex, v, mSoldiersMoving.size())) {
             Log.d(TAG, "Soldier could not be moved");
-            mSoldierMoving = null;
+            mSoldiersMoving.removeAll(mSoldiersMoving);
             return;
         }
         //should only translate if it could move
-        translateImage((int) c.getX(), (int) c.getY(), mSoldierMoving);
-        mSoldierMoving = null;
+        translateImageList(mSoldiersMoving, c);
+        mSoldiersMoving.removeAll(mSoldiersMoving);
     }
 
     public void setNumberAttacking(Coordinate coordinate, int num) {

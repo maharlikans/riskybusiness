@@ -122,11 +122,12 @@ public class NormalGameState implements GameState {
     }
 
     @Override
-    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo, Integer numMoving) {
         GameAction gameAction = GameAction.MOVE_MILITARY_UNIT;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("vertex_from", vertexFrom);
         map.put("vertex_to", vertexTo);
+        map.put("amount", numMoving);
         boolean result = mCurrentPlayer.effect(gameAction, map);
         mPlayerInfo.updatePlayerValues();
         return result;

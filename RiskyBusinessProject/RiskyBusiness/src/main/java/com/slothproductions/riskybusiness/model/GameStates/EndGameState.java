@@ -59,7 +59,7 @@ public class EndGameState implements GameState {
     }
 
     @Override
-    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo) {
+    public boolean moveMilitaryUnit(Vertex vertexFrom, Vertex vertexTo, Integer numMoving) {
         return false;
     }
 
