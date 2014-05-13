@@ -234,7 +234,6 @@ public class BoardButtonsFragment extends Fragment {
     }
 
     public void setMilitaryNumberPicker(final Coordinate c, Vertex v, final Boolean isMoving) {
-        //TODO: Make useable for military movement
         int maxNumberMilitary;
         MilitaryUnit military = v.getImmutable().getMilitary();
         if (isMoving) {
@@ -242,6 +241,16 @@ public class BoardButtonsFragment extends Fragment {
         }
         else {
             maxNumberMilitary = Math.min(5, military.getHaveNotMoved());
+        }
+
+        if (maxNumberMilitary == 1) {
+            if (isMoving) {
+                mBoardObjectManager.setNumberMoving(c, 1);
+            }
+            else {
+                mBoardObjectManager.setNumberAttacking(c, 1);
+            }
+            return;
         }
 
         //an anchor for the popup menu to be placed on. It needs this for whatever reason..
